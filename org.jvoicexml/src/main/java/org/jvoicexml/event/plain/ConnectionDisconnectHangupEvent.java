@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,20 +21,18 @@
 
 package org.jvoicexml.event.plain;
 
-import org.jvoicexml.event.PlainEvent;
-
 /**
  * The user has hung up.
  *
  * @author Dirk Schnelle-Walka
  */
 public class ConnectionDisconnectHangupEvent
-        extends PlainEvent {
+        extends ConnectionDisconnectEvent {
     /** The serial version UID. */
     private static final long serialVersionUID = -3102167627352107457L;
 
     /** The detail message. */
-    public static final String EVENT_TYPE = "connection.disconnect.hangup";
+    public static final String DETAIL = "hangup";
 
     /**
      * Constructs a new event with the event type as its detail message. The
@@ -89,10 +87,12 @@ public class ConnectionDisconnectHangupEvent
     }
 
     /**
-     * {@inheritDoc}
+     * Appends detail information to the type information.
+     * @param str type prefix.
      */
     @Override
-    public final String getEventType() {
-        return EVENT_TYPE;
+    protected void appendSpecificationDetails(final StringBuilder str) {
+        str.append('.');
+        str.append(DETAIL);
     }
 }

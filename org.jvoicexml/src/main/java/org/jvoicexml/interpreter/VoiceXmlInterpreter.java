@@ -231,13 +231,13 @@ public final class VoiceXmlInterpreter {
      * @exception JVoiceXMLEvent
      *                Error or event processing the dialog.
      */
-    public void process(final Dialog dialog,
+    public void process(Dialog dialog,
             final Map<String, Object> parameters) throws JVoiceXMLEvent {
         // There is no next dialog by default.
         nextDialog = null;
         fia = new FormInterpretationAlgorithm(context, this, dialog);
         final EventBus eventbus = context.getEventBus();
-        final HangupEventHandler hangupHandler = new HangupEventHandler(fia);
+        final HangupEventHandler hangupHandler = new HangupEventHandler(this);
         eventbus.subscribe(ConnectionDisconnectHangupEvent.EVENT_TYPE,
                 hangupHandler);
 

@@ -23,6 +23,7 @@ package org.jvoicexml.voicexmlunit;
 
 import java.io.File;
 import java.net.URI;
+import java.util.concurrent.TimeoutException;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -166,7 +167,7 @@ public interface Call {
      * Delays until an input is expected, i.e. the voice browser is expecting
      * input.
      */
-    void waitUnitExpectingInput();
+    void waitUntilExpectingInput();
 
     /**
      * Delays until an input is expected.
@@ -175,8 +176,30 @@ public interface Call {
      *            the timeout to wait at max in msec, waits forever, if timeout
      *            is zero
      */
-    void waitUnitExpectingInput(long timeout);
+    void waitUntilExpectingInput(final long timeout);
 
+    /**
+     * Waits until the provided log message is seen in the interpreter log.
+     * @param message the log message to look for
+     * @throws InterruptedException error waiting for the next log
+     * @since 0.7.9
+     */
+    void waitForInterpreterLog(final String message)
+            throws InterruptedException;
+
+    /**
+     * Waits until the provided log message is seen in the interpreter log.
+     * @param message the log message to look for
+     * @param timeout
+     *            the timeout to wait
+     * @throws InterruptedException error waiting for the next log
+     * @throws TimeoutException
+     *             waiting time exceeded
+     * @since 0.7.9
+     */
+    void waitForInterpreterLog(final String message, final long timeout)
+            throws InterruptedException, TimeoutException;
+    
     /**
      * Issues a hangup event.
      */
@@ -188,4 +211,12 @@ public interface Call {
      * @return the last observed error, {@code null} if there was no error
      */
     JVoiceXMLEvent getLastError();
+    
+    /**
+     * Cleans up any used resources used by this call. Must be called
+     * before a new test can be run.
+     * 
+     * @since 0.7.9
+     */
+    void cleanup();
 }

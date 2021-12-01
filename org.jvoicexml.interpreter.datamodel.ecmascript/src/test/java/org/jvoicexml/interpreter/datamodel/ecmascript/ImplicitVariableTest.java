@@ -23,12 +23,13 @@ package org.jvoicexml.interpreter.datamodel.ecmascript;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.datamodel.Connection;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.scope.Scope;
-import org.jvoicexml.mock.MockConnectionInformation;
-import org.jvoicexml.mock.MockRecognitionResult;
+import org.jvoicexml.xml.srgs.ModeType;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link ImplicitVariable}.
@@ -89,7 +90,7 @@ public class ImplicitVariableTest {
         final DataModel data = new EcmaScriptDataModel();
         Assert.assertEquals(0, data.createScope(Scope.SESSION));
         Assert.assertEquals(0, data.createScope(Scope.APPLICATION));
-        final ConnectionInformation info = new MockConnectionInformation("dummy");
+        final ConnectionInformation info = Mockito.mock(ConnectionInformation.class);
         final Connection connection = new Connection(info);
         Assert.assertEquals(0, data.createVariable("session.connection",
                 connection, Scope.SESSION));
@@ -111,10 +112,11 @@ public class ImplicitVariableTest {
         final DataModel model = new EcmaScriptDataModel();
         Assert.assertEquals(0, model.createScope(Scope.SESSION));
         Assert.assertEquals(0, model.createScope(Scope.APPLICATION));
-        final MockRecognitionResult result = new MockRecognitionResult();
-        result.setUtterance("hello world");
-        result.setSemanticInterpretation("hi");
-        result.setConfidence(0.7f);
+        final RecognitionResult result = Mockito.mock(RecognitionResult.class);
+        Mockito.when(result.getUtterance()).thenReturn("hello world");
+        Mockito.when(result.getSemanticInterpretation(model)).thenReturn("hi");
+        Mockito.when(result.getConfidence()).thenReturn(0.7f);
+        Mockito.when(result.getMode()).thenReturn(ModeType.VOICE);
         Assert.assertEquals(0,
                 model.createArray("lastresult$", 0, Scope.APPLICATION));
         Assert.assertEquals(0,

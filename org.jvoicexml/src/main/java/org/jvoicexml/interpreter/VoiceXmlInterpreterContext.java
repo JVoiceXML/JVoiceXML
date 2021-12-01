@@ -51,6 +51,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
+import org.jvoicexml.event.plain.ConnectionDisconnectEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
@@ -102,6 +103,9 @@ public class VoiceXmlInterpreterContext {
     /** The current application to process. */
     private Application application;
 
+    /** The currently used VoiceXML interpreter. */
+    private VoiceXmlInterpreter interpreter;
+    
     /** The employed data model. */
     private DataModel model;
 
@@ -469,7 +473,7 @@ public class VoiceXmlInterpreterContext {
                 document = null;
             } catch (ErrorEvent e) {
                 throw e;
-            } catch (ConnectionDisconnectHangupEvent e) {
+            } catch (ConnectionDisconnectEvent e) {
                 LOGGER.info("user hung up. terminating processing");
                 document = null;
             } catch (JVoiceXMLEvent e) {
@@ -480,10 +484,12 @@ public class VoiceXmlInterpreterContext {
             }
         }
         LOGGER.info("no more documents to process for '" + application + "'");
-        try {
-            playQueuedPromptsBeforeExit();
-        } catch (BadFetchError | NoresourceError | ConfigurationException e) {
-            LOGGER.warn("unable to play prompts before exit", e);
+        if (!interpreter.isInFinalProcessingState()) {
+            try {
+                playQueuedPromptsBeforeExit();
+            } catch (BadFetchError | NoresourceError | ConfigurationException e) {
+                LOGGER.warn("unable to play prompts before exit", e);
+            }
         }
         exitScope(Scope.APPLICATION);
     }
@@ -766,7 +772,7 @@ public class VoiceXmlInterpreterContext {
     private DocumentDescriptor interpret(final VoiceXmlDocument document,
             final String startDialog, final Map<String, Object> parameters)
                     throws JVoiceXMLEvent {
-        final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
+        interpreter = new VoiceXmlInterpreter(this);
         try {
             interpreter.setDocument(document, startDialog, configuration);
         } catch (ConfigurationException e) {

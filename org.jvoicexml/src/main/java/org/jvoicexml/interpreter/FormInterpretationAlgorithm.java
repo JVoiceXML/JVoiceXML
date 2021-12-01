@@ -54,7 +54,10 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.CancelEvent;
+import org.jvoicexml.event.plain.ConnectionDisconnectEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.ExitEvent;
 import org.jvoicexml.event.plain.implementation.RecordingStartedEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
@@ -496,11 +499,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     gotoFormItemName = e.getItem();
                     LOGGER.info("going to form item '" + gotoFormItemName
                             + "'...");
-                } catch (ConnectionDisconnectHangupEvent e) {
+                } catch (ConnectionDisconnectEvent | CancelEvent | ExitEvent e) {
+                    // Similar to the catch below but terminating processing
                     LOGGER.debug("caught hangup event while processing '"
                             + e.getEventType() + "'");
                     final EventBus eventbus = context.getEventBus();
                     eventbus.publish(e);
+                    processEvent(e);
                     break;
                 } catch (JVoiceXMLEvent e) {
                     try {
@@ -536,16 +541,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      */
     public boolean isInFinalProcessingState() {
         return interpreter.isInFinalProcessingState();
-    }
-
-    /**
-     * A hangup has been detected and the interpreter should enter the
-     * final processing state.
-     * 
-     * @since 0.7.9
-     */
-    public void enterFinalProcessing() {
-        interpreter.setState(InterpreterState.FINALPROCESSING);
     }
 
     /**
@@ -769,7 +764,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             event = handler.waitEvent();
             interpreter.setState(InterpreterState.TRANSITIONING);
         } else {
-            event = null;
+            // Check if something bad happened in the collect phase
+            event = handler.checkEvent();
+            if (event != null) {
+                throw event;
+            }
         }
 
         // Do some cleanup before continuing.
@@ -794,8 +793,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             call.stopRecord();
         }
 
-        // If there is an input item or an initial form item, wait for the
-        // event coming from the implementation platform.
+        // If an event was given, process it.
         if (event != null) {
             final CatchContainer container = (CatchContainer) formItem;
             try {

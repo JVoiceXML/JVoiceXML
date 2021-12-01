@@ -31,45 +31,44 @@ import org.jvoicexml.voicexmlunit.Call;
 import org.jvoicexml.voicexmlunit.TextCall;
 
 /**
- * A demo that tests a small VoiceXML script to enter a either 'yes' or 'no'
- * via builtin grammars.
+ * A demo that tests a small VoiceXML script to enter a either 'yes' or 'no'.
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
- * the <code>config</code> folder added to the classpath.
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and the
+ * <code>config</code> folder added to the classpath.
  * </p>
  * <p>
- * This demo requires that JVoiceXML is configured with the text
- * implementation platform.
+ * This demo requires that JVoiceXML is configured with the text implementation
+ * platform.
  * </p>
+ *
+ * @author Raphael Groner
  * @author Dirk Schnelle-Walka
- * @since 0.7.8
+ * @since 0.7.6
  *
  */
-public final class TestBuiltinDemo {
+public final class TestHangupDemo {
     /** Timeout in msec for each test method. */
     private static final int TIMEOUT = 10000;
     /** The call to JVoiceXML. */
     private Call call;
-    /** URI of the application to call. */
-    private URI uri;
-
 
     /**
      * Set up the test environment.
+     *
      * @throws Exception
-     *        error setting up the test environment
+     *             error setting up the test environment
      */
     @Before
     public void setUp() throws Exception {
-        uri = TestBuiltinDemo.class.getResource("/builtin.vxml").toURI();
         call = new TextCall();
     }
 
     /**
      * Tear down the test environment.
+     *
      * @exception JVoiceXMLEvent
-     *            error tearing down
+     *                error tearing down
      */
     @After
     public void tearDown() throws JVoiceXMLEvent {
@@ -78,25 +77,47 @@ public final class TestBuiltinDemo {
     }
 
     /**
-     * Runs a test with the option 'yes'.
+     * Runs a test with a hangup in a field.
+     *
+     * @throws Exception
+     *             test failed
      */
     @Test(timeout = TIMEOUT)
-    public void testInputYes() {
+    public void testHangupInput() throws Exception {
+        final URI uri = TestHangupDemo.class.getResource("/input.vxml").toURI();
         call.call(uri);
         call.hears("Do you like this example?");
-        call.say("yes");
-        call.hears("You like this example.");
+        final URI chime = uri.resolve("chime.wav");
+        call.hearsAudio(chime);
+        call.hangup();
+        call.waitForInterpreterLog("User hung up");
     }
 
     /**
-     * Runs a test with the option 'no'.
+     * Runs a test with a hangup in script.
+     *
+     * @throws Exception
+     *             test failed
      */
-//    @Test(timeout = TIMEOUT)
-    public void testInputNo() {
+    @Test(timeout = TIMEOUT)
+    public void testHangupScript() throws Exception {
+        final URI uri = TestHangupDemo.class.getResource("/scripthangup.vxml").toURI();
         call.call(uri);
-        call.hears("Do you like this example?");
-        call.say("no");
-        call.hears("You do not like this example.");
+        Thread.sleep(2000);
+        call.hangup();
+        call.waitForInterpreterLog("User hung up");
+    }
+
+    /**
+     * Runs a test with a hangup in script.
+     *
+     * @throws Exception
+     *             test failed
+     */
+    @Test(timeout = TIMEOUT)
+    public void testHangupBecauseOfThrow() throws Exception {
+        final URI uri = TestHangupDemo.class.getResource("/throwdemo.vxml").toURI();
+        call.call(uri);
+        call.waitForInterpreterLog("Caught custom event");
     }
 }
-

@@ -12,7 +12,7 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
 
@@ -21,7 +21,7 @@ repositories {
     mavenCentral()
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
+   }
 }
 
 sourceCompatibility = 1.8
@@ -36,19 +36,21 @@ def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 dependencies {
     jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
-    compile group: 'org.jvoicexml', name: 'javax.speech', version: '0.6-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.6-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.freetts', version: '0.6-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sphinx4', version: '0.6-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sapi', version: '0.6-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'cmu_us_kal', version: '1.2.3-SNAPSHOT'
+    implementation group: 'org.jvoicexml', name: 'javax.speech', version: '0.6-SNAPSHOT'
+    implementation group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.6-SNAPSHOT'
+    implementation group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2', version: '0.6-SNAPSHOT'
+    implementation group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.freetts', version: '0.6-SNAPSHOT'
+    implementation group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sphinx4', version: '0.6-SNAPSHOT'
+    implementation group: 'org.jvoicexml', name: 'org.jvoicexml.jsapi2.sapi', version: '0.6-SNAPSHOT'
+    implementation group: 'org.jvoicexml', name: 'cmu_us_kal', version: '1.2.3-SNAPSHOT'
     
-    testCompile group: 'junit', name: 'junit', version: '4.13.1'
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-    testCompile project(path: ':org.jvoicexml', configuration: 'testArtifacts')
+    
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+    testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testImplementation testFixtures(project(':org.jvoicexml'))
 
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
+    implementation project(':org.jvoicexml')
+    implementation project(':org.jvoicexml.client')
 }
 
 task xsltSphinxFreeTTS(type: com.github.eerohele.SaxonXsltTask) {
@@ -58,7 +60,7 @@ task xsltSphinxFreeTTS(type: com.github.eerohele.SaxonXsltTask) {
     parameters(
         buildpath: "${buildDir}/libs",
         version: JVOICEXML_VERSION,
-        libs: configurations.compile
+        libs: configurations.compileClasspath
     )
 }
 
@@ -69,7 +71,7 @@ task xsltSphinxFreeTTSDistribution(type: com.github.eerohele.SaxonXsltTask) {
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
-        libs: configurations.compile
+        libs: configurations.compileClasspath
     )
 }
 
@@ -80,7 +82,7 @@ task xsltSAPI(type: com.github.eerohele.SaxonXsltTask) {
     parameters(
         buildpath: "${buildDir}/libs",
         version: JVOICEXML_VERSION,
-        libs: configurations.compile
+        libs: configurations.compileClasspath
     )
 }
 
@@ -91,13 +93,13 @@ task xsltSAPIDistribution(type: com.github.eerohele.SaxonXsltTask) {
     parameters(
         buildpath: "lib",
         version: JVOICEXML_VERSION,
-        libs: configurations.compile
+        libs: configurations.compileClasspath
     )
 }
 
 task copyReferencedLibraries(type: Copy) {
     into "$buildDir/libs"
-    from(configurations.compile) {
+    from(configurations.runtimeClasspath) {
          include 'freetts*.jar',
          'cmu_us_kal*.jar',
          'cmulex*.jar',

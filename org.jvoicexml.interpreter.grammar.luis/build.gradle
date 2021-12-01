@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
 
@@ -31,17 +31,17 @@ def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 dependencies {
     jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
-    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.5'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
     
-    compile project(':org.jvoicexml')
+    implementation project(':org.jvoicexml')
 
-    testCompile group: 'junit', name: 'junit', version: '4.13.1'
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+    testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
-    testCompile project(path: ':org.jvoicexml', configuration: 'testArtifacts')
-    testCompile project(':org.jvoicexml.interpreter.datamodel.ecmascript')
+    testImplementation testFixtures(project(':org.jvoicexml'))
+    testImplementation project(':org.jvoicexml.interpreter.datamodel.ecmascript')
 }
 
 xslt {

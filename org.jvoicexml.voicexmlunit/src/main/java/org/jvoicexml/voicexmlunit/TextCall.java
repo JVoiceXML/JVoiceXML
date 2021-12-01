@@ -72,6 +72,8 @@ public final class TextCall implements Call {
     /** The last observed error. */
     private JVoiceXMLEvent lastError;
 
+    final Log4jSocketServer logServer;
+    
     /**
      * Server port number to use. Port number must be greater than 1024.
      */
@@ -84,8 +86,10 @@ public final class TextCall implements Call {
      * 
      * @throws InterruptedException
      *             error initializing the output buffer
+     * @throws IOException 
+     *             error creating the socket server
      */
-    public TextCall() throws InterruptedException {
+    public TextCall() throws InterruptedException, IOException {
         this(DEFAULT_SERVER_PORT);
     }
 
@@ -98,9 +102,11 @@ public final class TextCall implements Call {
      *            number to use for the {@link TextServer}.
      * @throws InterruptedException
      *             error initializing the output buffer
+     * @throws IOException 
+     *             error creating the socket server
      */
     public TextCall(final String hostname, final int port)
-            throws InterruptedException {
+            throws InterruptedException, IOException {
         portNumber = port;
         server = new TextServer(hostname, portNumber);
         server.setAutoAcknowledge(false);
@@ -109,6 +115,9 @@ public final class TextCall implements Call {
         inputMonitor = new InputMonitor();
         server.addTextListener(inputMonitor);
         listeners = new java.util.ArrayList<CallListener>();
+        
+        logServer = new Log4jSocketServer(14712);
+        logServer.startLoggingServer();
     }
 
     /**
@@ -118,8 +127,10 @@ public final class TextCall implements Call {
      *            number to use for the {@link TextServer}.
      * @throws InterruptedException
      *             error initializing the output buffer
+     * @throws IOException 
+     *             error creating the socket server
      */
-    public TextCall(final int port) throws InterruptedException {
+    public TextCall(final int port) throws InterruptedException, IOException {
         this(null, port);
     }
 
@@ -148,6 +159,11 @@ public final class TextCall implements Call {
      */
     @Override
     public void call(final URI uri) {
+        // Prepare the logevent buffers for the next call
+        final LogBufferProvider provider = LogBufferProvider.getInstance();
+        provider.init();
+        
+        // Actually make the call
         LOGGER.info("calling '" + uri + "'");
         try {
             lastError = null;
@@ -416,7 +432,7 @@ public final class TextCall implements Call {
      * {@inheritDoc}
      */
     @Override
-    public void waitUnitExpectingInput() {
+    public void waitUntilExpectingInput() {
         Assert.assertNotNull("no active session", session);
         try {
             inputMonitor.waitUntilExpectingInput();
@@ -443,7 +459,7 @@ public final class TextCall implements Call {
      * {@inheritDoc}
      */
     @Override
-    public void waitUnitExpectingInput(final long timeout) {
+    public void waitUntilExpectingInput(final long timeout) {
         Assert.assertNotNull("no active session", session);
         try {
             if (timeout == 0) {
@@ -486,6 +502,28 @@ public final class TextCall implements Call {
      * {@inheritDoc}
      */
     @Override
+    public void waitForInterpreterLog(final String message)
+            throws InterruptedException {
+        final LogBufferProvider provider = LogBufferProvider.getInstance();
+        final LogBuffer buffer = provider.getInterpreterBuffer();
+        buffer.waitForLog(message);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitForInterpreterLog(final String message, final long timeout)
+            throws InterruptedException, TimeoutException {
+        final LogBufferProvider provider = LogBufferProvider.getInstance();
+        final LogBuffer buffer = provider.getInterpreterBuffer();
+        buffer.waitForLog(message, timeout);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void hangup() {
         if (outputBuffer.hasReceivedDisconnect()) {
             try {
@@ -522,5 +560,13 @@ public final class TextCall implements Call {
             }
         }
         return lastError;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void cleanup() {
+        logServer.stopLoggingServer();
     }
 }

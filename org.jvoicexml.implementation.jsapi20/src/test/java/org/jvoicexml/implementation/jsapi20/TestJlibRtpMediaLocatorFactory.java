@@ -31,7 +31,7 @@ import java.net.URI;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.mock.implementation.MockSynthesizedOutput;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link JlibRtpMediaLocatorFactory}.
@@ -52,7 +52,7 @@ public final class TestJlibRtpMediaLocatorFactory {
         final JlibRtpMediaLocatorFactory factory =
             new JlibRtpMediaLocatorFactory();
         factory.setPort(30000);
-        final SynthesizedOutput output = new MockSynthesizedOutput();
+        final SynthesizedOutput output = Mockito.mock(SynthesizedOutput.class);
         final URI locator1 = factory.getSourceMediaLocator(output);
         Assert.assertEquals(new URI("rtp://localhost:30000/audio?"
                 + "participant=localhost&keepAlive=false&signed=false"),

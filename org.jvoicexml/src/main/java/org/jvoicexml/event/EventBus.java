@@ -64,6 +64,9 @@ public final class EventBus {
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         synchronized (subscriptions) {
+            if (subscriptions.contains(subscription)) {
+                return;
+            }
             subscriptions.add(subscription);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("added subscription of '" + type + "' for '"

@@ -59,7 +59,8 @@ public final class TestRecognitionEvent {
     @Test
     public void testGetEventType() {
         final RecognitionEvent event = new RecognitionEvent(null, null, result);
-        Assert.assertEquals(RecognitionEvent.EVENT_TYPE, event.getEventType());
+        Assert.assertEquals(RecognitionEvent.EVENT_TYPE + "."
+                + RecognitionEvent.DETAIL, event.getEventType());
     }
 
     /**
