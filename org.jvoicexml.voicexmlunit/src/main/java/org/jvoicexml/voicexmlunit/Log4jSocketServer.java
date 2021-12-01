@@ -32,7 +32,6 @@ public class Log4jSocketServer {
     /**
      * Constructs a new object at the specified host name with the specified
      * port.
-     * @param hostname the host to use
      * @param portNumber the port to use
      * @throws IOException error creating the socke server
      */

@@ -41,7 +41,7 @@ public class HangupEventHandler implements EventSubscriber {
 
     /**
      * Creates a new object.
-     * @param algorithm the FIA to use
+     * @param ip the VoiceXML interpreter to use
      */
     public HangupEventHandler(final VoiceXmlInterpreter ip) {
         interpreter = ip;

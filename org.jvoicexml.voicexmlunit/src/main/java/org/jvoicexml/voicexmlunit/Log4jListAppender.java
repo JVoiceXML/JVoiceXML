@@ -52,9 +52,7 @@ public class Log4jListAppender extends AbstractAppender {
      * @param name The Appender name.
      * @param filter The Filter to associate with the Appender.
      * @param layout The layout to use to format the event.
-     * @param ignoreExceptions If true, exceptions will be logged and
-     *          suppressed. If false errors will be logged and
-     *          then passed to the application.
+     * @param logBuffer the log buffer to use to forward log events
      */
     protected Log4jListAppender(final String name, final Filter filter,
             final Layout<? extends Serializable> layout,
@@ -67,6 +65,7 @@ public class Log4jListAppender extends AbstractAppender {
     /**
      * Creates a new object.
      * @param name name of this appender
+     * @param buffer name of the log buffer to use
      * @param layout the layouts to be used
      * @param filter the filters to be used
      * @return created appender
