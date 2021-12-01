@@ -119,6 +119,10 @@ final class TextSpokenInput implements SpokenInput {
      * @since 0.7.8
      */
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+        if (grammarParsers == null) {
+            LOGGER.warn("no grammar parsers defined");
+            return;
+        }
         for (GrammarParser<?> parser : grammarParsers) {
             final GrammarType type = parser.getType();
             final String mimeType = type.toString();

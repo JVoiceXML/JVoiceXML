@@ -173,13 +173,16 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
         
         // Check the security policy
         final String policy = System.getProperty("java.security.policy");
-        final File policyFile = new File(policy);
-        if (policyFile.exists()) {
-            LOGGER.info("java.security.policy:\t" + policy);
+        if (policy == null) {
+            LOGGER.info("java.security.policy:\t(undefined)");
         } else {
-            LOGGER.info("java.security.policy:\t" + policy + " (not found)");
-        }
-
+            final File policyFile = new File(policy);
+            if (policyFile.exists()) {
+                LOGGER.info("java.security.policy:\t" + policy);
+            } else {
+                LOGGER.info("java.security.policy:\t" + policy + " (not found)");
+            }
+        } 
         // Get classloader info
         if (LOGGER.isDebugEnabled()) {
             final ClassLoader loader = getClass().getClassLoader();

@@ -319,6 +319,10 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             throws SemanticError, ErrorEvent, JVoiceXMLEvent {
         final TagStrategyFactory factory = profile
                 .getInitializationTagStrategyFactory();
+        if (factory == null) {
+            LOGGER.warn("no TagStrategyFactory defined. Initializing nodes skipped");
+            return;
+        }
         for (XmlNode currentNode : nodes) {
             if (currentNode instanceof VoiceXmlNode) {
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;

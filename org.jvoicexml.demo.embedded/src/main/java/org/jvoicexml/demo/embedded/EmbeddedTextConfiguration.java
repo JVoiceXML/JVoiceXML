@@ -20,9 +20,12 @@
  */
 package org.jvoicexml.demo.embedded;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.List;
 
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.ImplementationPlatformFactory;
@@ -32,18 +35,24 @@ import org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy;
 import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.dtmf.BufferedDtmfInput;
+import org.jvoicexml.implementation.grammar.GrammarParser;
 import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory;
 import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.profile.vxml21.VoiceXml21Profile;
 import org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory;
+import org.jvoicexml.srgs.SrgsSisrXmlGrammarParser;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
 
@@ -59,7 +68,7 @@ public final class EmbeddedTextConfiguration implements Configuration {
     @SuppressWarnings("unchecked")
     @Override
     public <T> Collection<T> loadObjects(final Class<T> baseClass,
-            final String root) {
+            final String root)  throws ConfigurationException {
         final Collection<T> col = new java.util.ArrayList<T>();
         if (baseClass == TagStrategyFactory.class) {
             try {
@@ -71,10 +80,34 @@ public final class EmbeddedTextConfiguration implements Configuration {
         } else if (baseClass == PlatformFactory.class) {
             final TextPlatformFactory factory = new TextPlatformFactory();
             factory.setInstances(1);
+            final List<GrammarParser<?>> grammarParsers
+                = new java.util.ArrayList<GrammarParser<?>>();
+            final GrammarParser<?> parser = new SrgsSisrXmlGrammarParser();
+            grammarParsers.add(parser);
+            factory.setGrammarParsers(grammarParsers);
             col.add((T) factory);
         } else if (baseClass == GrammarIdentifier.class) {
             final GrammarIdentifier identifier = new SrgsXmlGrammarIdentifier();
             col.add((T) identifier);
+        } else if (baseClass == Profile.class) {
+            final VoiceXml21Profile profile = new VoiceXml21Profile();
+            try {
+                final TagStrategyFactory initializationStrategyFactory =
+                        new EmbeddedInitializationTagStrategyFactory();
+                profile.setInitializationTagStrategyFactory(initializationStrategyFactory);
+                final TagStrategyFactory tagStrategyFactory =
+                        new EmbeddedTagStrategyFactory();
+                profile.setTagStrategyFactory(tagStrategyFactory);
+            } catch (InstantiationException | IllegalAccessException
+                    | ClassNotFoundException | SecurityException
+                    | NoSuchMethodException | IllegalArgumentException
+                    | InvocationTargetException e) {
+                throw new ConfigurationException(e.getMessage(), e);
+            }
+            col.add((T) profile);
+        } else if (baseClass == DataModel.class) {
+            final DataModel model = new EcmaScriptDataModel();
+            col.add((T) model);
         }
         return col;
     }

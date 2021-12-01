@@ -56,45 +56,45 @@ public class EmbeddedTagStrategyFactory
         ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();
         strategies.put("assign",
-         loadStrategy("org.jvoicexml.interpreter.tagstrategy.AssignStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.AssignStrategy"));
         strategies.put("audio",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.AudioTagStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.AudioTagStrategy"));
         strategies.put("clear",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ClearStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ClearStrategy"));
         strategies.put("data",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.DataStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy"));
         strategies.put("disconnect",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.DisconnectStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.DisconnectStrategy"));
         strategies.put("exit",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ExitStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ExitStrategy"));
         strategies.put("goto",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.GotoStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.GotoStrategy"));
         strategies.put("grammar",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy"));
         strategies.put("if",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.IfStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.IfStrategy"));
         strategies.put("log",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.LogStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.LogStrategy"));
         strategies.put("prompt",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.PromptStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.PromptStrategy"));
         strategies.put("reprompt",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.RepromptStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.RepromptStrategy"));
         strategies.put("return",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ReturnStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ReturnStrategy"));
         strategies.put("script",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy"));
         strategies.put("submit",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.SubmitStrategy"));
         strategies.put("#text",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy"));
         strategies.put("throw",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ThrowStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ThrowStrategy"));
         strategies.put("submit",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.SubmitStrategy"));
         strategies.put("value",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.ValueStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ValueStrategy"));
         strategies.put("valvarue",
-                loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
+                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy"));
     }
 
     /**

@@ -64,6 +64,10 @@ public final class TextSpokenInputFactory
      * @since 0.7.8
      */
     public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
+        if (grammarParsers == null) {
+            LOGGER.warn("no grammar parsers defined");
+            return;
+        }
         parsers = grammarParsers;
         for (GrammarParser<?> parser : parsers) {
             LOGGER.info("added grammar parser '" + parser.getClass()
