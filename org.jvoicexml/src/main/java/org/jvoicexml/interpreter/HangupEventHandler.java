@@ -36,15 +36,15 @@ public class HangupEventHandler implements EventSubscriber {
     private static final Logger LOGGER = LogManager
             .getLogger(HangupEventHandler.class);
 
-    /** The used form interpretation algorithm. */
-    private final FormInterpretationAlgorithm fia;
+    /** The used form {@link VoiceXmlInterpreter}. */
+    private final VoiceXmlInterpreter interpreter;
 
     /**
      * Creates a new object.
      * @param algorithm the FIA to use
      */
-    public HangupEventHandler(final FormInterpretationAlgorithm algorithm) {
-        fia = algorithm;
+    public HangupEventHandler(final VoiceXmlInterpreter ip) {
+        interpreter = ip;
     }
     
     /**
@@ -55,10 +55,12 @@ public class HangupEventHandler implements EventSubscriber {
      */
     @Override
     public void onEvent(final JVoiceXMLEvent event) {
-        if (fia.isInFinalProcessingState()) {
-            LOGGER.info("received hangup event '" + event + "'");
-            fia.enterFinalProcessing();
+        if (interpreter.isInFinalProcessingState()) {
+            return;
         }
+        LOGGER.info("received hangup event '" + event 
+                + "'. Entering final processing state");
+        interpreter.setState(InterpreterState.FINALPROCESSING);
     }
 
 }

@@ -211,4 +211,12 @@ public interface Call {
      * @return the last observed error, {@code null} if there was no error
      */
     JVoiceXMLEvent getLastError();
+    
+    /**
+     * Cleans up any used resources used by this call. Must be called
+     * before a new test can be run.
+     * 
+     * @since 0.7.9
+     */
+    void cleanup();
 }

@@ -544,16 +544,6 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     }
 
     /**
-     * A hangup has been detected and the interpreter should enter the
-     * final processing state.
-     * 
-     * @since 0.7.9
-     */
-    public void enterFinalProcessing() {
-        interpreter.setState(InterpreterState.FINALPROCESSING);
-    }
-
-    /**
      * Deactivates the local grammars.
      * 
      * @throws BadFetchError
@@ -774,7 +764,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             event = handler.waitEvent();
             interpreter.setState(InterpreterState.TRANSITIONING);
         } else {
-            event = null;
+            // Check if something bad happened in the collect phase
+            event = handler.checkEvent();
+            if (event != null) {
+                throw event;
+            }
         }
 
         // Do some cleanup before continuing.
@@ -799,8 +793,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             call.stopRecord();
         }
 
-        // If there is an input item or an initial form item, wait for the
-        // event coming from the implementation platform.
+        // If an event was given, process it.
         if (event != null) {
             final CatchContainer container = (CatchContainer) formItem;
             try {

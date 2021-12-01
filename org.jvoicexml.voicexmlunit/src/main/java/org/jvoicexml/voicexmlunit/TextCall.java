@@ -561,4 +561,12 @@ public final class TextCall implements Call {
         }
         return lastError;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void cleanup() {
+        logServer.stopLoggingServer();
+    }
 }

@@ -73,6 +73,7 @@ public final class TestHangupDemo {
     @After
     public void tearDown() throws JVoiceXMLEvent {
         call.hangup();
+        call.cleanup();
     }
 
     /**
@@ -102,7 +103,7 @@ public final class TestHangupDemo {
     public void testHangupScript() throws Exception {
         final URI uri = TestHangupDemo.class.getResource("/scripthangup.vxml").toURI();
         call.call(uri);
-        call.hears("You should not hear this!");
+        Thread.sleep(2000);
         call.hangup();
         call.waitForInterpreterLog("User hung up");
     }

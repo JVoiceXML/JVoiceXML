@@ -478,6 +478,34 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JVoiceXMLEvent checkEvent() {
+        synchronized (semaphore) {
+            if (events.isEmpty()) {
+                return null;
+            }
+        }
+
+        JVoiceXMLEvent event;
+        try {
+            final JVoiceXMLEvent queuedEvent;
+            synchronized (semaphore) {
+                queuedEvent = events.poll();
+            }
+            event = transformEvent(queuedEvent);
+        } catch (SemanticError e) {
+            LOGGER.warn("unable to transform event", e);
+            event = e;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("received event: " + event);
+        }
+        return event;
+    }    
+    /**
      * {@inheritDoc} The relevant {@link EventStrategy} is determined via a
      * chaining of {@link EventFilter}s.
      */

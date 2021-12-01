@@ -121,6 +121,12 @@ public interface EventHandler
     JVoiceXMLEvent waitEvent();
 
     /**
+     * Checks if an event was generated in the implementation platform.
+     * @return the caught event.
+     */
+    JVoiceXMLEvent checkEvent();
+    
+    /**
      * Processes the last received event.
      * @param item The current form item.
      * @param event the caught event
