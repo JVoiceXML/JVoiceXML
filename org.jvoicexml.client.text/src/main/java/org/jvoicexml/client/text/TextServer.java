@@ -381,13 +381,13 @@ public final class TextServer extends Thread {
                 final InetSocketAddress remote = (InetSocketAddress) client
                         .getRemoteSocketAddress();
                 calledId = TcpUriFactory.createUri(remote);
-                synchronized (client) {
-                    if (client != null) {
-                        final InetSocketAddress local = (InetSocketAddress) client
-                                .getLocalSocketAddress();
-                        callingId = TcpUriFactory.createUri(local);
-                        LOGGER.info("connected to " + calledId);
-                        fireConnected(remote);
+                if (client != null) {
+                    synchronized (client) {
+                            final InetSocketAddress local = (InetSocketAddress) client
+                                    .getLocalSocketAddress();
+                            callingId = TcpUriFactory.createUri(local);
+                            LOGGER.info("connected to " + calledId);
+                            fireConnected(remote);
                     }
                 }
 
