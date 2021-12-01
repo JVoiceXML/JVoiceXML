@@ -74,6 +74,7 @@ public final class TestBuiltinDemo {
     @After
     public void tearDown() throws JVoiceXMLEvent {
         call.hangup();
+        call.cleanup();
     }
 
     /**

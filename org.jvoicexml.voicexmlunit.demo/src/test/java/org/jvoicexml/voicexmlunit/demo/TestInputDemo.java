@@ -76,6 +76,7 @@ public final class TestInputDemo {
     @After
     public void tearDown() throws JVoiceXMLEvent {
         call.hangup();
+        call.cleanup();
     }
 
     /**

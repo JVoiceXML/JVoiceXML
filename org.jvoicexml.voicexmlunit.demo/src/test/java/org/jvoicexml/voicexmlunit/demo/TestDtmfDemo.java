@@ -73,6 +73,7 @@ public final class TestDtmfDemo {
     @After
     public void tearDown() throws JVoiceXMLEvent {
         call.hangup();
+        call.cleanup();
     }
 
     /**
