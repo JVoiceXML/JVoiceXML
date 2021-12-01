@@ -101,9 +101,7 @@ final class ThrowStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("throwing generic '" + event + "'...");
-        }
+        LOGGER.info("throwing event '" + event + "'");
 
         if (message != null) {
             throw new GenericVoiceXmlEvent(event);

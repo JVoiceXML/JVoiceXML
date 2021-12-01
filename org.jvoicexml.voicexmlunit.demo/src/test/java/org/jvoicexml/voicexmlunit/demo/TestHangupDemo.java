@@ -107,4 +107,17 @@ public final class TestHangupDemo {
         call.hangup();
         call.waitForInterpreterLog("User hung up");
     }
+
+    /**
+     * Runs a test with a hangup in script.
+     *
+     * @throws Exception
+     *             test failed
+     */
+    @Test(timeout = TIMEOUT)
+    public void testHangupBecauseOfThrow() throws Exception {
+        final URI uri = TestHangupDemo.class.getResource("/throwdemo.vxml").toURI();
+        call.call(uri);
+        call.waitForInterpreterLog("Caught custom event");
+    }
 }
