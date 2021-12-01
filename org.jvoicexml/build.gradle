@@ -1,5 +1,20 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+   }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
+
 apply plugin: 'java-library'
 apply plugin: 'java-test-fixtures'
+apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
 apply plugin: 'signing'
 
@@ -39,6 +54,12 @@ dependencies {
     compile project(':org.jvoicexml.xml')
 }
 
+task enableLog4jRemoteAppender(type: com.github.eerohele.SaxonXsltTask) {
+    stylesheet "${jvxmlConfigurationDir}/patch-log4j2.xsl"
+    input "${jvxmlConfigurationDir}/log4j2.xml"
+    output "$buildDir/config/log4j2-remote.xml"
+}
+
 task copyConfiguration(type: Copy) {
     from configurations.jvxmlConfiguration.files
     into "$buildDir/config"
@@ -63,6 +84,7 @@ jar {
     dependsOn createVersionFile
     dependsOn copyConfiguration
     dependsOn copyConfigurationDistribution
+    dependsOn enableLog4jRemoteAppender
 
     manifest {
         attributes('Implementation-Title': 'JVoiceXML core library',
