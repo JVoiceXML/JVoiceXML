@@ -562,7 +562,9 @@ public final class JVoiceXmlDocumentServer
         for (SchemeStrategy strategy : knownStrategies) {
             strategy.sessionClosed(sessionId);
         }
-        repository.sessionClosed(sessionId);
+        if (repository != null) {
+            repository.sessionClosed(sessionId);
+        }
     }
 
     @Override

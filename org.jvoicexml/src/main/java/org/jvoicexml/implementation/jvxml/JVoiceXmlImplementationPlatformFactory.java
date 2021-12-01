@@ -101,11 +101,16 @@ public final class JVoiceXmlImplementationPlatformFactory
     public void init(final Configuration config) throws ConfigurationException {
         final Collection<PlatformFactory> factories = config.loadObjects(
                 PlatformFactory.class, "implementation");
+        if (factories == null) {
+            LOGGER.warn("no implementation platforms found");
+            return;
+        }
         for (PlatformFactory factory : factories) {
             try {
                 addPlatform(factory);
             } catch (Exception e) {
-                throw new ConfigurationException(e.getMessage(), e);
+                throw new ConfigurationException("error adding platform: " 
+                        + e.getMessage(), e);
             }
         }
         final Collection<ResourceFactory> resourceFactories = config

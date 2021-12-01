@@ -23,6 +23,7 @@ package org.jvoicexml.demo.embedded;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.BasicConfigurator;
@@ -58,7 +59,7 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
      */
     private EmbeddedJVoiceXML() {
         // Specify the location of the config folder.
-        System.setProperty("jvoicexml.config", "../org.jvoicexml/config");
+        //System.setProperty("jvoicexml.config", "../org.jvoicexml/config");
     }
 
     /**
@@ -108,11 +109,10 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
         final EmbeddedJVoiceXML demo = new EmbeddedJVoiceXML();
 
         try {
-            File dialog = new File("hello.vxml");
-            final URI uri = dialog.toURI();
+            final URI uri = EmbeddedJVoiceXML.class.getResource("/hello.vxml").toURI();
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent | InterruptedException
-                | UnknownHostException e) {
+                | UnknownHostException | URISyntaxException e) {
             LOGGER.error("error processing the document", e);
         }
     }

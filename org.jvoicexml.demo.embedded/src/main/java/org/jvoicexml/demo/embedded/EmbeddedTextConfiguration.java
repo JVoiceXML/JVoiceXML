@@ -36,13 +36,17 @@ import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory
 import org.jvoicexml.implementation.text.TextPlatformFactory;
 import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
+import org.jvoicexml.interpreter.datamodel.DataModel;
+import org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import org.jvoicexml.profile.Profile;
 import org.jvoicexml.profile.TagStrategyFactory;
+import org.jvoicexml.profile.vxml21.VoiceXml21Profile;
 import org.jvoicexml.profile.vxml21.VoiceXml21TagStrategyFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
@@ -75,6 +79,12 @@ public final class EmbeddedTextConfiguration implements Configuration {
         } else if (baseClass == GrammarIdentifier.class) {
             final GrammarIdentifier identifier = new SrgsXmlGrammarIdentifier();
             col.add((T) identifier);
+        } else if (baseClass == Profile.class) {
+            final Profile profile = new VoiceXml21Profile();
+            col.add((T) profile);
+        } else if (baseClass == DataModel.class) {
+            final DataModel model = new EcmaScriptDataModel();
+            col.add((T) model);
         }
         return col;
     }

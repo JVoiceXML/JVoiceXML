@@ -254,6 +254,9 @@ public final class TagStrategyExecutor {
             final VoiceXmlInterpreterContext context,
             final FormInterpretationAlgorithm fia, final VoiceXmlNode node)
             throws ErrorEvent {
+        if (factory == null) {
+            return null;
+        }
         final TagStrategy strategy = factory.getTagStrategy(node);
         if (strategy == null) {
             return null;

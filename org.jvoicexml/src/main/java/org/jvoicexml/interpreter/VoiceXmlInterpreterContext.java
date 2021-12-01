@@ -838,6 +838,10 @@ public class VoiceXmlInterpreterContext {
         final Profile profile = jvxmlsession.getProfile();
         final TagStrategyFactory factory = profile
                 .getInitializationTagStrategyFactory();
+        if (factory == null) {
+            LOGGER.warn("no tag strategy defined. Initializing document skipped");
+            return;
+        }
         for (int i = 0; i < list.getLength(); i++) {
             final Node currentNode = list.item(i);
             if (currentNode instanceof VoiceXmlNode) {
