@@ -60,22 +60,22 @@ public class EmbeddedInitializationTagStrategyFactory
         strategies = new java.util.HashMap<String, TagStrategy>();
         strategies
                 .put("grammar",
-                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"));
+                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy"));
         strategies
                 .put("meta",
-                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.MetaStrategy"));
+                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.MetaStrategy"));
         strategies
                 .put("property",
-                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.PropertyStrategy"));
+                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.PropertyStrategy"));
         strategies
                 .put("script",
-                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"));
+                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy"));
         strategies
                 .put("#text",
-                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.TextStrategy"));
+                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy"));
         strategies
                 .put("var",
-                        loadStrategy("org.jvoicexml.interpreter.tagstrategy.VarStrategy"));
+                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy"));
     }
 
     /**

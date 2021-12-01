@@ -1630,3 +1630,715 @@ java.net.SocketException: Software caused connection abort: socket write error
 	at org.jvoicexml.client.text.TextServer.acknowledge(TextServer.java:502) ~[main/:?]
 	at org.jvoicexml.client.text.TextServer.readOutput(TextServer.java:447) ~[main/:?]
 	at org.jvoicexml.client.text.TextServer.run(TextServer.java:394) [main/:?]
+2021-12-01T19:36:52,270 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   119) - ----------------------------------------------------
+2021-12-01T19:36:52,360 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   120) - starting VoiceXML interpreter unmanaged version...
+2021-12-01T19:36:52,364 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   167) - Java:			Java Runtime Environment 1.8.0_291
+2021-12-01T19:36:52,364 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   168) - Java vendor:		Oracle Corporation
+2021-12-01T19:36:52,365 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   172) - Operating system:	Windows 10
+2021-12-01T19:36:52,365 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   177) - java.security.policy:\t(undefined)
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   189) - Class loader: sun.misc.Launcher$AppClassLoader@73d16e93
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml/bin/default
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml/bin/main/
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.srgs/bin/default
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.srgs/bin/main/
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.xml/bin/default
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.xml/bin/main/
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.interpreter.grammar.luis/bin/default
+2021-12-01T19:36:52,365 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.interpreter.grammar.luis/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.interpreter.datamodel.ecmascript/bin/default
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.interpreter.datamodel.ecmascript/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.client/bin/default
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.documentserver.schemestrategy.file/bin/default
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.documentserver.schemestrategy.file/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client.text/bin/default/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client.text/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.documentserver.schemestrategy.http/bin/default
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.documentserver.schemestrategy.http/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.profile.vxml21/bin/default
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.profile.vxml21/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.implementation.text/bin/default
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.implementation.text/bin/main/
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.14.1/9141212b8507ab50a45525b545b39d224614528b/log4j-core-2.14.1.jar
+2021-12-01T19:36:52,366 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-jul/2.14.1/8ba38040d35759986f56779c76767e437d4db626/log4j-jul-2.14.1.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-1.2-api/2.14.1/6bfcc76fa1a1a41295aff0042200aaa82d9ac286/log4j-1.2-api-2.14.1.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.14.1/9a40554b8dab7ac9606089c87ae8a5ba914ec932/log4j-slf4j-impl-2.14.1.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.14.1/cd8858fbbde69f46bce8db1152c18a43328aae78/log4j-api-2.14.1.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.8.3/cea3788c72271d45676ce32c0665991674b24cc5/jackson-databind-2.8.3.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.8.3/5e1dc37c96308851c3ff609c250dc849c4b12022/jackson-core-2.8.3.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.mozilla/rhino/1.7.10/24650bd98b1041df2eb1be5cb64dd1ad5b2e7c55/rhino-1.7.10.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/net.sourceforge.jchardet/jchardet/1.0/fb9dcaf21914d93122f614886ac98a594ed7f767/jchardet-1.0.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-pool/commons-pool/1.6/4572d589699f09d866a226a14b7f4323c6d8f040/commons-pool-1.6.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.5/6c6c702c89bfff3cd9e80b04d668c5e190d588c6/commons-lang3-3.5.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.1.0/e13484d9da178399d32d2d27ee21a77cfb4b7873/protobuf-java-3.1.0.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.googlecode.json-simple/json-simple/1.1.1/c9ad4a0850ab676c5c64461a05ca524cdfff59f1/json-simple-1.1.1.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.9/a25c1be5ce99d0ce99aa43eb982868c796dd0775/httpclient-4.5.9.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.11/de748cf874e4e193b42eceea9fe5574fabb9d4df/httpcore-4.4.11.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.8.0/45b426f7796b741035581a176744d91090e2e6fb/jackson-annotations-2.8.0.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/junit/junit/4.10/e4f1766ce7404a08f45d859fb9c226fc9e41a861/junit-4.10.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/3acb4705652e16236558f0f4f2192cc33c3bd189/commons-codec-1.11.jar
+2021-12-01T19:36:52,367 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/860340562250678d1a344907ac75754e259cdb14/hamcrest-core-1.1.jar
+2021-12-01T19:36:52,368 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   129) - interpreter state STARTED
+2021-12-01T19:36:52,369 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   378) - interpreter state ALLOCATING_RESOURCES
+2021-12-01T19:36:52,369 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   388) - using configuration 'org.jvoicexml.demo.embedded.EmbeddedTextConfiguration'
+2021-12-01T19:36:52,370 [JVoiceXmlMain       ] DEBUG               org.jvoicexml.JVoiceXmlMain (   637) - added shutdown hook
+2021-12-01T19:36:52,381 [JVoiceXmlMain       ] INFO   l.documentserver.JVoiceXmlDocumentServer (   352) - adding scheme strategy for scheme 'http': org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy
+2021-12-01T19:36:52,385 [JVoiceXmlMain       ] INFO   l.documentserver.JVoiceXmlDocumentServer (   352) - adding scheme strategy for scheme 'file': org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy
+2021-12-01T19:36:52,399 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:36:52,404 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:36:52,405 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   224) - added synthesized output factory class org.jvoicexml.implementation.text.TextSynthesizedOutputFactory for type 'text'
+2021-12-01T19:36:52,408 [JVoiceXmlMain       ] WARN   plementation.text.TextSpokenInputFactory (    68) - no grammar parsers defined
+2021-12-01T19:36:52,409 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:36:52,417 [JVoiceXmlMain       ] WARN   exml.implementation.text.TextSpokenInput (   123) - no grammar parsers defined
+2021-12-01T19:36:52,418 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:36:52,418 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   244) - added user input factory class org.jvoicexml.implementation.text.TextSpokenInputFactory for type 'text'
+2021-12-01T19:36:52,420 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:36:52,423 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:36:52,423 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   262) - added telephony factory class org.jvoicexml.implementation.text.TextTelephonyFactory for type 'text'
+2021-12-01T19:36:52,423 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   151) - available synthesizers:
+2021-12-01T19:36:52,423 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   154) - - 1 instance(s) of type 'text'
+2021-12-01T19:36:52,423 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   162) - available recognizers:
+2021-12-01T19:36:52,423 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   165) - - 1 instance(s) of type 'text'
+2021-12-01T19:36:52,424 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   173) - available telephones:
+2021-12-01T19:36:52,424 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   176) - - 1 instance(s) of type 'text'
+2021-12-01T19:36:52,431 [JVoiceXmlMain       ] INFO   rpreter.grammar.GrammarIdentifierCentral (   202) - added grammar identifier class org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier for type 'application/srgs+xml'
+2021-12-01T19:36:52,446 [JVoiceXmlMain       ] FATAL               org.jvoicexml.JVoiceXmlMain (   436) - org.jvoicexml.interpreter.tagstrategy.GrammarStrategy
+org.jvoicexml.ConfigurationException: org.jvoicexml.interpreter.tagstrategy.GrammarStrategy
+	at org.jvoicexml.demo.embedded.EmbeddedTextConfiguration.loadObjects(EmbeddedTextConfiguration.java:97) ~[main/:?]
+	at org.jvoicexml.JVoiceXmlMain.initProfiles(JVoiceXmlMain.java:533) [main/:?]
+	at org.jvoicexml.JVoiceXmlMain.run(JVoiceXmlMain.java:414) [main/:?]
+Caused by: java.lang.ClassNotFoundException: org.jvoicexml.interpreter.tagstrategy.GrammarStrategy
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:382) ~[?:1.8.0_291]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:418) ~[?:1.8.0_291]
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:355) ~[?:1.8.0_291]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:351) ~[?:1.8.0_291]
+	at java.lang.Class.forName0(Native Method) ~[?:1.8.0_291]
+	at java.lang.Class.forName(Class.java:264) ~[?:1.8.0_291]
+	at org.jvoicexml.demo.embedded.EmbeddedInitializationTagStrategyFactory.loadStrategy(EmbeddedInitializationTagStrategyFactory.java:106) ~[main/:?]
+	at org.jvoicexml.demo.embedded.EmbeddedInitializationTagStrategyFactory.<init>(EmbeddedInitializationTagStrategyFactory.java:63) ~[main/:?]
+	at org.jvoicexml.demo.embedded.EmbeddedTextConfiguration.loadObjects(EmbeddedTextConfiguration.java:88) ~[main/:?]
+	... 2 more
+2021-12-01T19:36:52,463 [JVoiceXmlMain       ] ERROR  voicexml.demo.embedded.EmbeddedJVoiceXML (   137) - error starting JVoiceML
+org.jvoicexml.ConfigurationException: org.jvoicexml.interpreter.tagstrategy.GrammarStrategy
+	at org.jvoicexml.demo.embedded.EmbeddedTextConfiguration.loadObjects(EmbeddedTextConfiguration.java:97) ~[main/:?]
+	at org.jvoicexml.JVoiceXmlMain.initProfiles(JVoiceXmlMain.java:533) [main/:?]
+	at org.jvoicexml.JVoiceXmlMain.run(JVoiceXmlMain.java:414) [main/:?]
+Caused by: java.lang.ClassNotFoundException: org.jvoicexml.interpreter.tagstrategy.GrammarStrategy
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:382) ~[?:1.8.0_291]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:418) ~[?:1.8.0_291]
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:355) ~[?:1.8.0_291]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:351) ~[?:1.8.0_291]
+	at java.lang.Class.forName0(Native Method) ~[?:1.8.0_291]
+	at java.lang.Class.forName(Class.java:264) ~[?:1.8.0_291]
+	at org.jvoicexml.demo.embedded.EmbeddedInitializationTagStrategyFactory.loadStrategy(EmbeddedInitializationTagStrategyFactory.java:106) ~[main/:?]
+	at org.jvoicexml.demo.embedded.EmbeddedInitializationTagStrategyFactory.<init>(EmbeddedInitializationTagStrategyFactory.java:63) ~[main/:?]
+	at org.jvoicexml.demo.embedded.EmbeddedTextConfiguration.loadObjects(EmbeddedTextConfiguration.java:88) ~[main/:?]
+	... 2 more
+2021-12-01T19:36:52,468 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   373) - text server started at port '4242'
+2021-12-01T19:36:52,636 [main                ] ERROR  voicexml.demo.embedded.EmbeddedJVoiceXML (   116) - error processing the document
+org.jvoicexml.event.error.NoresourceError: error.noresource: JVoiceXML not running. Can't create a session!
+	at org.jvoicexml.JVoiceXmlMain.createSession(JVoiceXmlMain.java:229) ~[main/:?]
+	at org.jvoicexml.demo.embedded.EmbeddedJVoiceXML.interpretDocument(EmbeddedJVoiceXML.java:91) ~[main/:?]
+	at org.jvoicexml.demo.embedded.EmbeddedJVoiceXML.main(EmbeddedJVoiceXML.java:113) [main/:?]
+2021-12-01T19:36:52,637 [ShutdownHook        ] INFO        org.jvoicexml.JVoiceXmlShutdownHook (    55) - JVoiceXML interrupted! Shutting down...
+2021-12-01T19:36:52,638 [ShutdownHook        ] INFO                org.jvoicexml.JVoiceXmlMain (   578) - received shutdown request
+2021-12-01T19:42:09,356 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   119) - ----------------------------------------------------
+2021-12-01T19:42:09,438 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   120) - starting VoiceXML interpreter unmanaged version...
+2021-12-01T19:42:09,443 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   167) - Java:			Java Runtime Environment 1.8.0_291
+2021-12-01T19:42:09,444 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   168) - Java vendor:		Oracle Corporation
+2021-12-01T19:42:09,444 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   172) - Operating system:	Windows 10
+2021-12-01T19:42:09,444 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   177) - java.security.policy:\t(undefined)
+2021-12-01T19:42:09,444 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   189) - Class loader: sun.misc.Launcher$AppClassLoader@73d16e93
+2021-12-01T19:42:09,444 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/
+2021-12-01T19:42:09,444 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml/bin/default
+2021-12-01T19:42:09,444 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.srgs/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.srgs/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.xml/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.xml/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.interpreter.grammar.luis/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.interpreter.grammar.luis/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.interpreter.datamodel.ecmascript/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.interpreter.datamodel.ecmascript/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.client/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.documentserver.schemestrategy.file/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.documentserver.schemestrategy.file/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client.text/bin/default/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client.text/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.documentserver.schemestrategy.http/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.documentserver.schemestrategy.http/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.profile.vxml21/bin/default
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.profile.vxml21/bin/main/
+2021-12-01T19:42:09,445 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.implementation.text/bin/default
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.implementation.text/bin/main/
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.14.1/9141212b8507ab50a45525b545b39d224614528b/log4j-core-2.14.1.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-jul/2.14.1/8ba38040d35759986f56779c76767e437d4db626/log4j-jul-2.14.1.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-1.2-api/2.14.1/6bfcc76fa1a1a41295aff0042200aaa82d9ac286/log4j-1.2-api-2.14.1.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.14.1/9a40554b8dab7ac9606089c87ae8a5ba914ec932/log4j-slf4j-impl-2.14.1.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.14.1/cd8858fbbde69f46bce8db1152c18a43328aae78/log4j-api-2.14.1.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.8.3/cea3788c72271d45676ce32c0665991674b24cc5/jackson-databind-2.8.3.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.8.3/5e1dc37c96308851c3ff609c250dc849c4b12022/jackson-core-2.8.3.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.mozilla/rhino/1.7.10/24650bd98b1041df2eb1be5cb64dd1ad5b2e7c55/rhino-1.7.10.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/net.sourceforge.jchardet/jchardet/1.0/fb9dcaf21914d93122f614886ac98a594ed7f767/jchardet-1.0.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-pool/commons-pool/1.6/4572d589699f09d866a226a14b7f4323c6d8f040/commons-pool-1.6.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.5/6c6c702c89bfff3cd9e80b04d668c5e190d588c6/commons-lang3-3.5.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.1.0/e13484d9da178399d32d2d27ee21a77cfb4b7873/protobuf-java-3.1.0.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.googlecode.json-simple/json-simple/1.1.1/c9ad4a0850ab676c5c64461a05ca524cdfff59f1/json-simple-1.1.1.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.9/a25c1be5ce99d0ce99aa43eb982868c796dd0775/httpclient-4.5.9.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.11/de748cf874e4e193b42eceea9fe5574fabb9d4df/httpcore-4.4.11.jar
+2021-12-01T19:42:09,446 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar
+2021-12-01T19:42:09,447 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.8.0/45b426f7796b741035581a176744d91090e2e6fb/jackson-annotations-2.8.0.jar
+2021-12-01T19:42:09,447 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/junit/junit/4.10/e4f1766ce7404a08f45d859fb9c226fc9e41a861/junit-4.10.jar
+2021-12-01T19:42:09,447 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar
+2021-12-01T19:42:09,447 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/3acb4705652e16236558f0f4f2192cc33c3bd189/commons-codec-1.11.jar
+2021-12-01T19:42:09,447 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/860340562250678d1a344907ac75754e259cdb14/hamcrest-core-1.1.jar
+2021-12-01T19:42:09,447 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   129) - interpreter state STARTED
+2021-12-01T19:42:09,448 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   378) - interpreter state ALLOCATING_RESOURCES
+2021-12-01T19:42:09,448 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   388) - using configuration 'org.jvoicexml.demo.embedded.EmbeddedTextConfiguration'
+2021-12-01T19:42:09,449 [JVoiceXmlMain       ] DEBUG               org.jvoicexml.JVoiceXmlMain (   637) - added shutdown hook
+2021-12-01T19:42:09,460 [JVoiceXmlMain       ] INFO   l.documentserver.JVoiceXmlDocumentServer (   352) - adding scheme strategy for scheme 'http': org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy
+2021-12-01T19:42:09,465 [JVoiceXmlMain       ] INFO   l.documentserver.JVoiceXmlDocumentServer (   352) - adding scheme strategy for scheme 'file': org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy
+2021-12-01T19:42:09,481 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:42:09,486 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:42:09,486 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   224) - added synthesized output factory class org.jvoicexml.implementation.text.TextSynthesizedOutputFactory for type 'text'
+2021-12-01T19:42:09,489 [JVoiceXmlMain       ] WARN   plementation.text.TextSpokenInputFactory (    68) - no grammar parsers defined
+2021-12-01T19:42:09,490 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:42:09,497 [JVoiceXmlMain       ] WARN   exml.implementation.text.TextSpokenInput (   123) - no grammar parsers defined
+2021-12-01T19:42:09,499 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:42:09,499 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   244) - added user input factory class org.jvoicexml.implementation.text.TextSpokenInputFactory for type 'text'
+2021-12-01T19:42:09,501 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:42:09,503 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:42:09,504 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   262) - added telephony factory class org.jvoicexml.implementation.text.TextTelephonyFactory for type 'text'
+2021-12-01T19:42:09,504 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   151) - available synthesizers:
+2021-12-01T19:42:09,504 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   154) - - 1 instance(s) of type 'text'
+2021-12-01T19:42:09,504 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   162) - available recognizers:
+2021-12-01T19:42:09,505 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   165) - - 1 instance(s) of type 'text'
+2021-12-01T19:42:09,505 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   173) - available telephones:
+2021-12-01T19:42:09,505 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   176) - - 1 instance(s) of type 'text'
+2021-12-01T19:42:09,514 [JVoiceXmlMain       ] INFO   rpreter.grammar.GrammarIdentifierCentral (   202) - added grammar identifier class org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier for type 'application/srgs+xml'
+2021-12-01T19:42:09,556 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   538) - added profile 'VoiceXML21'
+2021-12-01T19:42:09,556 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   546) - available profiles:
+2021-12-01T19:42:09,556 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   549) - - 'VoiceXML21'
+2021-12-01T19:42:09,557 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   423) - interpreter state RUNNING
+2021-12-01T19:42:09,557 [ShutdownWaiter      ] DEBUG              org.jvoicexml.ShutdownWaiter (    65) - initialized shutdown sequence
+2021-12-01T19:42:09,558 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   424) - VoiceXML interpreter unmanaged version started.
+2021-12-01T19:42:09,562 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   373) - text server started at port '4242'
+2021-12-01T19:42:09,731 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   249) - creating new session...
+2021-12-01T19:42:09,738 [main                ] INFO  81b58736-7562-42fd-b6aa-740b9b557945              org.jvoicexml.JVoiceXmlMain (   261) - created session 81b58736-7562-42fd-b6aa-740b9b557945
+2021-12-01T19:42:09,740 [main                ] INFO  81b58736-7562-42fd-b6aa-740b9b557945 g.jvoicexml.interpreter.JVoiceXmlSession (   296) - waiting for end of session...
+2021-12-01T19:42:09,740 [fd-b6aa-740b9b557945] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   349) - starting session 81b58736-7562-42fd-b6aa-740b9b557945
+2021-12-01T19:42:09,740 [fd-b6aa-740b9b557945] DEBUG  g.jvoicexml.interpreter.JVoiceXmlSession (   353) - using class loader sun.misc.Launcher$AppClassLoader@73d16e93
+2021-12-01T19:42:09,760 [fd-b6aa-740b9b557945] DEBUG  .interpreter.event.JVoiceXmlEventHandler (   376) - adding strategy: 'class org.jvoicexml.interpreter.event.HangupEventStrategy' for event type 'connection.disconnect'
+2021-12-01T19:42:09,761 [fd-b6aa-740b9b557945] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'connection.disconnect' for 'org.jvoicexml.interpreter.event.JVoiceXmlEventHandler'
+2021-12-01T19:42:09,762 [fd-b6aa-740b9b557945] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent' for 'org.jvoicexml.interpreter.JVoiceXmlSession'
+2021-12-01T19:42:09,762 [fd-b6aa-740b9b557945] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'org.jvoicexml.event.plain.implementation.SpokenInputEvent' for 'org.jvoicexml.interpreter.JVoiceXmlSession'
+2021-12-01T19:42:09,762 [fd-b6aa-740b9b557945] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'nomatch' for 'org.jvoicexml.interpreter.JVoiceXmlSession'
+2021-12-01T19:42:09,763 [fd-b6aa-740b9b557945] INFO   l.documentserver.JVoiceXmlDocumentServer (   261) - loading document with URI 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml...
+2021-12-01T19:42:09,763 [fd-b6aa-740b9b557945] DEBUG  r.schemestrategy.file.FileSchemeStrategy (    84) - reading 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml'...
+2021-12-01T19:42:09,824 [fd-b6aa-740b9b557945] DEBUG  l.documentserver.JVoiceXmlDocumentServer (   283) - ...read document
+2021-12-01T19:42:09,865 [fd-b6aa-740b9b557945] DEBUG  l.documentserver.JVoiceXmlDocumentServer (   295) - <?xml version="1.0" encoding="UTF-8" standalone="no"?><vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xml:lang="de-DE" xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <form id="say_hello">
+        <block>
+            Hello World!
+            <goto next="#say_goodbye"/>
+        </block>
+    </form>
+    <form id="say_goodbye">
+        <block>
+            <prompt>Goodbye!</prompt>
+      ...
+2021-12-01T19:42:09,866 [fd-b6aa-740b9b557945] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   235) - resolving URI 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml'...
+2021-12-01T19:42:09,867 [fd-b6aa-740b9b557945] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   263) - resolved to 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml'
+2021-12-01T19:42:09,867 [fd-b6aa-740b9b557945] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   136) - loaded documents:
+2021-12-01T19:42:09,867 [fd-b6aa-740b9b557945] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   139) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml
+2021-12-01T19:42:09,867 [fd-b6aa-740b9b557945] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   434) - start processing application 'Unknown application' called from 'tcp://DESKTOP-TJP65I3:4242' to 'null' using protocol 'null' version 'null'...
+2021-12-01T19:42:09,876 [fd-b6aa-740b9b557945] INFO   l.interpreter.VoiceXmlInterpreterContext (   251) - loaded data model 'org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel@7d1525f0'
+2021-12-01T19:42:09,877 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'session'...
+2021-12-01T19:42:09,878 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION]
+2021-12-01T19:42:09,940 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'SESSION'
+2021-12-01T19:42:09,953 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'session.connection' in scope 'SESSION' with 'Connection [remote=ConnectionRemote [uri=tcp://DESKTOP-TJP65I3:4242], local=ConnectionLocal [uri=null], protocol=ConnectionProtocol [name=null, version=null], hangup=false, info=org.jvoicexml.client.text.TextConnectionInformation[text,text,text,tcp://DESKTOP-TJP65I3:4242,null,null,null,DESKTOP-TJP65I3/192.168.178.47,4242]]'
+2021-12-01T19:42:09,953 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'session.sessionid' in scope 'SESSION' with '81b58736-7562-42fd-b6aa-740b9b557945'
+2021-12-01T19:42:09,953 [fd-b6aa-740b9b557945] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'connection.disconnect' for 'org.jvoicexml.interpreter.datamodel.Connection'
+2021-12-01T19:42:09,954 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'application'...
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION]
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'APPLICATION'
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   461) - created 'lastresult$' in scope 'APPLICATION' as an array of 0
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.confidence' in scope 'APPLICATION' with 'null'
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.utterance' in scope 'APPLICATION' with 'null'
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.inputmode' in scope 'APPLICATION' with 'null'
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.interpretation' in scope 'APPLICATION' with 'null'
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   461) - created 'loadedDocumentURIs$' in scope 'APPLICATION' as an array of 1
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   850) - set 'loadedDocumentURIs$[0]' to 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml' in scope 'APPLICATION'
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   235) - resolving URI 'null'...
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   240) - cannot resolve null
+2021-12-01T19:42:09,955 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'document'...
+2021-12-01T19:42:09,956 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION, DOCUMENT]
+2021-12-01T19:42:09,956 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'DOCUMENT'
+2021-12-01T19:42:09,958 [fd-b6aa-740b9b557945] DEBUG  nterpreter.dialog.JVoiceXmlDialogFactory (    79) - added dialog template 'class org.jvoicexml.interpreter.dialog.ExecutablePlainForm' to handle tag 'form'
+2021-12-01T19:42:09,960 [fd-b6aa-740b9b557945] DEBUG  nterpreter.dialog.JVoiceXmlDialogFactory (    79) - added dialog template 'class org.jvoicexml.interpreter.dialog.ExecutableMenuForm' to handle tag 'menu'
+2021-12-01T19:42:09,961 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.VoiceXmlInterpreter (   178) - interpreter starts with dialog 'say_hello'
+2021-12-01T19:42:09,961 [fd-b6aa-740b9b557945] INFO   l.interpreter.VoiceXmlInterpreterContext (   831) - initializing document...
+2021-12-01T19:42:09,961 [fd-b6aa-740b9b557945] DEBUG  .interpreter.event.JVoiceXmlEventHandler (   169) - found 0 catch elements in document
+2021-12-01T19:42:09,961 [fd-b6aa-740b9b557945] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:42:09,962 [fd-b6aa-740b9b557945] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:42:09,962 [fd-b6aa-740b9b557945] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:42:09,962 [fd-b6aa-740b9b557945] INFO   l.interpreter.VoiceXmlInterpreterContext (   861) - ...done initializing document
+2021-12-01T19:42:09,962 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'dialog'...
+2021-12-01T19:42:09,962 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION, DOCUMENT, DIALOG]
+2021-12-01T19:42:09,962 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'DIALOG'
+2021-12-01T19:42:09,966 [fd-b6aa-740b9b557945] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'connection.disconnect' for 'org.jvoicexml.interpreter.HangupEventHandler'
+2021-12-01T19:42:09,967 [fd-b6aa-740b9b557945] DEBUG  .interpreter.event.JVoiceXmlEventHandler (   199) - found 0 catch elements in dialog 'say_hello'
+2021-12-01T19:42:09,967 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   276) - initializing FIA for dialog 'say_hello' using profile 'VoiceXML21'...
+2021-12-01T19:42:09,976 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   391) - initializing form item 'F17d774dd7b8S000001'
+2021-12-01T19:42:09,977 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   401) - created 'F17d774dd7b8S000001' in scope 'DIALOG' with 'null'
+2021-12-01T19:42:09,977 [fd-b6aa-740b9b557945] INFO   cexml.interpreter.formitem.BlockFormItem (   140) - initialized block form item 'F17d774dd7b8S000001' with 'null'
+2021-12-01T19:42:09,977 [fd-b6aa-740b9b557945] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:42:09,977 [fd-b6aa-740b9b557945] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:42:09,977 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   301) - found 1 form items in dialog 'say_hello'...
+2021-12-01T19:42:09,977 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   468) - starting main loop for form 'say_hello'...
+2021-12-01T19:42:09,978 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.VoiceXmlInterpreter (   120) - entered state TRANSITIONING
+2021-12-01T19:42:09,978 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   648) - selecting next form item in dialog 'say_hello'...
+2021-12-01T19:42:09,978 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   184) - checking if 'F17d774dd7b8S000001' is selectable
+2021-12-01T19:42:09,978 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   186) - value of   'F17d774dd7b8S000001': 'null'
+2021-12-01T19:42:09,978 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   187) - cond of    'F17d774dd7b8S000001': 'true'
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   188) - selectable 'F17d774dd7b8S000001': true
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   480) - next form item in form 'say_hello' is 'F17d774dd7b8S000001'
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   702) - collecting 'F17d774dd7b8S000001'...
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (  1313) - visiting block 'F17d774dd7b8S000001'
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] INFO   ml.interpreter.formitem.AbstractFormItem (   129) - setting form item variable 'F17d774dd7b8S000001' to true'
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   784) - set 'F17d774dd7b8S000001' in scope 'DIALOG' to 'true'
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] DEBUG  cexml.interpreter.formitem.BlockFormItem (    92) - block 'F17d774dd7b8S000001' marked as visited.
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'anonymous'...
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION, DOCUMENT, DIALOG, ANONYMOUS]
+2021-12-01T19:42:09,979 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'ANONYMOUS'
+2021-12-01T19:42:09,980 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'anonymous'...
+2021-12-01T19:42:09,980 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION, APPLICATION, DOCUMENT, DIALOG]
+2021-12-01T19:42:09,980 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'ANONYMOUS'
+2021-12-01T19:42:09,980 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   754) - processing 'F17d774dd7b8S000001'...
+2021-12-01T19:42:09,980 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   758) - cleared all just_filled flags
+2021-12-01T19:42:09,980 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   733) - obtaining resource 'text' from pool...
+2021-12-01T19:42:09,980 [fd-b6aa-740b9b557945] INFO   ml.implementation.pool.KeyedResourcePool (   118) - borrowed object of type 'text' (org.jvoicexml.implementation.text.TextTelephony)
+2021-12-01T19:42:09,981 [fd-b6aa-740b9b557945] DEBUG  ml.implementation.pool.KeyedResourcePool (   123) - pool has now 1 active/0 idle for key 'text' (org.jvoicexml.implementation.text.TextTelephony) after borrow
+2021-12-01T19:42:09,981 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   738) - connecting external resource (org.jvoicexml.implementation.text.TextTelephony).
+2021-12-01T19:42:09,981 [fd-b6aa-740b9b557945] DEBUG  icexml.implementation.text.TextTelephony (   446) - connecting to 'tcp://DESKTOP-TJP65I3:4242'...
+2021-12-01T19:42:09,983 [TextReceiverThread  ] DEBUG  l.implementation.text.TextReceiverThread (    92) - text receiver thread started
+2021-12-01T19:42:09,987 [fd-b6aa-740b9b557945] DEBUG  icexml.implementation.text.TextTelephony (   483) - ...connected
+2021-12-01T19:42:09,987 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   753) - ...connected
+2021-12-01T19:42:09,987 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (    90) - text sender thread started
+2021-12-01T19:42:09,987 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (    97) - trying to take next message
+2021-12-01T19:42:09,988 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   507) - borrowed call control of type 'text'
+2021-12-01T19:42:10,002 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   389) - connected to tcp://DESKTOP-TJP65I3.fritz.box:63994
+2021-12-01T19:42:10,049 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   648) - selecting next form item in dialog 'say_hello'...
+2021-12-01T19:42:10,049 [TextSenderThread    ] DEBUG  icexml.implementation.text.TextTelephony (   163) - added pending message 0
+2021-12-01T19:42:10,049 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   184) - checking if 'F17d774dd7b8S000001' is selectable
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   186) - value of   'F17d774dd7b8S000001': 'true'
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   187) - cond of    'F17d774dd7b8S000001': 'true'
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] DEBUG  ml.interpreter.formitem.AbstractFormItem (   188) - selectable 'F17d774dd7b8S000001': false
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] INFO   .interpreter.FormInterpretationAlgorithm (   535) - no next element in dialog 'say_hello'. Exiting mainLoop...
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'dialog'...
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION, APPLICATION, DOCUMENT]
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'DIALOG'
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'document'...
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION, APPLICATION]
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'DOCUMENT'
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] INFO   l.interpreter.VoiceXmlInterpreterContext (   486) - no more documents to process for 'Unknown application'
+2021-12-01T19:42:10,050 [fd-b6aa-740b9b557945] INFO   l.interpreter.VoiceXmlInterpreterContext (   510) - playing queued prompts before exit
+2021-12-01T19:42:10,052 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   733) - obtaining resource 'text' from pool...
+2021-12-01T19:42:10,053 [fd-b6aa-740b9b557945] INFO   ml.implementation.pool.KeyedResourcePool (   118) - borrowed object of type 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput)
+2021-12-01T19:42:10,053 [fd-b6aa-740b9b557945] DEBUG  ml.implementation.pool.KeyedResourcePool (   123) - pool has now 1 active/0 idle for key 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) after borrow
+2021-12-01T19:42:10,053 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   738) - connecting external resource (org.jvoicexml.implementation.text.TextSynthesizedOutput).
+2021-12-01T19:42:10,053 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   753) - ...connected
+2021-12-01T19:42:10,055 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   291) - borrowed system output of type 'text'
+2021-12-01T19:42:10,055 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   366) - waiting for empty output queue...
+2021-12-01T19:42:10,055 [fd-b6aa-740b9b557945] DEBUG  mplementation.text.TextSynthesizedOutput (   329) - output queue is empty
+2021-12-01T19:42:10,055 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   372) - ...output queue empty.
+2021-12-01T19:42:10,056 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'application'...
+2021-12-01T19:42:10,056 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION]
+2021-12-01T19:42:10,056 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'APPLICATION'
+2021-12-01T19:42:10,055 [Thread-8            ] INFO   icexml.implementation.text.TextTelephony (   120) - playing prompts
+2021-12-01T19:42:10,056 [fd-b6aa-740b9b557945] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   454) - finished processing application 'Unknown application'
+2021-12-01T19:42:10,056 [fd-b6aa-740b9b557945] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   459) - closing session...
+2021-12-01T19:42:10,056 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   561) - closing implementation platform
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   366) - waiting for empty output queue...
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] DEBUG  mplementation.text.TextSynthesizedOutput (   329) - output queue is empty
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   372) - ...output queue empty.
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   587) - returning aqcuired resources
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   318) - returning system output of type 'text'...
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   773) - returning external resource 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) to pool...
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   775) - disconnecting external resource
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   778) - org.jvoicexml.implementation.text.TextSynthesizedOutput disconnected
+2021-12-01T19:42:10,057 [fd-b6aa-740b9b557945] INFO   ml.implementation.pool.KeyedResourcePool (   151) - returned object of type 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput)
+2021-12-01T19:42:10,058 [fd-b6aa-740b9b557945] DEBUG  ml.implementation.pool.KeyedResourcePool (   157) - pool has now 0 active/1 idle for key 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) after return
+2021-12-01T19:42:10,058 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   786) - returned external resource 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) to pool
+2021-12-01T19:42:10,058 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   327) - returned system output of type 'text'
+2021-12-01T19:42:10,058 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   537) - returning call control of type 'text'...
+2021-12-01T19:42:10,058 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   773) - returning external resource 'text' (org.jvoicexml.implementation.text.TextTelephony) to pool...
+2021-12-01T19:42:10,058 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   775) - disconnecting external resource
+2021-12-01T19:42:10,058 [fd-b6aa-740b9b557945] DEBUG  icexml.implementation.text.TextTelephony (   493) - disconnecting from 'tcp://DESKTOP-TJP65I3:4242'...
+2021-12-01T19:42:10,113 [TextSenderThread    ] INFO   xml.implementation.text.TextSenderThread (   104) - sending Type: INPUT_CLOSED
+SequenceNumber: 0
+
+2021-12-01T19:42:10,119 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (   107) - ... done sending output
+2021-12-01T19:42:10,119 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (    97) - trying to take next message
+2021-12-01T19:42:10,119 [TextSenderThread    ] DEBUG  icexml.implementation.text.TextTelephony (   163) - added pending message 1
+2021-12-01T19:42:10,119 [TextSenderThread    ] INFO   xml.implementation.text.TextSenderThread (   104) - sending Type: BYE
+SequenceNumber: 1
+
+2021-12-01T19:42:10,119 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   441) - read Type: INPUT_CLOSED
+SequenceNumber: 0
+
+2021-12-01T19:42:10,120 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (   107) - ... done sending output
+2021-12-01T19:42:10,120 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (   121) - text sender thread stopped
+2021-12-01T19:42:10,121 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   600) - sent Type: ACK
+SequenceNumber: 0
+
+2021-12-01T19:42:10,121 [TextReceiverThread  ] INFO   l.implementation.text.TextReceiverThread (   107) - read: Type: ACK
+SequenceNumber: 0
+
+2021-12-01T19:42:10,121 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   441) - read Type: BYE
+SequenceNumber: 1
+
+2021-12-01T19:42:10,122 [TextReceiverThread  ] DEBUG  icexml.implementation.text.TextTelephony (   186) - removed pending message 0 remaining [1]
+2021-12-01T19:42:10,122 [TextReceiverThread  ] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   899) - telephony connection hung up org.jvoicexml.implementation.Telephony[org.jvoicexml.implementation.text.TextTelephony@1a619f52,HUNGUP]
+2021-12-01T19:42:10,122 [fd-b6aa-740b9b557945] DEBUG  icexml.implementation.text.TextTelephony (   553) - disconnected
+2021-12-01T19:42:10,122 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   600) - sent Type: ACK
+SequenceNumber: 1
+
+2021-12-01T19:42:10,122 [fd-b6aa-740b9b557945] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   778) - org.jvoicexml.implementation.text.TextTelephony disconnected
+2021-12-01T19:42:10,122 [fd-b6aa-740b9b557945] INFO   ml.implementation.pool.KeyedResourcePool (   151) - returned object of type 'text' (org.jvoicexml.implementation.text.TextTelephony)
+2021-12-01T19:42:10,123 [fd-b6aa-740b9b557945] DEBUG  ml.implementation.pool.KeyedResourcePool (   157) - pool has now 0 active/1 idle for key 'text' (org.jvoicexml.implementation.text.TextTelephony) after return
+2021-12-01T19:42:10,123 [TextReceiverThread  ] INFO   .interpreter.event.JVoiceXmlEventHandler (   600) - notified event 'connection.disconnect.hangup'
+2021-12-01T19:42:10,123 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   786) - returned external resource 'text' (org.jvoicexml.implementation.text.TextTelephony) to pool
+2021-12-01T19:42:10,123 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   626) - server closed
+2021-12-01T19:42:10,123 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   544) - returned call control of type 'text'
+2021-12-01T19:42:10,123 [TextReceiverThread  ] DEBUG  oicexml.interpreter.datamodel.Connection (   150) - setting hangup in scripting environment to true
+2021-12-01T19:42:10,123 [fd-b6aa-740b9b557945] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   591) - implementation platform closed
+2021-12-01T19:42:10,123 [TextReceiverThread  ] INFO   jvoicexml.interpreter.HangupEventHandler (    61) - received hangup event 'org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent: connection.disconnect.hangup: caller hung up'. Entering final processing state
+2021-12-01T19:42:10,123 [fd-b6aa-740b9b557945] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'session'...
+2021-12-01T19:42:10,124 [fd-b6aa-740b9b557945] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: []
+2021-12-01T19:42:10,123 [TextReceiverThread  ] INFO   voicexml.interpreter.VoiceXmlInterpreter (   120) - entered state FINALPROCESSING
+2021-12-01T19:42:10,124 [fd-b6aa-740b9b557945] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'SESSION'
+2021-12-01T19:42:10,124 [fd-b6aa-740b9b557945] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   468) - ...session closed
+2021-12-01T19:42:10,124 [TextReceiverThread  ] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   922) - returning aqcuired resources
+2021-12-01T19:42:10,124 [TextReceiverThread  ] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   926) - implementation platform closed
+2021-12-01T19:42:10,124 [main                ] INFO  81b58736-7562-42fd-b6aa-740b9b557945 g.jvoicexml.interpreter.JVoiceXmlSession (   309) - ...session ended
+2021-12-01T19:42:10,125 [TextReceiverThread  ] DEBUG  l.implementation.text.TextReceiverThread (   138) - text receiver thread stopped
+2021-12-01T19:42:10,125 [main                ] INFO  81b58736-7562-42fd-b6aa-740b9b557945     org.jvoicexml.client.text.TextServer (   615) - text server stopped
+2021-12-01T19:42:10,125 [main                ] INFO  81b58736-7562-42fd-b6aa-740b9b557945              org.jvoicexml.JVoiceXmlMain (   578) - received shutdown request
+2021-12-01T19:42:10,125 [ShutdownWaiter      ] INFO                org.jvoicexml.JVoiceXmlMain (   587) - shutting down JVoiceXml...
+2021-12-01T19:42:10,125 [ShutdownWaiter      ] INFO                org.jvoicexml.JVoiceXmlMain (   589) - interpreter state DEALLOCATING_RESOURCES
+2021-12-01T19:42:10,125 [ShutdownWaiter      ] DEBUG               org.jvoicexml.JVoiceXmlMain (   655) - shutdown already in process
+2021-12-01T19:42:10,125 [ShutdownWaiter      ] DEBUG               org.jvoicexml.JVoiceXmlMain (   659) - removed shutdown hook
+2021-12-01T19:42:10,126 [ShutdownWaiter      ] DEBUG  l.JVoiceXmlImplementationPlatformFactory (   294) - closing implementation platforms...
+2021-12-01T19:42:10,126 [ShutdownHook        ] INFO        org.jvoicexml.JVoiceXmlShutdownHook (    55) - JVoiceXML interrupted! Shutting down...
+2021-12-01T19:42:10,127 [ShutdownWaiter      ] DEBUG  l.JVoiceXmlImplementationPlatformFactory (   304) - synthesizer pool has 0 active/1 idle objects
+2021-12-01T19:42:10,127 [TerminationThread   ] DEBUG  l.implementation.jvxml.TerminationThread (    50) - Termination thread started
+2021-12-01T19:51:11,824 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   119) - ----------------------------------------------------
+2021-12-01T19:51:11,911 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   120) - starting VoiceXML interpreter unmanaged version...
+2021-12-01T19:51:11,915 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   167) - Java:			Java Runtime Environment 1.8.0_291
+2021-12-01T19:51:11,915 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   168) - Java vendor:		Oracle Corporation
+2021-12-01T19:51:11,915 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   172) - Operating system:	Windows 10
+2021-12-01T19:51:11,916 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   177) - java.security.policy:	(undefined)
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   189) - Class loader: sun.misc.Launcher$AppClassLoader@73d16e93
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml/bin/default
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml/bin/main/
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.srgs/bin/default
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.srgs/bin/main/
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.xml/bin/default
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.xml/bin/main/
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.interpreter.grammar.luis/bin/default
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.interpreter.grammar.luis/bin/main/
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.interpreter.datamodel.ecmascript/bin/default
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.interpreter.datamodel.ecmascript/bin/main/
+2021-12-01T19:51:11,916 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.client/bin/default
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client/bin/main/
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.documentserver.schemestrategy.file/bin/default
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.documentserver.schemestrategy.file/bin/main/
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client.text/bin/default/
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.client.text/bin/main/
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.documentserver.schemestrategy.http/bin/default
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.documentserver.schemestrategy.http/bin/main/
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.profile.vxml21/bin/default
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.profile.vxml21/bin/main/
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/org.jvoicexml.implementation.text/bin/default
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.implementation.text/bin/main/
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.14.1/9141212b8507ab50a45525b545b39d224614528b/log4j-core-2.14.1.jar
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-jul/2.14.1/8ba38040d35759986f56779c76767e437d4db626/log4j-jul-2.14.1.jar
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-1.2-api/2.14.1/6bfcc76fa1a1a41295aff0042200aaa82d9ac286/log4j-1.2-api-2.14.1.jar
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.14.1/9a40554b8dab7ac9606089c87ae8a5ba914ec932/log4j-slf4j-impl-2.14.1.jar
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.14.1/cd8858fbbde69f46bce8db1152c18a43328aae78/log4j-api-2.14.1.jar
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.8.3/cea3788c72271d45676ce32c0665991674b24cc5/jackson-databind-2.8.3.jar
+2021-12-01T19:51:11,917 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.8.3/5e1dc37c96308851c3ff609c250dc849c4b12022/jackson-core-2.8.3.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.mozilla/rhino/1.7.10/24650bd98b1041df2eb1be5cb64dd1ad5b2e7c55/rhino-1.7.10.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/net.sourceforge.jchardet/jchardet/1.0/fb9dcaf21914d93122f614886ac98a594ed7f767/jchardet-1.0.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-pool/commons-pool/1.6/4572d589699f09d866a226a14b7f4323c6d8f040/commons-pool-1.6.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.5/6c6c702c89bfff3cd9e80b04d668c5e190d588c6/commons-lang3-3.5.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.1.0/e13484d9da178399d32d2d27ee21a77cfb4b7873/protobuf-java-3.1.0.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.googlecode.json-simple/json-simple/1.1.1/c9ad4a0850ab676c5c64461a05ca524cdfff59f1/json-simple-1.1.1.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.9/a25c1be5ce99d0ce99aa43eb982868c796dd0775/httpclient-4.5.9.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.11/de748cf874e4e193b42eceea9fe5574fabb9d4df/httpcore-4.4.11.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.8.0/45b426f7796b741035581a176744d91090e2e6fb/jackson-annotations-2.8.0.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/junit/junit/4.10/e4f1766ce7404a08f45d859fb9c226fc9e41a861/junit-4.10.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.11/3acb4705652e16236558f0f4f2192cc33c3bd189/commons-codec-1.11.jar
+2021-12-01T19:51:11,918 [main                ] DEBUG               org.jvoicexml.JVoiceXmlMain (   195) - - file:/C:/Users/dirks/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.1/860340562250678d1a344907ac75754e259cdb14/hamcrest-core-1.1.jar
+2021-12-01T19:51:11,919 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   129) - interpreter state STARTED
+2021-12-01T19:51:11,919 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   378) - interpreter state ALLOCATING_RESOURCES
+2021-12-01T19:51:11,920 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   388) - using configuration 'org.jvoicexml.demo.embedded.EmbeddedTextConfiguration'
+2021-12-01T19:51:11,921 [JVoiceXmlMain       ] DEBUG               org.jvoicexml.JVoiceXmlMain (   637) - added shutdown hook
+2021-12-01T19:51:11,933 [JVoiceXmlMain       ] INFO   l.documentserver.JVoiceXmlDocumentServer (   352) - adding scheme strategy for scheme 'http': org.jvoicexml.documentserver.schemestrategy.http.HttpSchemeStrategy
+2021-12-01T19:51:11,938 [JVoiceXmlMain       ] INFO   l.documentserver.JVoiceXmlDocumentServer (   352) - adding scheme strategy for scheme 'file': org.jvoicexml.documentserver.schemestrategy.file.FileSchemeStrategy
+2021-12-01T19:51:11,961 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:51:11,966 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:51:11,967 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   224) - added synthesized output factory class org.jvoicexml.implementation.text.TextSynthesizedOutputFactory for type 'text'
+2021-12-01T19:51:11,974 [JVoiceXmlMain       ] INFO   plementation.text.TextSpokenInputFactory (    73) - added grammar parser 'class org.jvoicexml.srgs.SrgsSisrXmlGrammarParser' for grammar type 'application/srgs+xml'
+2021-12-01T19:51:11,975 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:51:11,981 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:51:11,981 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   244) - added user input factory class org.jvoicexml.implementation.text.TextSpokenInputFactory for type 'text'
+2021-12-01T19:51:11,984 [JVoiceXmlMain       ] INFO   ml.implementation.pool.KeyedResourcePool (    85) - loading 1 instance(s) of type 'text'
+2021-12-01T19:51:11,988 [JVoiceXmlMain       ] DEBUG  ml.implementation.pool.KeyedResourcePool (    91) - ...resources loaded.
+2021-12-01T19:51:11,988 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   262) - added telephony factory class org.jvoicexml.implementation.text.TextTelephonyFactory for type 'text'
+2021-12-01T19:51:11,988 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   151) - available synthesizers:
+2021-12-01T19:51:11,988 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   154) - - 1 instance(s) of type 'text'
+2021-12-01T19:51:11,989 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   162) - available recognizers:
+2021-12-01T19:51:11,989 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   165) - - 1 instance(s) of type 'text'
+2021-12-01T19:51:11,989 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   173) - available telephones:
+2021-12-01T19:51:11,989 [JVoiceXmlMain       ] INFO   l.JVoiceXmlImplementationPlatformFactory (   176) - - 1 instance(s) of type 'text'
+2021-12-01T19:51:11,995 [JVoiceXmlMain       ] INFO   rpreter.grammar.GrammarIdentifierCentral (   202) - added grammar identifier class org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier for type 'application/srgs+xml'
+2021-12-01T19:51:12,032 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   538) - added profile 'VoiceXML21'
+2021-12-01T19:51:12,032 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   546) - available profiles:
+2021-12-01T19:51:12,033 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   549) - - 'VoiceXML21'
+2021-12-01T19:51:12,033 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   423) - interpreter state RUNNING
+2021-12-01T19:51:12,033 [ShutdownWaiter      ] DEBUG              org.jvoicexml.ShutdownWaiter (    65) - initialized shutdown sequence
+2021-12-01T19:51:12,034 [JVoiceXmlMain       ] INFO                org.jvoicexml.JVoiceXmlMain (   424) - VoiceXML interpreter unmanaged version started.
+2021-12-01T19:51:12,038 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   373) - text server started at port '4242'
+2021-12-01T19:51:12,213 [main                ] INFO                org.jvoicexml.JVoiceXmlMain (   249) - creating new session...
+2021-12-01T19:51:12,220 [main                ] INFO  04b084e1-14ce-4419-b751-8b7be8be88e0              org.jvoicexml.JVoiceXmlMain (   261) - created session 04b084e1-14ce-4419-b751-8b7be8be88e0
+2021-12-01T19:51:12,222 [main                ] INFO  04b084e1-14ce-4419-b751-8b7be8be88e0 g.jvoicexml.interpreter.JVoiceXmlSession (   296) - waiting for end of session...
+2021-12-01T19:51:12,222 [19-b751-8b7be8be88e0] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   349) - starting session 04b084e1-14ce-4419-b751-8b7be8be88e0
+2021-12-01T19:51:12,222 [19-b751-8b7be8be88e0] DEBUG  g.jvoicexml.interpreter.JVoiceXmlSession (   353) - using class loader sun.misc.Launcher$AppClassLoader@73d16e93
+2021-12-01T19:51:12,243 [19-b751-8b7be8be88e0] DEBUG  .interpreter.event.JVoiceXmlEventHandler (   376) - adding strategy: 'class org.jvoicexml.interpreter.event.HangupEventStrategy' for event type 'connection.disconnect'
+2021-12-01T19:51:12,243 [19-b751-8b7be8be88e0] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'connection.disconnect' for 'org.jvoicexml.interpreter.event.JVoiceXmlEventHandler'
+2021-12-01T19:51:12,244 [19-b751-8b7be8be88e0] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'org.jvoicexml.event.plain.implementation.SynthesizedOutputEvent' for 'org.jvoicexml.interpreter.JVoiceXmlSession'
+2021-12-01T19:51:12,244 [19-b751-8b7be8be88e0] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'org.jvoicexml.event.plain.implementation.SpokenInputEvent' for 'org.jvoicexml.interpreter.JVoiceXmlSession'
+2021-12-01T19:51:12,244 [19-b751-8b7be8be88e0] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'nomatch' for 'org.jvoicexml.interpreter.JVoiceXmlSession'
+2021-12-01T19:51:12,245 [19-b751-8b7be8be88e0] INFO   l.documentserver.JVoiceXmlDocumentServer (   261) - loading document with URI 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml...
+2021-12-01T19:51:12,246 [19-b751-8b7be8be88e0] DEBUG  r.schemestrategy.file.FileSchemeStrategy (    84) - reading 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml'...
+2021-12-01T19:51:12,315 [19-b751-8b7be8be88e0] DEBUG  l.documentserver.JVoiceXmlDocumentServer (   283) - ...read document
+2021-12-01T19:51:12,356 [19-b751-8b7be8be88e0] DEBUG  l.documentserver.JVoiceXmlDocumentServer (   295) - <?xml version="1.0" encoding="UTF-8" standalone="no"?><vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xml:lang="de-DE" xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <form id="say_hello">
+        <block>
+            Hello World!
+            <goto next="#say_goodbye"/>
+        </block>
+    </form>
+    <form id="say_goodbye">
+        <block>
+            <prompt>Goodbye!</prompt>
+      ...
+2021-12-01T19:51:12,357 [19-b751-8b7be8be88e0] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   235) - resolving URI 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml'...
+2021-12-01T19:51:12,358 [19-b751-8b7be8be88e0] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   263) - resolved to 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml'
+2021-12-01T19:51:12,358 [19-b751-8b7be8be88e0] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   136) - loaded documents:
+2021-12-01T19:51:12,358 [19-b751-8b7be8be88e0] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   139) - - file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml
+2021-12-01T19:51:12,358 [19-b751-8b7be8be88e0] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   434) - start processing application 'Unknown application' called from 'tcp://DESKTOP-TJP65I3:4242' to 'null' using protocol 'null' version 'null'...
+2021-12-01T19:51:12,366 [19-b751-8b7be8be88e0] INFO   l.interpreter.VoiceXmlInterpreterContext (   251) - loaded data model 'org.jvoicexml.interpreter.datamodel.ecmascript.EcmaScriptDataModel@3eac1bfd'
+2021-12-01T19:51:12,367 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'session'...
+2021-12-01T19:51:12,368 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION]
+2021-12-01T19:51:12,427 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'SESSION'
+2021-12-01T19:51:12,440 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'session.connection' in scope 'SESSION' with 'Connection [remote=ConnectionRemote [uri=tcp://DESKTOP-TJP65I3:4242], local=ConnectionLocal [uri=null], protocol=ConnectionProtocol [name=null, version=null], hangup=false, info=org.jvoicexml.client.text.TextConnectionInformation[text,text,text,tcp://DESKTOP-TJP65I3:4242,null,null,null,DESKTOP-TJP65I3/192.168.178.47,4242]]'
+2021-12-01T19:51:12,440 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'session.sessionid' in scope 'SESSION' with '04b084e1-14ce-4419-b751-8b7be8be88e0'
+2021-12-01T19:51:12,440 [19-b751-8b7be8be88e0] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'connection.disconnect' for 'org.jvoicexml.interpreter.datamodel.Connection'
+2021-12-01T19:51:12,441 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'application'...
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION]
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'APPLICATION'
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   461) - created 'lastresult$' in scope 'APPLICATION' as an array of 0
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.confidence' in scope 'APPLICATION' with 'null'
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.utterance' in scope 'APPLICATION' with 'null'
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.inputmode' in scope 'APPLICATION' with 'null'
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   404) - created 'lastresult$.interpretation' in scope 'APPLICATION' with 'null'
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   461) - created 'loadedDocumentURIs$' in scope 'APPLICATION' as an array of 1
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   850) - set 'loadedDocumentURIs$[0]' to 'file:/C:/Users/dirks/git/JVoiceXML/org.jvoicexml.demo.embedded/bin/main/hello.vxml' in scope 'APPLICATION'
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   235) - resolving URI 'null'...
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  oicexml.interpreter.JVoiceXmlApplication (   240) - cannot resolve null
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'document'...
+2021-12-01T19:51:12,442 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION, DOCUMENT]
+2021-12-01T19:51:12,443 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'DOCUMENT'
+2021-12-01T19:51:12,444 [19-b751-8b7be8be88e0] DEBUG  nterpreter.dialog.JVoiceXmlDialogFactory (    79) - added dialog template 'class org.jvoicexml.interpreter.dialog.ExecutablePlainForm' to handle tag 'form'
+2021-12-01T19:51:12,445 [19-b751-8b7be8be88e0] DEBUG  nterpreter.dialog.JVoiceXmlDialogFactory (    79) - added dialog template 'class org.jvoicexml.interpreter.dialog.ExecutableMenuForm' to handle tag 'menu'
+2021-12-01T19:51:12,446 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.VoiceXmlInterpreter (   178) - interpreter starts with dialog 'say_hello'
+2021-12-01T19:51:12,446 [19-b751-8b7be8be88e0] INFO   l.interpreter.VoiceXmlInterpreterContext (   831) - initializing document...
+2021-12-01T19:51:12,446 [19-b751-8b7be8be88e0] DEBUG  .interpreter.event.JVoiceXmlEventHandler (   169) - found 0 catch elements in document
+2021-12-01T19:51:12,447 [19-b751-8b7be8be88e0] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:51:12,447 [19-b751-8b7be8be88e0] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:51:12,447 [19-b751-8b7be8be88e0] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:51:12,447 [19-b751-8b7be8be88e0] INFO   l.interpreter.VoiceXmlInterpreterContext (   861) - ...done initializing document
+2021-12-01T19:51:12,447 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'dialog'...
+2021-12-01T19:51:12,447 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION, DOCUMENT, DIALOG]
+2021-12-01T19:51:12,447 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'DIALOG'
+2021-12-01T19:51:12,452 [19-b751-8b7be8be88e0] DEBUG              org.jvoicexml.event.EventBus (    72) - added subscription of 'connection.disconnect' for 'org.jvoicexml.interpreter.HangupEventHandler'
+2021-12-01T19:51:12,452 [19-b751-8b7be8be88e0] DEBUG  .interpreter.event.JVoiceXmlEventHandler (   199) - found 0 catch elements in dialog 'say_hello'
+2021-12-01T19:51:12,453 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   276) - initializing FIA for dialog 'say_hello' using profile 'VoiceXML21'...
+2021-12-01T19:51:12,462 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   391) - initializing form item 'F17d77561eceS000001'
+2021-12-01T19:51:12,462 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   401) - created 'F17d77561eceS000001' in scope 'DIALOG' with 'null'
+2021-12-01T19:51:12,462 [19-b751-8b7be8be88e0] INFO   cexml.interpreter.formitem.BlockFormItem (   140) - initialized block form item 'F17d77561eceS000001' with 'null'
+2021-12-01T19:51:12,462 [19-b751-8b7be8be88e0] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:51:12,463 [19-b751-8b7be8be88e0] DEBUG  e.vxml21.tagstrategy.AbstractTagStrategy (   313) - node: '#text'
+2021-12-01T19:51:12,463 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   301) - found 1 form items in dialog 'say_hello'...
+2021-12-01T19:51:12,463 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   468) - starting main loop for form 'say_hello'...
+2021-12-01T19:51:12,463 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.VoiceXmlInterpreter (   120) - entered state TRANSITIONING
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   648) - selecting next form item in dialog 'say_hello'...
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   184) - checking if 'F17d77561eceS000001' is selectable
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   186) - value of   'F17d77561eceS000001': 'null'
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   187) - cond of    'F17d77561eceS000001': 'true'
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   188) - selectable 'F17d77561eceS000001': true
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   480) - next form item in form 'say_hello' is 'F17d77561eceS000001'
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   702) - collecting 'F17d77561eceS000001'...
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (  1313) - visiting block 'F17d77561eceS000001'
+2021-12-01T19:51:12,464 [19-b751-8b7be8be88e0] INFO   ml.interpreter.formitem.AbstractFormItem (   129) - setting form item variable 'F17d77561eceS000001' to true'
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   784) - set 'F17d77561eceS000001' in scope 'DIALOG' to 'true'
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] DEBUG  cexml.interpreter.formitem.BlockFormItem (    92) - block 'F17d77561eceS000001' marked as visited.
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (    75) - entering new scope 'anonymous'...
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (    80) - current scope stack: [SESSION, APPLICATION, DOCUMENT, DIALOG, ANONYMOUS]
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   180) - created scope 'ANONYMOUS'
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'anonymous'...
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION, APPLICATION, DOCUMENT, DIALOG]
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'ANONYMOUS'
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   754) - processing 'F17d77561eceS000001'...
+2021-12-01T19:51:12,465 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   758) - cleared all just_filled flags
+2021-12-01T19:51:12,466 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   733) - obtaining resource 'text' from pool...
+2021-12-01T19:51:12,466 [19-b751-8b7be8be88e0] INFO   ml.implementation.pool.KeyedResourcePool (   118) - borrowed object of type 'text' (org.jvoicexml.implementation.text.TextTelephony)
+2021-12-01T19:51:12,466 [19-b751-8b7be8be88e0] DEBUG  ml.implementation.pool.KeyedResourcePool (   123) - pool has now 1 active/0 idle for key 'text' (org.jvoicexml.implementation.text.TextTelephony) after borrow
+2021-12-01T19:51:12,466 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   738) - connecting external resource (org.jvoicexml.implementation.text.TextTelephony).
+2021-12-01T19:51:12,466 [19-b751-8b7be8be88e0] DEBUG  icexml.implementation.text.TextTelephony (   446) - connecting to 'tcp://DESKTOP-TJP65I3:4242'...
+2021-12-01T19:51:12,469 [TextReceiverThread  ] DEBUG  l.implementation.text.TextReceiverThread (    92) - text receiver thread started
+2021-12-01T19:51:12,471 [19-b751-8b7be8be88e0] DEBUG  icexml.implementation.text.TextTelephony (   483) - ...connected
+2021-12-01T19:51:12,471 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   753) - ...connected
+2021-12-01T19:51:12,471 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (    90) - text sender thread started
+2021-12-01T19:51:12,471 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (    97) - trying to take next message
+2021-12-01T19:51:12,472 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   507) - borrowed call control of type 'text'
+2021-12-01T19:51:12,478 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   389) - connected to tcp://DESKTOP-TJP65I3.fritz.box:61301
+2021-12-01T19:51:12,518 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   648) - selecting next form item in dialog 'say_hello'...
+2021-12-01T19:51:12,518 [TextSenderThread    ] DEBUG  icexml.implementation.text.TextTelephony (   163) - added pending message 0
+2021-12-01T19:51:12,519 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   184) - checking if 'F17d77561eceS000001' is selectable
+2021-12-01T19:51:12,519 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   186) - value of   'F17d77561eceS000001': 'true'
+2021-12-01T19:51:12,519 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   187) - cond of    'F17d77561eceS000001': 'true'
+2021-12-01T19:51:12,519 [19-b751-8b7be8be88e0] DEBUG  ml.interpreter.formitem.AbstractFormItem (   188) - selectable 'F17d77561eceS000001': false
+2021-12-01T19:51:12,519 [19-b751-8b7be8be88e0] INFO   .interpreter.FormInterpretationAlgorithm (   535) - no next element in dialog 'say_hello'. Exiting mainLoop...
+2021-12-01T19:51:12,519 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'dialog'...
+2021-12-01T19:51:12,520 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION, APPLICATION, DOCUMENT]
+2021-12-01T19:51:12,520 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'DIALOG'
+2021-12-01T19:51:12,520 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'document'...
+2021-12-01T19:51:12,520 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION, APPLICATION]
+2021-12-01T19:51:12,520 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'DOCUMENT'
+2021-12-01T19:51:12,520 [19-b751-8b7be8be88e0] INFO   l.interpreter.VoiceXmlInterpreterContext (   486) - no more documents to process for 'Unknown application'
+2021-12-01T19:51:12,520 [19-b751-8b7be8be88e0] INFO   l.interpreter.VoiceXmlInterpreterContext (   510) - playing queued prompts before exit
+2021-12-01T19:51:12,522 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   733) - obtaining resource 'text' from pool...
+2021-12-01T19:51:12,522 [19-b751-8b7be8be88e0] INFO   ml.implementation.pool.KeyedResourcePool (   118) - borrowed object of type 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput)
+2021-12-01T19:51:12,523 [19-b751-8b7be8be88e0] DEBUG  ml.implementation.pool.KeyedResourcePool (   123) - pool has now 1 active/0 idle for key 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) after borrow
+2021-12-01T19:51:12,523 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   738) - connecting external resource (org.jvoicexml.implementation.text.TextSynthesizedOutput).
+2021-12-01T19:51:12,523 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   753) - ...connected
+2021-12-01T19:51:12,525 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   291) - borrowed system output of type 'text'
+2021-12-01T19:51:12,526 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   366) - waiting for empty output queue...
+2021-12-01T19:51:12,526 [19-b751-8b7be8be88e0] DEBUG  mplementation.text.TextSynthesizedOutput (   329) - output queue is empty
+2021-12-01T19:51:12,526 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   372) - ...output queue empty.
+2021-12-01T19:51:12,526 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'application'...
+2021-12-01T19:51:12,526 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: [SESSION]
+2021-12-01T19:51:12,526 [Thread-8            ] INFO   icexml.implementation.text.TextTelephony (   120) - playing prompts
+2021-12-01T19:51:12,526 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'APPLICATION'
+2021-12-01T19:51:12,526 [19-b751-8b7be8be88e0] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   454) - finished processing application 'Unknown application'
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   459) - closing session...
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   561) - closing implementation platform
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   366) - waiting for empty output queue...
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] DEBUG  mplementation.text.TextSynthesizedOutput (   329) - output queue is empty
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   372) - ...output queue empty.
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   587) - returning aqcuired resources
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   318) - returning system output of type 'text'...
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   773) - returning external resource 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) to pool...
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   775) - disconnecting external resource
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   778) - org.jvoicexml.implementation.text.TextSynthesizedOutput disconnected
+2021-12-01T19:51:12,527 [19-b751-8b7be8be88e0] INFO   ml.implementation.pool.KeyedResourcePool (   151) - returned object of type 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput)
+2021-12-01T19:51:12,528 [19-b751-8b7be8be88e0] DEBUG  ml.implementation.pool.KeyedResourcePool (   157) - pool has now 0 active/1 idle for key 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) after return
+2021-12-01T19:51:12,528 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   786) - returned external resource 'text' (org.jvoicexml.implementation.text.TextSynthesizedOutput) to pool
+2021-12-01T19:51:12,528 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   327) - returned system output of type 'text'
+2021-12-01T19:51:12,528 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   537) - returning call control of type 'text'...
+2021-12-01T19:51:12,528 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   773) - returning external resource 'text' (org.jvoicexml.implementation.text.TextTelephony) to pool...
+2021-12-01T19:51:12,528 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   775) - disconnecting external resource
+2021-12-01T19:51:12,528 [19-b751-8b7be8be88e0] DEBUG  icexml.implementation.text.TextTelephony (   493) - disconnecting from 'tcp://DESKTOP-TJP65I3:4242'...
+2021-12-01T19:51:12,573 [TextSenderThread    ] INFO   xml.implementation.text.TextSenderThread (   104) - sending Type: INPUT_CLOSED
+SequenceNumber: 0
+
+2021-12-01T19:51:12,578 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (   107) - ... done sending output
+2021-12-01T19:51:12,578 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (    97) - trying to take next message
+2021-12-01T19:51:12,578 [TextSenderThread    ] DEBUG  icexml.implementation.text.TextTelephony (   163) - added pending message 1
+2021-12-01T19:51:12,578 [TextSenderThread    ] INFO   xml.implementation.text.TextSenderThread (   104) - sending Type: BYE
+SequenceNumber: 1
+
+2021-12-01T19:51:12,578 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (   107) - ... done sending output
+2021-12-01T19:51:12,578 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   441) - read Type: INPUT_CLOSED
+SequenceNumber: 0
+
+2021-12-01T19:51:12,578 [TextSenderThread    ] DEBUG  xml.implementation.text.TextSenderThread (   121) - text sender thread stopped
+2021-12-01T19:51:12,580 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   600) - sent Type: ACK
+SequenceNumber: 0
+
+2021-12-01T19:51:12,580 [TextReceiverThread  ] INFO   l.implementation.text.TextReceiverThread (   107) - read: Type: ACK
+SequenceNumber: 0
+
+2021-12-01T19:51:12,580 [VoiceXML text server] INFO       org.jvoicexml.client.text.TextServer (   441) - read Type: BYE
+SequenceNumber: 1
+
+2021-12-01T19:51:12,581 [TextReceiverThread  ] DEBUG  icexml.implementation.text.TextTelephony (   186) - removed pending message 0 remaining [1]
+2021-12-01T19:51:12,581 [19-b751-8b7be8be88e0] DEBUG  icexml.implementation.text.TextTelephony (   553) - disconnected
+2021-12-01T19:51:12,581 [TextReceiverThread  ] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   899) - telephony connection hung up org.jvoicexml.implementation.Telephony[org.jvoicexml.implementation.text.TextTelephony@73c0d8ab,HUNGUP]
+2021-12-01T19:51:12,581 [19-b751-8b7be8be88e0] DEBUG  on.jvxml.JVoiceXmlImplementationPlatform (   778) - org.jvoicexml.implementation.text.TextTelephony disconnected
+2021-12-01T19:51:12,581 [19-b751-8b7be8be88e0] INFO   ml.implementation.pool.KeyedResourcePool (   151) - returned object of type 'text' (org.jvoicexml.implementation.text.TextTelephony)
+2021-12-01T19:51:12,582 [19-b751-8b7be8be88e0] DEBUG  ml.implementation.pool.KeyedResourcePool (   157) - pool has now 0 active/1 idle for key 'text' (org.jvoicexml.implementation.text.TextTelephony) after return
+2021-12-01T19:51:12,582 [TextReceiverThread  ] INFO   .interpreter.event.JVoiceXmlEventHandler (   600) - notified event 'connection.disconnect.hangup'
+2021-12-01T19:51:12,582 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   786) - returned external resource 'text' (org.jvoicexml.implementation.text.TextTelephony) to pool
+2021-12-01T19:51:12,582 [TextReceiverThread  ] DEBUG  oicexml.interpreter.datamodel.Connection (   150) - setting hangup in scripting environment to true
+2021-12-01T19:51:12,582 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   544) - returned call control of type 'text'
+2021-12-01T19:51:12,582 [TextReceiverThread  ] INFO   jvoicexml.interpreter.HangupEventHandler (    61) - received hangup event 'org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent: connection.disconnect.hangup: caller hung up'. Entering final processing state
+2021-12-01T19:51:12,582 [19-b751-8b7be8be88e0] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   591) - implementation platform closed
+2021-12-01T19:51:12,582 [TextReceiverThread  ] INFO   voicexml.interpreter.VoiceXmlInterpreter (   120) - entered state FINALPROCESSING
+2021-12-01T19:51:12,582 [19-b751-8b7be8be88e0] INFO   voicexml.interpreter.scope.ScopeObserver (   100) - exiting scope 'session'...
+2021-12-01T19:51:12,582 [TextReceiverThread  ] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   922) - returning aqcuired resources
+2021-12-01T19:51:12,583 [19-b751-8b7be8be88e0] DEBUG  voicexml.interpreter.scope.ScopeObserver (   114) - current scope stack: []
+2021-12-01T19:51:12,583 [TextReceiverThread  ] INFO   on.jvxml.JVoiceXmlImplementationPlatform (   926) - implementation platform closed
+2021-12-01T19:51:12,584 [19-b751-8b7be8be88e0] DEBUG  datamodel.ecmascript.EcmaScriptDataModel (   264) - deleted scope 'SESSION'
+2021-12-01T19:51:12,584 [19-b751-8b7be8be88e0] INFO   g.jvoicexml.interpreter.JVoiceXmlSession (   468) - ...session closed
+2021-12-01T19:51:12,584 [TextReceiverThread  ] DEBUG  l.implementation.text.TextReceiverThread (   138) - text receiver thread stopped
+2021-12-01T19:51:12,584 [main                ] INFO  04b084e1-14ce-4419-b751-8b7be8be88e0 g.jvoicexml.interpreter.JVoiceXmlSession (   309) - ...session ended
+2021-12-01T19:51:12,584 [main                ] INFO  04b084e1-14ce-4419-b751-8b7be8be88e0     org.jvoicexml.client.text.TextServer (   626) - server closed
+2021-12-01T19:51:12,585 [main                ] INFO  04b084e1-14ce-4419-b751-8b7be8be88e0     org.jvoicexml.client.text.TextServer (   615) - text server stopped
+2021-12-01T19:51:12,586 [main                ] INFO  04b084e1-14ce-4419-b751-8b7be8be88e0              org.jvoicexml.JVoiceXmlMain (   578) - received shutdown request
+2021-12-01T19:51:12,586 [ShutdownWaiter      ] INFO                org.jvoicexml.JVoiceXmlMain (   587) - shutting down JVoiceXml...
+2021-12-01T19:51:12,586 [ShutdownWaiter      ] INFO                org.jvoicexml.JVoiceXmlMain (   589) - interpreter state DEALLOCATING_RESOURCES
+2021-12-01T19:51:12,586 [ShutdownWaiter      ] DEBUG               org.jvoicexml.JVoiceXmlMain (   655) - shutdown already in process
+2021-12-01T19:51:12,586 [ShutdownWaiter      ] DEBUG               org.jvoicexml.JVoiceXmlMain (   659) - removed shutdown hook
+2021-12-01T19:51:12,586 [ShutdownWaiter      ] DEBUG  l.JVoiceXmlImplementationPlatformFactory (   294) - closing implementation platforms...
+2021-12-01T19:51:12,587 [ShutdownHook        ] INFO        org.jvoicexml.JVoiceXmlShutdownHook (    55) - JVoiceXML interrupted! Shutting down...
+2021-12-01T19:51:12,588 [ShutdownWaiter      ] DEBUG  l.JVoiceXmlImplementationPlatformFactory (   304) - synthesizer pool has 0 active/1 idle objects
+2021-12-01T19:51:12,588 [TerminationThread   ] DEBUG  l.implementation.jvxml.TerminationThread (    50) - Termination thread started
+2021-12-01T19:51:12,582 [VoiceXML text server] DEBUG      org.jvoicexml.client.text.TextServer (   400) - error reading from the socket
+java.net.SocketException: Software caused connection abort: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method) ~[?:1.8.0_291]
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111) ~[?:1.8.0_291]
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:155) ~[?:1.8.0_291]
+	at com.google.protobuf.CodedOutputStream$OutputStreamEncoder.doFlush(CodedOutputStream.java:2997) ~[protobuf-java-3.1.0.jar:?]
+	at com.google.protobuf.CodedOutputStream$OutputStreamEncoder.flushIfNotAvailable(CodedOutputStream.java:2992) ~[protobuf-java-3.1.0.jar:?]
+	at com.google.protobuf.CodedOutputStream$OutputStreamEncoder.writeInt32(CodedOutputStream.java:2671) ~[protobuf-java-3.1.0.jar:?]
+	at org.jvoicexml.client.text.protobuf.TextMessageOuterClass$TextMessage.writeTo(TextMessageOuterClass.java:418) ~[default/:?]
+	at com.google.protobuf.AbstractMessageLite.writeDelimitedTo(AbstractMessageLite.java:95) ~[protobuf-java-3.1.0.jar:?]
+	at org.jvoicexml.client.text.TextServer.send(TextServer.java:599) ~[main/:?]
+	at org.jvoicexml.client.text.TextServer.acknowledge(TextServer.java:502) ~[main/:?]
+	at org.jvoicexml.client.text.TextServer.readOutput(TextServer.java:447) ~[main/:?]
+	at org.jvoicexml.client.text.TextServer.run(TextServer.java:394) [main/:?]
+2021-12-01T19:51:12,590 [ShutdownWaiter      ] DEBUG  l.JVoiceXmlImplementationPlatformFactory (   315) - spoken input pool has 0 active/1 idle objects
+2021-12-01T19:51:12,590 [ShutdownWaiter      ] DEBUG  l.JVoiceXmlImplementationPlatformFactory (   326) - telephony pool has 0 active/1 idle objects
+2021-12-01T19:51:12,590 [ShutdownWaiter      ] DEBUG  l.JVoiceXmlImplementationPlatformFactory (   337) - ...implementation platforms closed

@@ -8,14 +8,27 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile project(':org.jvoicexml')
-    compile project(':org.jvoicexml.client')
-    compile project(':org.jvoicexml.client.text')
-    compile project(':org.jvoicexml.profile.vxml21')
-    compile project(':org.jvoicexml.implementation.text')
-    compile project(':org.jvoicexml.interpreter.datamodel.ecmascript')
-    compile project(':org.jvoicexml.documentserver.schemestrategy.file')
-    compile project(':org.jvoicexml.documentserver.schemestrategy.http')
+    if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
+        compile project(':org.jvoicexml')
+        compile project(':org.jvoicexml.client')
+        compile project(':org.jvoicexml.client.text')
+        compile project(':org.jvoicexml.profile.vxml21')
+        compile project(':org.jvoicexml.implementation.text')
+        compile project(':org.jvoicexml.interpreter.datamodel.ecmascript')
+        compile project(':org.jvoicexml.documentserver.schemestrategy.file')
+        compile project(':org.jvoicexml.documentserver.schemestrategy.http')
+        compile project(':org.jvoicexml.srgs')
+    } else {
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.client.text', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.profile.vxml21', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.implementation.text', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.interpreter.datamodel.ecmascript', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.documentserver.schemestrategy.file', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.documentserver.schemestrategy.http', version: JVOICEXML_VERSION
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.srgs', version: JVOICEXML_VERSION
+    }
 }
 
 jar {

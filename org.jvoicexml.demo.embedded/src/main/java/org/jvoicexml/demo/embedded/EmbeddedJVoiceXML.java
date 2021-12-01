@@ -21,7 +21,6 @@
 
 package org.jvoicexml.demo.embedded;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
