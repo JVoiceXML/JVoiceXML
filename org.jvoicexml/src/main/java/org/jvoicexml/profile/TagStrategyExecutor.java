@@ -255,6 +255,7 @@ public final class TagStrategyExecutor {
             final FormInterpretationAlgorithm fia, final VoiceXmlNode node)
             throws ErrorEvent {
         if (factory == null) {
+            LOGGER.warn("no TagStrategyFactory defined. Skipping execution");
             return null;
         }
         final TagStrategy strategy = factory.getTagStrategy(node);

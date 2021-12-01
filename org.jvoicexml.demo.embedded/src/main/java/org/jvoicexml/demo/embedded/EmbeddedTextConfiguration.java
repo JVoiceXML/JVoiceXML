@@ -97,7 +97,7 @@ public final class EmbeddedTextConfiguration implements Configuration {
                 profile.setInitializationTagStrategyFactory(initializationStrategyFactory);
                 final TagStrategyFactory tagStrategyFactory =
                         new EmbeddedTagStrategyFactory();
-                profile.setInitializationTagStrategyFactory(tagStrategyFactory);
+                profile.setTagStrategyFactory(tagStrategyFactory);
             } catch (InstantiationException | IllegalAccessException
                     | ClassNotFoundException | SecurityException
                     | NoSuchMethodException | IllegalArgumentException
