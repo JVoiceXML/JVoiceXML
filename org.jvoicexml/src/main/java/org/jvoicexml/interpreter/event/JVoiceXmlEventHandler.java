@@ -167,7 +167,7 @@ public final class JVoiceXmlEventHandler
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + catches.size()
-                    + " catch elements in document");
+                    + " catch element(s) in document");
         }
 
         // Transform them into event handlers.
@@ -177,13 +177,7 @@ public final class JVoiceXmlEventHandler
         } else {
             fia = interpreter.getFormInterpretationAlgorithm();
         }
-        for (AbstractCatchElement catchElement : catches) {
-            final TokenList events = catchElement.getEventList();
-            for (String eventType : events) {
-                addCustomEvents(context, interpreter, fia, null, catchElement,
-                        eventType);
-            }
-        }
+        addStrategiesForCatches(context, interpreter, fia, null, catches);
     }
 
     /**
@@ -197,19 +191,13 @@ public final class JVoiceXmlEventHandler
                 .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + catches.size()
-                    + " catch elements in dialog '" + dialog.getId() + "'");
+                    + " catch element(s) in dialog '" + dialog.getId() + "'");
         }
 
         // Transform them into event handlers.
         final FormInterpretationAlgorithm fia = interpreter
                 .getFormInterpretationAlgorithm();
-        for (AbstractCatchElement catchElement : catches) {
-            final TokenList events = catchElement.getEventList();
-            for (String eventType : events) {
-                addCustomEvents(context, interpreter, fia, null, catchElement,
-                        eventType);
-            }
-        }
+        addStrategiesForCatches(context, interpreter, fia, null, catches);
     }
 
     /**
@@ -225,32 +213,21 @@ public final class JVoiceXmlEventHandler
         // Retrieve the specified catch elements.
         final Collection<AbstractCatchElement> catches = item
                 .getCatchElements();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("found " + catches.size()
-                    + " catch elements in item '" + item.getName() + "'");
-        }
 
-        // Transform them into event handlers.
-        for (AbstractCatchElement catchElement : catches) {
-            final TokenList events = catchElement.getEventList();
-            for (String eventType : events) {
-                if (eventType.equals(Filled.TAG_NAME)
-                        && (item instanceof InitialFormItem)) {
-                    // TODO The spec does not tell what to do in this case,
-                    // so we simply ignore it.
-                    LOGGER.warn("Initial form items must not have catches for "
-                            + "filled: ignoring...");
-                } else {
-                    final EventStrategy strategy = addCustomEvents(context,
-                            interpreter, fia, item, catchElement, eventType);
-                    added.add(strategy);
-                }
-            }
+        final Collection<AbstractCatchElement> filteredCatches =
+                filterItemCatches(item, catches);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("found " + filteredCatches.size()
+                    + " catch element(s) in item '" + item.getName() + "'");
         }
+        
+        // Transform them into event handlers.
+        addStrategiesForCatches(context, interpreter, fia, item,
+                filteredCatches);
 
         // Add the default strategies for input items.
-        Collection<EventStrategy> defaultStrategies = addDefaultStrategies(
-                context, interpreter, fia, item);
+        final Collection<EventStrategy> defaultStrategies =
+                addDefaultStrategies(context, interpreter, fia, item);
         added.addAll(defaultStrategies);
 
         // Add an input item strategy
@@ -264,33 +241,67 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
-     * Adds an event handler defined for the current input item.
-     * 
-     * @param context
-     *            The current <code>VoiceXmlInterpreterContext</code>
-     * @param interpreter
-     *            The current <code>VoiceXmlInterpreter</code>
-     * @param fia
-     *            The <code>FormInterpretationAlgorithm</code>
-     * @param item
-     *            The visited input item.
-     * @param catchElement
-     *            The node where the catch is defined.
-     * @param eventType
-     *            Name of the event to find a suitable strategy.
-     * @return added strategy.
+     * Filters the list of catches for valid entries
+     * @param item the curren tform item
+     * @param catches list of catches under review
+     * @return valid catches
+     * @since 0.7.9
      */
-    private EventStrategy addCustomEvents(
+    private Collection<AbstractCatchElement> filterItemCatches(
+            final CatchContainer item,
+            final Collection<AbstractCatchElement> catches) {
+        final Collection<AbstractCatchElement> filtered =
+                new java.util.ArrayList<AbstractCatchElement>();
+        for (AbstractCatchElement catchElement : catches) {
+            final TokenList events = catchElement.getEventList();
+            for (String eventType : events) {
+                if (eventType.equals(Filled.TAG_NAME)
+                        && (item instanceof InitialFormItem)) {
+                    // TODO The spec does not tell what to do in this case,
+                    // so we simply ignore it.
+                    LOGGER.warn("Initial form items must not have catches for "
+                            + "filled: ignoring...");
+                } else {
+                    filtered.add(catchElement);
+                }
+            }
+        }
+        return filtered;
+    }
+    
+    /**
+     * Adds {@link EventStrategy}s for the provided list of catches.
+     * @param context the current VoiceXMLInterpreterContext
+     * @param interpreter the current VoiceXMLInterpreter
+     * @param fia the current FIA
+     * @param item the current item
+     * @param catches catches from which to create {@link EventStrategy}s
+     * @since 0.7.9
+     */
+    private void addStrategiesForCatches(
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final FormItem item,
-            final AbstractCatchElement catchElement, final String eventType) {
-        final EventStrategy strategy = new CatchEventStrategy(context,
-                interpreter, fia, item, catchElement, eventType);
-        addStrategy(strategy);
-        return strategy;
+            final FormInterpretationAlgorithm fia,
+            final FormItem item,
+            final Collection<AbstractCatchElement> catches) {
+        for (AbstractCatchElement catchElement : catches) {
+            final TokenList events = catchElement.getEventList();
+            if (events.isEmpty()) {
+                final EventStrategy strategy = new CatchEventStrategy(context,
+                        interpreter, fia, item, catchElement,
+                        "org.jvoicexml.event");
+                addStrategy(strategy);
+            } else {
+                for (String eventType : events) {
+                    final EventStrategy strategy = new CatchEventStrategy(context,
+                            interpreter, fia, item, catchElement, eventType);
+                    addStrategy(strategy);
+                }
+            }
+        }
     }
 
+    
     /**
      * Adds the missing event handlers that are defined by default.
      * <p>
@@ -539,9 +550,6 @@ public final class JVoiceXmlEventHandler
             eventFilters = filters;
         }
 
-        for (EventStrategy f : strategies) {
-            LOGGER.info(f);
-        }
         // Filter the matching strategies.
         for (EventFilter filter : eventFilters) {
             filter.filter(matchingStrategies, event, item);
@@ -558,6 +566,9 @@ public final class JVoiceXmlEventHandler
         // Select the first remaining matching strategy.
         final Iterator<EventStrategy> iterator = matchingStrategies.iterator();
         final EventStrategy strategy = iterator.next();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("processing event '" + type + "' with " + strategy);
+        }
         try {
             strategy.process(event);
         } catch (NomatchEvent e) {

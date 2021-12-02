@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,12 +24,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.BadFetchHttpResponsecodeError;
-import org.jvoicexml.mock.event.MockEventSubscriber;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link EventBus}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public final class TestEventBus {
@@ -44,7 +38,7 @@ public final class TestEventBus {
      */
     @Test
     public void testSubscribe() {
-        final EventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventBus bus = new EventBus();
         final String type = "test.dummy.event";
         bus.subscribe(type, subscriber);
@@ -56,13 +50,13 @@ public final class TestEventBus {
      */
     @Test
     public void testPublish() {
-        final MockEventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventBus bus = new EventBus();
         final String type = BadFetchError.EVENT_TYPE;
         bus.subscribe(type, subscriber);
         final JVoiceXMLEvent event = new BadFetchError("test message");
         bus.publish(event);
-        Assert.assertEquals(event, subscriber.getEvent());
+        Mockito.verify(subscriber).onEvent(event);
     }
 
     /**
@@ -70,14 +64,14 @@ public final class TestEventBus {
      */
     @Test
     public void testPublishSubType() {
-        final MockEventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventBus bus = new EventBus();
         final String type = BadFetchError.EVENT_TYPE;
         bus.subscribe(type, subscriber);
         final JVoiceXMLEvent event =
                 new BadFetchHttpResponsecodeError(440, "test message");
         bus.publish(event);
-        Assert.assertEquals(event, subscriber.getEvent());
+        Mockito.verify(subscriber).onEvent(event);
     }
 
     /**
@@ -85,12 +79,12 @@ public final class TestEventBus {
      */
     @Test
     public void testPublishAll() {
-        final MockEventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventBus bus = new EventBus();
         bus.subscribe("", subscriber);
         final JVoiceXMLEvent event =
                 new BadFetchHttpResponsecodeError(440, "test message");
         bus.publish(event);
-        Assert.assertEquals(event, subscriber.getEvent());
+        Mockito.verify(subscriber).onEvent(event);
     }
 }
