@@ -1,5 +1,20 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+   }
+
+    dependencies {
+        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
+    }
+}
+
 apply plugin: 'java-library'
 apply plugin: 'java-test-fixtures'
+apply plugin: "com.github.eerohele.saxon-gradle"
 apply plugin: 'maven'
 apply plugin: 'signing'
 
@@ -44,9 +59,37 @@ task copyConfiguration(type: Copy) {
     into "$buildDir/config"
 }
 
+task enableLog4jRemoteAppender(type: com.github.eerohele.SaxonXsltTask) {
+    onlyIf { 
+        project.property('JVOICEXML_ENABLE_REMOTE_LOGGING') == 'true'
+    }
+    dependsOn copyConfiguration
+    stylesheet "${jvxmlConfigurationDir}/patch-log4j2.xsl"
+    input "${buildDir}/config/log4j2.xml"
+    output "$buildDir/config/log4j2-remote.xml"
+}
+
+task renameLog4jRemoteAppender(type: Copy) {
+    onlyIf { 
+        project.property('JVOICEXML_ENABLE_REMOTE_LOGGING') == 'true'
+    }
+    dependsOn enableLog4jRemoteAppender
+    from ("$buildDir/config")
+    include 'log4j2-remote.xml'
+    destinationDir file("$buildDir/config")
+    rename 'log4j2-remote.xml', "log4j2.xml"
+}
+
 task copyConfigurationDistribution(type: Copy) {
     from configurations.jvxmlConfiguration.files
     into "${project(':main').buildDir}/config"
+}
+
+task enableLog4jRemoteAppenderDistribution(type: com.github.eerohele.SaxonXsltTask) {
+    dependsOn copyConfigurationDistribution
+    stylesheet "${jvxmlConfigurationDir}/patch-log4j2.xsl"
+    input "${project(':main').buildDir}/config/log4j2.xml"
+    output "${project(':main').buildDir}/config/log4j2-remote.xml"
 }
 
 task createVersionFile() {
@@ -61,8 +104,8 @@ jar {
     version = JVOICEXML_VERSION
 
     dependsOn createVersionFile
-    dependsOn copyConfiguration
-    dependsOn copyConfigurationDistribution
+    dependsOn renameLog4jRemoteAppender
+    dependsOn enableLog4jRemoteAppenderDistribution
 
     manifest {
         attributes('Implementation-Title': 'JVoiceXML core library',

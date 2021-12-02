@@ -19,10 +19,6 @@
                  <TimeBasedTriggeringPolicy interval="1"/>
              </Policies>
         </RollingFile>
-        
-        <Socket name="remote" host="localhost" port="14712" reconnectionDelay="1000">
-            <JsonLayout properties="true"/>
-        </Socket>
     </Appenders>
 
     <Loggers>
@@ -34,7 +30,6 @@
         <Root>
              <AppenderRef ref="stdout"/>
              <AppenderRef ref="dailyrotfile"/>
-             <AppenderRef ref="remote" level="info"/>
         </Root>
     </Loggers>
 </Configuration>
