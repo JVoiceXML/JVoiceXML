@@ -28,6 +28,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
@@ -97,6 +99,7 @@ final class SubdialogExecutorThread extends Thread {
      */
     @Override
     public void run() {
+        final ReturnEventHandler handler = registerReturnEventHandler();
         final DataModel model = context.getDataModel();
         try {
             // We need to copy the values here to ensure that the contexts are
@@ -106,38 +109,59 @@ final class SubdialogExecutorThread extends Thread {
             final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
                     DocumentDescriptor.MIME_TYPE_XML);
             context.processSubdialog(application, descriptor, parameters);
-        } catch (ReturnEvent e) {
+            final ReturnEvent event = handler.getReturnEvent();
             final Object result;
             try {
-                result = getReturnObject(e);
+                result = getReturnObject(event);
             } catch (SemanticError sematicerror) {
                 eventbus.publish(sematicerror);
                 return;
             }
-            final SubdialogResultEvent event = new SubdialogResultEvent(result);
-            eventbus.publish(event);
-            return;
+            final ImplementationPlatform platform = context
+                    .getImplementationPlatform();
+            platform.setEventBus(eventbus);
+            final DocumentServer server = context.getDocumentServer();
+            // TODO use the correct call properties
+            platform.playPrompts(server, null);
+            final SubdialogResultEvent resultEvent =
+                    new SubdialogResultEvent(result);
+            eventbus.publish(resultEvent);
         } catch (JVoiceXMLEvent e) {
             LOGGER.warn("Caught JVoiceXMLEvent in subdialog", e);
             eventbus.publish(e);
-            return;
         } catch (Exception e) {
             LOGGER.error("Caught error in subdialog", e);
             final ExceptionWrapper wrapper = 
                     new ExceptionWrapper(e.getMessage(), e);
             eventbus.publish(wrapper);
-            return;
         } finally {
+            unregisterReturnEventHandler(handler);
             model.deleteScope(Scope.DIALOG);
         }
-        // The VoiceXML spec leaves it open what should happen if there was no
-        // return or exit and the dialog terminated because all forms were
-        // processed. So we simply return TRUE in this case.
-        final SubdialogResultEvent event = new SubdialogResultEvent(
-                Boolean.TRUE);
-        eventbus.publish(event);
     }
 
+    /**
+     * Registers a return event handler.
+     * @return the registered handler
+     * @since 0.7.9
+     */
+    private ReturnEventHandler registerReturnEventHandler() {
+        final ReturnEventHandler handler = new ReturnEventHandler();
+        final EventBus bus = context.getEventBus();
+        bus.subscribe(ReturnEvent.EVENT_TYPE, handler);
+        return handler;
+    }
+
+    /**
+     * Unregisters a return event handler.
+     * @return the handler to unregister
+     * @since 0.7.9
+     */
+    private void unregisterReturnEventHandler(final ReturnEventHandler handler) {
+        final EventBus bus = context.getEventBus();
+        bus.unsubscribe(ReturnEvent.EVENT_TYPE, handler);
+    }
+    
     /**
      * Creates the value for the returned result.
      * 
