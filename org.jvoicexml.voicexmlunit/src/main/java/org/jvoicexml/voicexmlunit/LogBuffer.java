@@ -103,6 +103,11 @@ public class LogBuffer {
      */
     public void waitForLog(final String message) throws InterruptedException {
         do {
+            if (position >= events.size()) {
+                synchronized (lock) {
+                    lock.wait();
+                }
+            }
             final LogEvent current;
             synchronized (events) {
                 current = events.get(position);
@@ -113,11 +118,6 @@ public class LogBuffer {
             if (message.equals(formattedMessage)) {
                 LOGGER.info("'" + name + "' saw log message '" + message + "'");
                 return;
-            }
-            if (position >= events.size()) {
-                synchronized (lock) {
-                    lock.wait();
-                }
             }
         } while (true);
     }
@@ -134,20 +134,22 @@ public class LogBuffer {
             throws InterruptedException, TimeoutException {
         final long maxEndTime = System.currentTimeMillis() + timeout;
         do {
-            final LogEvent current;
-            synchronized (events) {
-                current = events.get(position);
-                position ++;
-            }
-            final Message currentMesage = current.getMessage();
-            final String formattedMessage = currentMesage.getFormattedMessage();
-            if (message.equals(formattedMessage)) {
-                LOGGER.info("'" + name + "' saw log message '" + message + "'");
-                return;
-            }
             if (position >= events.size()) {
                 synchronized (lock) {
                     lock.wait(WAIT_TIME);
+                }
+            }
+            if (position < events.size()) {
+                final LogEvent current;
+                synchronized (events) {
+                    current = events.get(position);
+                    position ++;
+                }
+                final Message currentMesage = current.getMessage();
+                final String formattedMessage = currentMesage.getFormattedMessage();
+                if (message.equals(formattedMessage)) {
+                    LOGGER.info("'" + name + "' saw log message '" + message + "'");
+                    return;
                 }
             }
         } while (System.currentTimeMillis() < maxEndTime);

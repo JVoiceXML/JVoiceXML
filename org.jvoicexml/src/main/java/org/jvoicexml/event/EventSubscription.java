@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,12 +23,12 @@ package org.jvoicexml.event;
 /**
  * A subscription for a specific event type.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 final class EventSubscription {
     /** The type of subscription. */
     private final String type;
+
     /** The associated event subscriber. */
     private final EventSubscriber subscriber;
     
@@ -63,6 +58,9 @@ final class EventSubscription {
      * @since 0.7.7
      */
     public boolean matches(final String eventType) {
+        if (type.equals(EventSubscriber.ALL_TYPES)) {
+            return true;
+        }
         return eventType.startsWith(type);
     }
 

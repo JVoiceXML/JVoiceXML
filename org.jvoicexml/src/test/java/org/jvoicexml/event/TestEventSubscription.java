@@ -1,12 +1,7 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2014-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,12 +23,11 @@ package org.jvoicexml.event;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.mock.event.MockEventSubscriber;
+import org.mockito.Mockito;
 
 /**
  * Test cases for {@link EventSubscription}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public final class TestEventSubscription {
@@ -43,7 +37,7 @@ public final class TestEventSubscription {
     @Test
     public void testGetType() {
         final String type = "test.dummy.event";
-        final EventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         Assert.assertEquals(type, subscription.getType());
@@ -55,7 +49,7 @@ public final class TestEventSubscription {
     @Test
     public void testMatches() {
         final String type = "test.dummy.event";
-        final EventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         Assert.assertTrue(subscription.matches(type));
@@ -67,7 +61,7 @@ public final class TestEventSubscription {
     @Test
     public void testMatchesWrongType() {
         final String type = "test.dummy.event";
-        final EventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         Assert.assertFalse(subscription.matches("wrong.event.type"));
@@ -79,7 +73,7 @@ public final class TestEventSubscription {
     @Test
     public void testMatchesPrefix() {
         final String type = "test.dummy";
-        final EventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         Assert.assertTrue(subscription.matches("test.dummy.event"));
@@ -91,19 +85,32 @@ public final class TestEventSubscription {
     @Test
     public void testMatchesAll() {
         final String type = "";
-        final EventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         Assert.assertTrue(subscription.matches("test.dummy.event"));
+        Assert.assertTrue(subscription.matches("a.b.c"));
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.event.EventSubscription#matches(java.lang.String)}.
+     */
+    @Test
+    public void testMatchesAllTypes() {
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
+        final EventSubscription subscription =
+                new EventSubscription(EventSubscriber.ALL_TYPES, subscriber);
+        Assert.assertTrue(subscription.matches("test.dummy.event"));
+        Assert.assertTrue(subscription.matches("a.b.c"));
+    }
+    
     /**
      * Test method for {@link org.jvoicexml.event.EventSubscription#getSubscriber()}.
      */
     @Test
     public void testGetSubscriber() {
         final String type = "test.dummy.event";
-        final EventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         Assert.assertEquals(subscriber, subscription.getSubscriber());
@@ -115,12 +122,12 @@ public final class TestEventSubscription {
     @Test
     public void testPublish() {
         final String type = "test.dummy.event";
-        final MockEventSubscriber subscriber = new MockEventSubscriber();
+        final EventSubscriber subscriber = Mockito.mock(EventSubscriber.class);
         final EventSubscription subscription =
                 new EventSubscription(type, subscriber);
         final JVoiceXMLEvent event = new ConnectionDisconnectHangupEvent();
         subscription.publish(event);
-        Assert.assertEquals(event, subscriber.getEvent());
+        Mockito.verify(subscriber).onEvent(event);
         Assert.assertEquals(subscriber, subscription.getSubscriber());
     }
 

@@ -88,7 +88,7 @@ final class CatchEventStrategy extends AbstractEventStrategy {
                 getFormInterpretationAlgorithm();
         if (fia == null) {
             LOGGER.warn("Unable to process event '" + event.getEventType()
-                    + "' No reference to a form FIA!");
+                    + "' No reference to a FIA!");
             return;
         }
         
