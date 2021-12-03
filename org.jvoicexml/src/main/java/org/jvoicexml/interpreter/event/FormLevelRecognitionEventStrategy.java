@@ -98,7 +98,7 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm algorithm, final Dialog dlg) {
         super(ctx, interpreter, algorithm, null, null,
-                RecognitionEvent.EVENT_TYPE);
+                RecognitionEvent.EVENT_TYPE + "." + RecognitionEvent.DETAIL);
         dialog = dlg;
     }
 
@@ -181,6 +181,9 @@ final class FormLevelRecognitionEventStrategy extends AbstractEventStrategy
                 Scope.APPLICATION);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void process(final JVoiceXMLEvent event) throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
