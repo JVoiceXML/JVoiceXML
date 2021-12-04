@@ -117,10 +117,13 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
         try (CloseableHttpClient client = builder.build()) {
             final URIBuilder uribuilder = new URIBuilder(grammarUri);
             uribuilder.addParameter("subscription-key", subscriptionKey);
-            uribuilder.addParameter("q", utterance);
+            uribuilder.addParameter("query", utterance);
             final URI uri = uribuilder.build();
             final HttpGet request = new HttpGet(uri);
             final HttpResponse response = client.execute(request);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("sent input '" + utterance + "'");
+            }
             final StatusLine statusLine = response.getStatusLine();
             final int status = statusLine.getStatusCode();
             if (status != HttpStatus.SC_OK) {
@@ -155,31 +158,36 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
         final InputStreamReader reader = new InputStreamReader(input);
         final JSONParser parser = new JSONParser();
         final JSONObject object = (JSONObject) parser.parse(reader);
-        final JSONObject topScoringIntent = 
-                (JSONObject) object.get("topScoringIntent");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("reveived json: " + object);
+        }
+        final JSONObject prediction = 
+                (JSONObject) object.get("prediction");
         final DataModel interpretationModel = model.newInstance();
         interpretationModel.createScope();
         interpretationModel.createVariable("out", model.createNewObject());
         Object out =  interpretationModel.readVariable("out", Object.class);
-        final String intent = (String) topScoringIntent.get("intent");
-        final Double score = (Double) topScoringIntent.get("score");
-        LOGGER.info("detected intent '" + intent + "' (" + score + ")");
-        interpretationModel.createVariableFor(out, "nlu-intent", intent);
-        interpretationModel.createVariableFor(out, intent,
+        final JSONObject intents = 
+                (JSONObject) prediction.get("intents");
+        final String topIntent = (String) prediction.get("topIntent");
+        final JSONObject intent = (JSONObject) intents.get(topIntent);
+        final Double score = (Double) intent.get("score");
+        LOGGER.info("detected intent '" + topIntent + "' (" + score + ")");
+        interpretationModel.createVariableFor(out, "nlu-intent", topIntent);
+        interpretationModel.createVariableFor(out, topIntent,
                 model.createNewObject());
         final Object intentObject = interpretationModel.readVariable(
-                "out." + intent, Object.class);
-        final JSONArray entities = (JSONArray) object.get("entities");
+                "out." + topIntent, Object.class);
+        final JSONObject entities = (JSONObject) prediction.get("entities");
         if (entities.isEmpty()) {
-            return intent;
+            return topIntent;
         }
-        for (int i = 0; i < entities.size(); i++) {
-            final JSONObject currentEntity = (JSONObject) entities.get(i);
-            final String type = (String) currentEntity.get("type");
-            final String value = (String) currentEntity.get("entity");
-            final Double entityScore = (Double) currentEntity.get("score");
-            LOGGER.info("detected entity '" + type + "'='" + value + "' ("
-                    + entityScore + ")");
+        for (Object key : entities.keySet()) {
+            final String type = key.toString();
+            final JSONArray valueList = (JSONArray) entities.get(key);
+            final JSONArray valueListEntries = (JSONArray) valueList.get(0);
+            final String value = (String) valueListEntries.get(0);
+            LOGGER.info("detected entity '" + type + "'='" + value + "'");
             interpretationModel.createVariableFor(intentObject, type, value);
         }
 

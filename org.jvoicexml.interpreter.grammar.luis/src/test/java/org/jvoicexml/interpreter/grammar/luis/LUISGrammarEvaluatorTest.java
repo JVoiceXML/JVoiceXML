@@ -21,8 +21,8 @@ public class LUISGrammarEvaluatorTest {
                 .get("JVOICEXML_DEMO_LUIS_APPLICATIONID");
 
         final URI uri = new URI(
-                "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/"
-                        + applicationId);
+                "https://westus.api.cognitive.microsoft.com/luis/prediction/v3.0/apps/"
+                        + applicationId + "/slots/production/predict");
         final LUISGrammarEvaluator evaluator = new LUISGrammarEvaluator(subscription,
                 uri);
         final DataModel model = new EcmaScriptDataModel();
