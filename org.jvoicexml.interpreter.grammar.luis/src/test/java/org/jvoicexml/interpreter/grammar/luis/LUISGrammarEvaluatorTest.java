@@ -21,14 +21,16 @@ public class LUISGrammarEvaluatorTest {
                 .get("JVOICEXML_DEMO_LUIS_APPLICATIONID");
 
         final URI uri = new URI(
-                "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/"
-                        + applicationId);
+                "https://westus.api.cognitive.microsoft.com/luis/prediction/v3.0/apps/"
+                        + applicationId + "/slots/production/predict");
         final LUISGrammarEvaluator evaluator = new LUISGrammarEvaluator(subscription,
                 uri);
         final DataModel model = new EcmaScriptDataModel();
         model.createScope();
+//        final Object result = evaluator.getSemanticInterpretation(model,
+//                "I want a large pizza with salami");
         final Object result = evaluator.getSemanticInterpretation(model,
-                "I want a large pizza with salami");
+                "yes please");
         Assert.assertNotNull("interpretation must no be null", result);
     }
 }

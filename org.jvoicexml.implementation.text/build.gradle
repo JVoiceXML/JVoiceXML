@@ -73,6 +73,8 @@ task copyReferencedLibraries(type: Copy) {
     from(configurations.compile) {
         include 'protobuf-java*.jar',
         'json-simple*.jar',
+        'httpcore*.jar',
+        'httpclient*.jar',
         'org.jvoicexml.client.text*.jar',
         'org.jvoicexml.srgs*.jar',
         'org.jvoicexml.interpreter.grammar.luis*.jar'

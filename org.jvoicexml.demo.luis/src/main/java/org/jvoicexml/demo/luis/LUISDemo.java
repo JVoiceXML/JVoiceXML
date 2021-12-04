@@ -31,10 +31,10 @@ import javax.naming.InitialContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextMessageEvent;
 import org.jvoicexml.client.text.TextServer;
@@ -106,9 +106,9 @@ public final class LUISDemo implements TextListener {
      * @throws IOException 
      */
     private void interpretDocument(final URI uri) throws JVoiceXMLEvent, InterruptedException, IOException {
-        final JVoiceXml jvxml;
+        final RemoteJVoiceXml jvxml;
         try {
-            jvxml = (JVoiceXml) context.lookup(JVoiceXml.class.getSimpleName());
+            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
             return;

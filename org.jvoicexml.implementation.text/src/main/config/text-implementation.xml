@@ -9,6 +9,8 @@
     <classpath>org.jvoicexml.interpreter.grammar.luis-@@VERSION@@.jar</classpath>
     <classpath>protobuf-java-3.1.0.jar</classpath>
     <classpath>json-simple-1.1.1.jar</classpath>
+    <classpath>httpcore-4.4.5.jar</classpath>
+    <classpath>httpclient-4.5.2.jar</classpath>
 
     <beans:bean class="org.jvoicexml.implementation.text.TextPlatformFactory">
         <beans:property name="instances" value="100" />
