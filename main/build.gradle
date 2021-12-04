@@ -1,8 +1,10 @@
 import static org.apache.tools.ant.taskdefs.condition.Os.*
 
-apply plugin: 'java'
-apply plugin: 'application'
-apply plugin: 'distribution'
+plugins {
+    id 'java'
+    id 'application'
+    id 'distribution'
+}
 
 distributions {
     custom {}

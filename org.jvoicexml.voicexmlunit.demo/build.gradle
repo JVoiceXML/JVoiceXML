@@ -1,5 +1,6 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+    id 'java-library'
+}
 
 repositories {
     mavenLocal()
@@ -52,11 +53,6 @@ jar {
                    'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
     }
     baseName 'org.jvoicexml.voicexmlunit.demo'
-}
-
-install {
-   version = JVOICEXML_VERSION
-   group = JVOICEXML_GROUP
 }
 
 test {

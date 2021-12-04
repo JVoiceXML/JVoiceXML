@@ -1,6 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'application'
-apply plugin: 'maven'
+plugins {
+    id 'java-library'
+    id 'application'
+}
 
 repositories {
     mavenLocal()
@@ -42,11 +43,6 @@ jar {
                    'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
     }
     baseName 'org.jvoicexml.systemtest'
-}
-
-install {
-   version = JVOICEXML_VERSION
-   group = JVOICEXML_GROUP
 }
 
 mainClassName = "org.jvoicexml.systemtest.SystemTestMain"
