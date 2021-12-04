@@ -27,8 +27,10 @@ public class LUISGrammarEvaluatorTest {
                 uri);
         final DataModel model = new EcmaScriptDataModel();
         model.createScope();
+//        final Object result = evaluator.getSemanticInterpretation(model,
+//                "I want a large pizza with salami");
         final Object result = evaluator.getSemanticInterpretation(model,
-                "I want a large pizza with salami");
+                "yes please");
         Assert.assertNotNull("interpretation must no be null", result);
     }
 }

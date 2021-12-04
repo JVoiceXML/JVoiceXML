@@ -9,7 +9,7 @@
     <meta name="copyright" content="2017 JVoiceXML group" />
 
     <form id="order">
-        <grammar src="https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/@@MUST-BE-SUPPLIED-VALUE@@"
+        <grammar src="https://westus.api.cognitive.microsoft.com/luis/prediction/v3.0/apps/@@MUST-BE-SUPPLIED-VALUE@@/slots/production/predict"
              type="application/grammar+luis" fetchhint="safe"/>
 
         <block>

@@ -1,0 +1,1011 @@
+{
+  "luis_schema_version": "7.0.0",
+  "intents": [
+    {
+      "name": "None",
+      "features": []
+    },
+    {
+      "name": "pizza",
+      "features": [
+        {
+          "modelName": "size",
+          "isRequired": false
+        },
+        {
+          "modelName": "topping",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "Utilities.Cancel",
+      "inherits": {
+        "domain_name": "Utilities",
+        "model_name": "Cancel"
+      },
+      "features": []
+    },
+    {
+      "name": "Utilities.Confirm",
+      "inherits": {
+        "domain_name": "Utilities",
+        "model_name": "Confirm"
+      },
+      "features": []
+    }
+  ],
+  "entities": [
+    {
+      "name": "Utilities.DirectionalReference",
+      "children": [],
+      "inherits": {
+        "domain_name": "Utilities",
+        "model_name": "DirectionalReference"
+      },
+      "roles": [],
+      "features": []
+    }
+  ],
+  "hierarchicals": [],
+  "composites": [],
+  "closedLists": [
+    {
+      "name": "size",
+      "subLists": [
+        {
+          "canonicalForm": "large",
+          "list": []
+        },
+        {
+          "canonicalForm": "medium",
+          "list": []
+        },
+        {
+          "canonicalForm": "small",
+          "list": []
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "topping",
+      "subLists": [
+        {
+          "canonicalForm": "salami",
+          "list": []
+        },
+        {
+          "canonicalForm": "mushrooms",
+          "list": [
+            "mushroom"
+          ]
+        },
+        {
+          "canonicalForm": "ham",
+          "list": []
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "prebuiltEntities": [
+    {
+      "name": "number",
+      "roles": []
+    },
+    {
+      "name": "ordinal",
+      "roles": []
+    }
+  ],
+  "utterances": [
+    {
+      "text": "a pizza with salami please",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "a small one",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "all of them",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "alright",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancel app",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancel cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancel it",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancel never mind",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancel that",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancel that one",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "canceled",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "cancelled",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "choose the bottom left",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "choose the upper left choice",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 20,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "choose the upper right one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "choose top right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "choose top right one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "come om",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "come on",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "come on baby",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "confirm",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "do it",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "do nothing",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "don't do that",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "don't do that anymore",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "fine",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "forget about it",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "go ahead",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "go away",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "go for it",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "great",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "i like left one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i like the bottom one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i like the top right one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 19,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i like the upper right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i like upper right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 17,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want a large pizza with salami and mushrooms",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "i want bottom",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want left",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want right one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want the left",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 14,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want the lower choice",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want the right one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want them all",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i want to all of them",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i want to choose bottom one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 17,
+          "endPos": 22,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want to choose lower right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 17,
+          "endPos": 27,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want to choose right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 17,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want to choose the left one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 21,
+          "endPos": 24,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want to choose the lower choice",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 21,
+          "endPos": 25,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i want to choose the right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 21,
+          "endPos": 25,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "i would like a small pizza",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "i'm sure",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "it's fine",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "just cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "just cancel it",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "just do it",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "large please",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "never mind",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "never mind cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "never mind cancel that",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "nice",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "no cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "no cancel cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "no cancel it",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "no cancel that",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "no doubt",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "no never mind",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "no no cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "no no cancel it",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "nothing never mind",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "nothing please",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "of course",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "oh cancel",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "oh yeah",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "oh yes",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "ok",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "ok for now",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "okay",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "opt for left",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 8,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "opt for right one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 8,
+          "endPos": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "opt for the left one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 12,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "opt for the lower choice",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 12,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "opt for the right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 12,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "perfect",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "perfect thank you",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "please do nothing",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "quit",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "right",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "right yes",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "select lower one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "select the bottom choice",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 16,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "select the lower one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "select the right one",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 15,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "select the upper right",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 11,
+          "endPos": 21,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "select upper",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "Utilities.DirectionalReference",
+          "startPos": 7,
+          "endPos": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "text": "sorry, don't do it",
+      "intent": "Utilities.Cancel",
+      "entities": []
+    },
+    {
+      "text": "sounds good",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sounds good thank you",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sounds good thanks",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sounds good to me",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sounds great",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sounds perfect",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sure",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sure does",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sure is",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sure thing",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "sure yes",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "thank you very much",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "thank you yes",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "that is correct",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "that is right",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "that right",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "that sounds good",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "that's all",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "that's fine",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "this is good",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "very good",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "with ham",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "with mushrooms",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "with salami",
+      "intent": "pizza",
+      "entities": []
+    },
+    {
+      "text": "ya",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah baby",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah bro",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah buddy",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah cool",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah go ahead",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah go for it",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yeah good",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    },
+    {
+      "text": "yes",
+      "intent": "Utilities.Confirm",
+      "entities": []
+    }
+  ],
+  "versionId": "0.1",
+  "name": "pizza",
+  "desc": "JVoiceXML LUIS Demo",
+  "culture": "en-us",
+  "tokenizerVersion": "1.0.0",
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "phraselists": [],
+  "regex_features": [],
+  "patterns": [
+    {
+      "pattern": "^(yes|sure)[[,]i want (that|the ({Utilities.DirectionalReference}|{ordinal}) ({number}|one))]",
+      "intent": "Utilities.Confirm"
+    }
+  ],
+  "settings": []
+}
