@@ -1,8 +1,10 @@
 import static org.apache.tools.ant.taskdefs.condition.Os.*
 
-apply plugin: 'java'
-apply plugin: 'application'
-apply plugin: 'distribution'
+plugins {
+    id 'java'
+    id 'application'
+    id 'distribution'
+}
 
 distributions {
     custom {}
@@ -643,14 +645,4 @@ applicationDistribution.into("bin") {
     duplicatesStrategy= DuplicatesStrategy.EXCLUDE
     from(createShutdownApp)
     fileMode = 0755
-}
-
-
-uploadArchives {
-    dependsOn ':org.jvoicexml.xml:uploadArchives'
-    dependsOn ':org.jvoicexml:uploadArchives'
-    dependsOn ':org.jvoicexml.client:uploadArchives'
-    dependsOn ':org.jvoicexml.client.text:uploadArchives'
-    dependsOn ':org.jvoicexml.jndi:uploadArchives'
-    dependsOn ':org.jvoicexml.voicexmlunit:uploadArchives'
 }

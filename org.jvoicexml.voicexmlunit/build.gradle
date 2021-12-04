@@ -1,6 +1,8 @@
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
 
 repositories {
     mavenCentral()
@@ -11,6 +13,9 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+group = JVOICEXML_GROUP
+version = JVOICEXML_VERSION
 
 sourceSets {
     main {
@@ -47,75 +52,63 @@ jar {
     baseName 'org.jvoicexml.voicexmlunit'
 }
 
-install {
-   version = JVOICEXML_VERSION
-   group = JVOICEXML_GROUP
-}
-
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-signing {
-    sign configurations.archives
-}
-
-uploadArchives {
-    version = JVOICEXML_VERSION
-    group = JVOICEXML_GROUP
-
-    repositories {
-        mavenDeployer {
-            beforeDeployment { 
-                MavenDeployment deployment -> signing.signPom(deployment) 
-            }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
-            }
-    
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: JVOICEXML_OSSRH_USERNAME, password: JVOICEXML_OSSRH_PASSWORD)
-            }
-    
-            pom.project {
-                name 'JVoiceXML'
-                groupId = JVOICEXML_GROUP
-                packaging 'jar'
-                description 'The Open Source Voice Browser'
-                url 'https://github.com/JVoiceXML/JVoiceXML'
-                
-                scm {
-                    connection 'scm:git:git@github.com:JVoiceXML/JVoiceXML.git'
-                    developerConnection 'scm:git:ssh://github.com:JVoiceXML/JVoiceXML.git'
-                    url "https://github.com/JVoiceXML/JVoiceXML/tree/release/${JVOICEXML_VERSION}"
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = tasks.jar.baseName
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
                 }
-                    
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'JVoiceXML Unit Test Framework'
+                description = 'JVoiceXML Unit Test Framework'
+                url = 'https://github.com/JVoiceXML/JVoiceXML'
                 licenses {
                     license {
-                        name 'GNU Lesser General Public License, Version 2.1'
-                        url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                        name = 'GNU Lesser General Public License, Version 2.1'
+                        url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
                     }
                 }
-    
                 developers {
                     developer {
-                        id 'schnelle'
-                        name 'Dirk Schnelle-Walka'
-                        email 'dirk.schnelle@jvoicexml.org'
+                        id = 'schnelle'
+                        name = 'Dirk Schnelle-Walka'
+                        email = 'dirk.schnelle@jvoicexml.org'
                     }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:JVoiceXML/JVoiceXML.git'
+                    developerConnection = 'scm:git:ssh://github.com:JVoiceXML/JVoiceXML.git'
+                    url = 'https://github.com/JVoiceXML/JVoiceXML'
                 }
             }
         }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/" 
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = JVOICEXML_OSSRH_USERNAME
+                password = JVOICEXML_OSSRH_PASSWORD
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }

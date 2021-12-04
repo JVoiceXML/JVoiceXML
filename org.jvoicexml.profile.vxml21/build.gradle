@@ -1,18 +1,14 @@
-apply plugin: 'java'
-apply plugin: "com.github.eerohele.saxon-gradle"
-apply plugin: 'maven'
-
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
     }
+}
 
-    dependencies {
-        classpath  "gradle.plugin.com.github.eerohele:saxon-gradle:0.2.1"
-    }
+plugins {
+    id 'java-library'
+    id 'com.github.eerohele.saxon-gradle' version '0.8.0'
+    id 'maven-publish'
+    id 'signing'
 }
 
 repositories {
@@ -21,6 +17,9 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+group = JVOICEXML_GROUP
+version = JVOICEXML_VERSION
 
 configurations {
     jvxmlConfiguration
@@ -79,11 +78,67 @@ jar {
     baseName 'org.jvoicexml.profile.vxml21'
 }
 
-install {
-   version = JVOICEXML_VERSION
-   group = JVOICEXML_GROUP
-}
-
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/vxml2.1-profile.xml")
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = tasks.jar.baseName
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'JVoiceXML VoiceXML 2.1 Profile'
+                description = 'JVoiceXML VoiceXML 2.1 Profile'
+                url = 'https://github.com/JVoiceXML/JVoiceXML'
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License, Version 2.1'
+                        url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'schnelle'
+                        name = 'Dirk Schnelle-Walka'
+                        email = 'dirk.schnelle@jvoicexml.org'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:JVoiceXML/JVoiceXML.git'
+                    developerConnection = 'scm:git:ssh://github.com:JVoiceXML/JVoiceXML.git'
+                    url = 'https://github.com/JVoiceXML/JVoiceXML'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/" 
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = JVOICEXML_OSSRH_USERNAME
+                password = JVOICEXML_OSSRH_PASSWORD
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
 }
