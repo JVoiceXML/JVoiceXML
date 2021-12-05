@@ -345,7 +345,22 @@ distributions {
                     from("${project(':org.jvoicexml').projectDir}/src/main/doc")
                 }
             }
-            
+            into('demo') {
+                from(rootProject.projectDir) {
+                    include 'gradlew',
+                        'gradlew.bat',
+                        "gradle/**"
+                }
+            }
+            into('demo') {
+                from("${project(':org.jvoicexml').projectDir}/src/main/config") {
+                    include 'demo-gradle.properties',
+                        'demo-settings.gradle'
+                }
+                rename {
+                    String filename -> filename.replace("demo-", "")
+                }
+            }
             into('demo/org.jvoicexml.demo.gotodemo') {
                 from(project(':org.jvoicexml.demo.gotodemo').projectDir) {
                     exclude "**/build",
