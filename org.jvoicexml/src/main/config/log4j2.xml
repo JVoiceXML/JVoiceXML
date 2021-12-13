@@ -22,7 +22,7 @@
         </RollingFile>
         
         <!-- Useful, e.g. if logging should be handled by linux logrotate -->
-        <File name="logfile" fileName="/var/log/joicexml/jvoicexml.log">
+        <File name="logfile" fileName="/var/log/jvoicexml/jvoicexml.log">
             <PatternLayout>
                   <Pattern>%d{ISO8601} [%-20.20t] %-5p %X{sessionId} %40.40c (%6L) - %m%n</Pattern>
              </PatternLayout>
