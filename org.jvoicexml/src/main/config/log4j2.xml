@@ -10,6 +10,7 @@
              </Filters>
         </Console>
 
+        <!-- Default logging in a folder inside JVoiceXML -->
         <RollingFile name="dailyrotfile" fileName="logging/jvoicexml.log" filePattern="logging/jvoicexml-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                   <Pattern>%d{ISO8601} [%-20.20t] %-5p %X{sessionId} %40.40c (%6L) - %m%n</Pattern>
@@ -19,6 +20,13 @@
                  <TimeBasedTriggeringPolicy interval="1"/>
              </Policies>
         </RollingFile>
+        
+        <!-- Useful, e.g. if logging should be handled by linux logrotate -->
+        <File name="logfile" fileName="/var/log/joicexml/jvoicexml.log">
+            <PatternLayout>
+                  <Pattern>%d{ISO8601} [%-20.20t] %-5p %X{sessionId} %40.40c (%6L) - %m%n</Pattern>
+             </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
@@ -30,6 +38,7 @@
         <Root>
              <AppenderRef ref="stdout"/>
              <AppenderRef ref="dailyrotfile"/>
+             <!-- AppenderRef ref="logfile"/-->
         </Root>
     </Loggers>
 </Configuration>
