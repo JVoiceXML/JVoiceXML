@@ -12,8 +12,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.15.0'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.15.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.16.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.16.0'
     if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
         compile project(':org.jvoicexml.xml')
     } else {
