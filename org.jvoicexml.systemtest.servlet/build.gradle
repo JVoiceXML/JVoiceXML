@@ -19,8 +19,8 @@ sourceSets {
 }
 
 dependencies {
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.16.0'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.16.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.0'
     compile group: 'servlets.com', name: 'cos', version: '05Nov2002'
     compile group: 'xerces', name: 'xercesImpl', version: '2.8.0'
 
