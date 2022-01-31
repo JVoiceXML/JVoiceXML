@@ -10,6 +10,7 @@ plugins {
     id 'com.github.eerohele.saxon-gradle' version '0.8.0'
     id 'signing'
     id 'maven-publish'
+    id 'jacoco'
 }
 
 repositories {
