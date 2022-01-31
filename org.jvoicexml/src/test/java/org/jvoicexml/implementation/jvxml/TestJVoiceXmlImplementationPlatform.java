@@ -37,7 +37,6 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
-import org.jvoicexml.mock.MockConnectionInformation;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -93,7 +92,11 @@ public final class TestJVoiceXmlImplementationPlatform {
         Mockito.when(spokenInputFactory.createResource()).thenReturn(input);
         Mockito.when(spokenInputFactory.getType()).thenReturn("dummy");
         recognizerPool.addResourceFactory(spokenInputFactory);
-        info = new MockConnectionInformation(telephonyFactory.getType());
+        info = Mockito.mock(ConnectionInformation.class);
+        Mockito.when(info.getSystemOutput()).thenReturn("dummy");
+        Mockito.when(info.getCallControl()).thenReturn(telephonyFactory.getType());
+        Mockito.when(info.getUserInput()).thenReturn("dummy");
+        Mockito.when(info.getProfile()).thenReturn("VoiceXML21");
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
                 synthesizerPool, recognizerPool, info);
     }

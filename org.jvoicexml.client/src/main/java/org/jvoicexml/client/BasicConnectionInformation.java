@@ -24,6 +24,7 @@ package org.jvoicexml.client;
 import java.net.URI;
 
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * Basic connection configuration.
@@ -34,9 +35,9 @@ import org.jvoicexml.ConnectionInformation;
  * custom implementations to transfer other client settings that is needed by
  * custom implementation platforms.
  * </p>
- *
  * <p>
  * By default the {@code VoiceXML21} profile is used.
+ * </p>
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.6
@@ -47,7 +48,7 @@ public class BasicConnectionInformation
     /**
      * The serial version UID.
      */
-    private static final long serialVersionUID = -8506051361967016535L;
+    private static final long serialVersionUID = 4959720563787735176L;
 
     /** The profile name. */
     private String profile;
@@ -72,6 +73,9 @@ public class BasicConnectionInformation
 
     /** Version of the connection protocol. */
     private String protocolVersion;
+
+    /** The session identifier. */
+    private SessionIdentifier identifier;
 
     /**
      * Constructs a new object.
@@ -194,6 +198,22 @@ public class BasicConnectionInformation
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSessionIdentifier(final SessionIdentifier id) {
+        identifier = id;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SessionIdentifier getSessionIdentifier() {
+        return identifier;
+    }
+    
+    /**
      * Subclass specific additions to the
      * {@link BasicConnectionInformation#toString()} method. Subclasses are
      * requested to add their member variables in the following form
@@ -227,6 +247,8 @@ public class BasicConnectionInformation
         str.append(protocolName);
         str.append(',');
         str.append(protocolVersion);
+        str.append(',');
+        str.append(identifier.getId());
         addToString(str);
         str.append(']');
         return str.toString();
