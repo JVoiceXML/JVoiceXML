@@ -36,7 +36,7 @@ dependencies {
     
     implementation project(':org.jvoicexml')
 
-    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
     testImplementation testFixtures(project(':org.jvoicexml'))
