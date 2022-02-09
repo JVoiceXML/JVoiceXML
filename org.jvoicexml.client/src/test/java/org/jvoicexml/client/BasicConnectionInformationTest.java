@@ -13,7 +13,6 @@ public class BasicConnectionInformationTest {
     public void testGetProfile() {
         final BasicConnectionInformation info = 
                 new BasicConnectionInformation("call1", "output1", "input1");
-        Assert.assertEquals("call1", info.getCallControl());
         Assert.assertEquals("VoiceXML21", info.getProfile());
         info.setProfile("profile1");
         Assert.assertEquals("profile1", info.getProfile());
@@ -55,7 +54,7 @@ public class BasicConnectionInformationTest {
         final BasicConnectionInformation info = 
                 new BasicConnectionInformation("call1", "output1", "input1");
         Assert.assertNull(info.getCallingDevice());
-        final URI uri = new URI("cakkingdevice1");
+        final URI uri = new URI("callingdevice1");
         info.setCallingDevice(uri);
         Assert.assertEquals(uri, info.getCallingDevice());
     }
