@@ -253,4 +253,23 @@ public final class TestJVoiceXmlImplementationPlatform {
         platform.inputStatusChanged(event);
         Mockito.verify(synthesizedOutput, Mockito.times(1)).cancelOutput(BargeInType.SPEECH);
     }
+
+    /**
+     * Test case for notifications about speech started from the {@link UserInput}.
+     * 
+     * @since 0.7.9
+     */
+    @Test
+    public void testInputStatusChangedInputStartedNotSupported() throws JVoiceXMLEvent {
+        final UserInput input = platform.getUserInput();
+        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
+        types.add(BargeInType.SPEECH);
+        Mockito.when(input.getSupportedBargeInTypes()).thenReturn(types);
+        final JVoiceXmlSystemOutput output = (JVoiceXmlSystemOutput) platform.getSystemOutput();
+        final SynthesizedOutput synthesizedOutput = output.getSynthesizedOutput();
+        Mockito.when(synthesizedOutput.supportsBargeIn()).thenReturn(Boolean.FALSE);
+        final InputStartedEvent event = new InputStartedEvent(null, null, ModeType.VOICE);
+        platform.inputStatusChanged(event);
+        Mockito.verify(synthesizedOutput, Mockito.times(0)).cancelOutput(BargeInType.SPEECH);
+    }
 }
