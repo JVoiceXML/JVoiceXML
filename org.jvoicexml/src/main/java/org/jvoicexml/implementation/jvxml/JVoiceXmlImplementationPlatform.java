@@ -651,7 +651,7 @@ public final class JVoiceXmlImplementationPlatform
                         + " stopping system output if bargein is enabled...");
             } else {
                 LOGGER.debug("input started: '" + type.getMode()
-                        + "' trying to stop system output...");
+                        + "' trying to stop system output if bargein is enabled...");
             }
         }
         try {
