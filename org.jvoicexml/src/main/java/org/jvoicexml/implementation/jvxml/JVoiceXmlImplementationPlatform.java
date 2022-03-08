@@ -648,7 +648,7 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             if (type == null) {
                 LOGGER.debug("input started 'unknown mode':"
-                        + " stopping system output...");
+                        + " stopping system output if bargein is enabled...");
             } else {
                 LOGGER.debug("input started: '" + type.getMode()
                         + "' trying to stop system output...");
@@ -661,7 +661,7 @@ public final class JVoiceXmlImplementationPlatform
             return;
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...system output stopped");
+            LOGGER.debug("...system output stopped where it was possible");
         }
     }
 
