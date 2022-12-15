@@ -33,6 +33,7 @@ import java.net.URI;
 import java.net.UnknownHostException;
 
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.SessionIdentifier;
 
 /**
  * Jtapi based implementation of a {@link ConnectionInformation}.
@@ -197,5 +198,17 @@ public final class JtapiConnectionInformation implements ConnectionInformation {
      */
     public void setProtocolVersion(final String version) {
         protocolVersion = version;
+    }
+
+    @Override
+    public void setSessionIdentifier(SessionIdentifier id) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public SessionIdentifier getSessionIdentifier() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
