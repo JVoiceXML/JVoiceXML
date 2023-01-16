@@ -34,7 +34,6 @@ import javax.naming.NamingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
@@ -66,13 +65,14 @@ public final class TextDemo implements TextListener {
     private static final Logger LOGGER = LogManager.getLogger(TextDemo.class);
 
     /** Maximum number of session. */
-    private static final int MAX_SESSIONS = 1;
+    private static final int MAX_SESSIONS = 10;
 
     /**
      * Runs the text demo in sequential mod, i.e. {@link #MAX_SESSIONS} sessions
      * will be called subsequently.
      */
     public void sequentialMode() {
+        LOGGER.info("starting sequential mode of " + MAX_SESSIONS + " sessions");
         try {
             final Context context = new InitialContext();
             final RemoteJVoiceXml jvxml =
@@ -83,7 +83,7 @@ public final class TextDemo implements TextListener {
                 final TextServer server = new TextServer(14242);
                 server.start();
                 server.waitStarted();
-                LOGGER.info("initiating  calls " + i + "...");
+                LOGGER.info("initiating call " + i + "...");
                 final ConnectionInformation info = server.getConnectionInformation();
                 final SessionIdentifier id = new UuidSessionIdentifier();
                 final Session session = jvxml.createSession(info, id);
@@ -106,6 +106,7 @@ public final class TextDemo implements TextListener {
      * will be called parallel.
      */
     public void parallelMode() {
+        LOGGER.info("starting parallel mode of " + MAX_SESSIONS + " sessions");
         final TextServer[] servers = new TextServer[MAX_SESSIONS];
         for (int i = 0; i < MAX_SESSIONS; i++) {
             final TextServer server = new TextServer(14242 + i);
