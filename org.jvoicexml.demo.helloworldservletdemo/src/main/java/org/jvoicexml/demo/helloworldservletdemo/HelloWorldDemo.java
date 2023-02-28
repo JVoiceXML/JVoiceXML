@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.rmi.RemoteException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -37,6 +38,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
@@ -82,9 +84,9 @@ public final class HelloWorldDemo {
      */
     private void interpretDocument(final URI uri)
         throws JVoiceXMLEvent {
-        JVoiceXml jvxml;
+        RemoteJVoiceXml jvxml;
         try {
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 
@@ -94,13 +96,16 @@ public final class HelloWorldDemo {
         final ConnectionInformation client =
             new BasicConnectionInformation("desktop", "jsapi20", "jsapi20");
         final SessionIdentifier id = new UuidSessionIdentifier();
-        final Session session = jvxml.createSession(client, id);
+        Session session;
+        try {
+            session = jvxml.createSession(client, id);
+            session.call(uri);
+            session.waitSessionEnd();
+            session.hangup();
+        } catch (RemoteException e) {
+            LOGGER.error("unable to call and run application", e);
+        }
 
-        session.call(uri);
-
-        session.waitSessionEnd();
-
-        session.hangup();
     }
 
     /**
