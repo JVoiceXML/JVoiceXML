@@ -43,7 +43,6 @@ import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
-import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -194,30 +193,6 @@ public final class InputDemo {
     }
 
     /**
-     * Print the given VoiceXML document to <code>stdout</code>. Does nothing if
-     * an error occurs.
-     *
-     * @param document
-     *            The VoiceXML document to print.
-     * @return VoiceXML document as an XML string, <code>null</code> in case of
-     *         an error.
-     */
-    private String printDocument(final VoiceXmlDocument document) {
-        final String xml;
-        try {
-            xml = document.toXml();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-
-            return null;
-        }
-
-        System.out.println(xml);
-
-        return xml;
-    }
-
-    /**
      * Call the VoiceXML interpreter context to process the given XML document.
      *
      * @param uri
@@ -244,13 +219,11 @@ public final class InputDemo {
 
         session.call(uri);
 
+        final DtmfInput input = session.getDtmfInput();
         final char dtmf = readDTMF();
         if (dtmf > 0) {
             LOGGER.info("sending DTMF '" + dtmf + "'");
-
-            DtmfInput input = session.getDtmfInput();
             input.addDtmf(dtmf);
-
             session.waitSessionEnd();
         }
 
@@ -269,9 +242,10 @@ public final class InputDemo {
         final BufferedReader br = new BufferedReader(reader);
 
         try {
+            // Reading from stdin does not work from within gradle
             String dtmf = br.readLine();
             if (dtmf == null) {
-                System.out.println("no input received");
+                System.out.println("No input received. Did you start from gradle?");
                 return 0;
             }
             dtmf = dtmf.trim();
@@ -299,7 +273,6 @@ public final class InputDemo {
 
         try {
             final VoiceXmlDocument document = demo.createDocument();
-            demo.printDocument(document);
             final URI uri = InputDemo.class.getResource("/movies.vxml").toURI();
 
             demo.interpretDocument(uri);
