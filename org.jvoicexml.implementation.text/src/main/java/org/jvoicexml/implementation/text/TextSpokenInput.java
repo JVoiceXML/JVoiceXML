@@ -200,8 +200,7 @@ final class TextSpokenInput implements SpokenInput {
      */
     @Override
     public GrammarImplementation<?> loadGrammar(final URI uri,
-            final GrammarType type) throws NoresourceError, IOException,
-            UnsupportedFormatError {
+            final GrammarType type) throws NoresourceError, UnsupportedFormatError, IOException {
         final String mimeType = type.toString();
         final GrammarParser<?> parser = parsers.get(mimeType);
         if (parser == null) {

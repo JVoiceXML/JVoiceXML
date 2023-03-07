@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2023 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -50,6 +50,7 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventBus;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -1102,12 +1103,14 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      * @exception ConnectionDisconnectHangupEvent
      *                the user hung up
      * @exception SemanticError
-     *                if there was an error evaluating a scripting expression
+     *                if there was an error evaluating a scripting expression or in the grammar to activate
+     * @exception NoauthorizationError
+     *                 the grammar could not be loaded because of security constraints
      */
     private void activateModalGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError,
-            SemanticError {
+            SemanticError, NoauthorizationError {
         if (!(formItem instanceof GrammarContainer)) {
             return;
         }
@@ -1176,11 +1179,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      *                the user hung up
      * @exception SemanticError
      *                if there are no grammars to activate
+     * @exception NoauthorizationError
+     *                 the grammar could not be loaded because of security constraints
      */
     private void activateGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError,
-            SemanticError {
+            SemanticError, NoauthorizationError {
         final boolean isInitialItem = formItem instanceof InitialFormItem;
         final boolean isGrammarContainer = formItem instanceof GrammarContainer;
         if (!isGrammarContainer && !isInitialItem) {
@@ -1236,12 +1241,16 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      *             the user already hung up
      * @throws UnsupportedFormatError
      *             if the requested grammar type is not supported
+     * @exception SemanticError
+     *                semantic error in the grammar file
+     * @exception NoauthorizationError
+     *                 the grammar could not be loaded because of security constraints
      * @since 0.7.3
      */
     private void activateGrammars(
             final Collection<GrammarDocument> grammarsToActivate)
             throws BadFetchError, NoresourceError, UnsupportedLanguageError,
-            ConnectionDisconnectHangupEvent, UnsupportedFormatError {
+            ConnectionDisconnectHangupEvent, UnsupportedFormatError, SemanticError, NoauthorizationError {
         if (grammarsToActivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("no grammars to activate");

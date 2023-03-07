@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2017 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2023 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,7 +53,9 @@ import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.implementation.RecognitionStartedEvent;
@@ -248,7 +250,7 @@ public final class Jsapi20SpokenInput
     @Override
     public GrammarImplementation<RuleGrammar> loadGrammar(final URI uri,
             final GrammarType grammarType) throws NoresourceError,
-            UnsupportedFormatError, IOException {
+            UnsupportedFormatError, SemanticError, NoauthorizationError, IOException {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -286,13 +288,13 @@ public final class Jsapi20SpokenInput
         } catch (EngineStateException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
         } catch (IllegalArgumentException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
+            throw new SemanticError(ex.getMessage(), ex);
         } catch (javax.speech.recognition.GrammarException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
+            throw new SemanticError(ex.getMessage(), ex);
         } catch (ParserConfigurationException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
+            throw new SemanticError(ex.getMessage(), ex);
         } catch (SAXException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
+            throw new SemanticError(ex.getMessage(), ex);
         }
 
         return new RuleGrammarImplementation(grammar, uri);

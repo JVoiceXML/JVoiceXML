@@ -28,7 +28,9 @@ import java.util.Collection;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -174,12 +176,16 @@ public interface SpokenInput extends ExternalResource, InputDevice {
      * @exception NoresourceError
      *                the input resource is not available.
      * @exception IOException
-     *                error reading the grammar.
+     *                error reading the grammar. Will be converted into {@link BadFetchError}
      * @exception UnsupportedFormatError
      *                invalid grammar format.
+     * @exception SemanticError
+     *                semantic error in the grammar file
+     * @exception NoauthorizationError
+     *                 the grammar could not be loaded because of security constraints
      */
     GrammarImplementation<?> loadGrammar(URI uri, GrammarType type)
-            throws NoresourceError, IOException, UnsupportedFormatError;
+            throws NoresourceError, IOException, UnsupportedFormatError, SemanticError, NoauthorizationError;
 
     /**
      * Retrieves the barge-in types supported by this <code>UserInput</code>.
