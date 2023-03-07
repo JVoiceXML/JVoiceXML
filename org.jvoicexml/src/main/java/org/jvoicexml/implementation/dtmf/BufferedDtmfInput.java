@@ -402,7 +402,7 @@ public class BufferedDtmfInput implements DtmfInput, SpokenInput {
     @Override
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type)
-            throws NoresourceError, IOException, UnsupportedFormatError {
+            throws NoresourceError, UnsupportedFormatError, IOException {
         final GrammarParser<?> parser = parsers.get(type);
         if (parser == null) {
             throw new UnsupportedFormatError("'" + type + "' is not supported");

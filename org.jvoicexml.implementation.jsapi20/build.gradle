@@ -43,7 +43,7 @@ dependencies {
     implementation group: 'org.jvoicexml', name: 'cmu_us_kal', version: '1.2.3-SNAPSHOT'
     
     
-    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testImplementation testFixtures(project(':org.jvoicexml'))
 

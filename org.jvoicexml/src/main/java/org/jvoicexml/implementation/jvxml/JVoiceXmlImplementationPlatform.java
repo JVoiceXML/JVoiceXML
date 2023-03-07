@@ -628,7 +628,7 @@ public final class JVoiceXmlImplementationPlatform
      * The user has started to speak.
      * 
      * @param type
-     *            the mode type of te recognizer that started
+     *            the mode type of the recognizer that started
      */
     private void inputStarted(final ModeType type) {
         // No need to wait for input
@@ -642,16 +642,16 @@ public final class JVoiceXmlImplementationPlatform
 
         // Try cancel the output only, if the platform supports SPEECH bargeins.
         final Collection<BargeInType> types = input.getSupportedBargeInTypes();
-        if (types.contains(BargeInType.SPEECH)) {
+        if (!types.contains(BargeInType.SPEECH)) {
             return;
         }
         if (LOGGER.isDebugEnabled()) {
             if (type == null) {
                 LOGGER.debug("input started 'unknown mode':"
-                        + " stopping system output...");
+                        + " stopping system output if bargein is enabled...");
             } else {
                 LOGGER.debug("input started: '" + type.getMode()
-                        + "' stopping system output...");
+                        + "' trying to stop system output if bargein is enabled...");
             }
         }
         try {
@@ -661,7 +661,7 @@ public final class JVoiceXmlImplementationPlatform
             return;
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...system output stopped");
+            LOGGER.debug("...system output stopped where it was possible");
         }
     }
 
@@ -813,7 +813,9 @@ public final class JVoiceXmlImplementationPlatform
         } else {
             LOGGER.warn("unknown spoken input event " + event);
         }
-        eventbus.publish(event);
+        if (eventbus != null) {
+            eventbus.publish(event);
+        }
     }
 
     /**

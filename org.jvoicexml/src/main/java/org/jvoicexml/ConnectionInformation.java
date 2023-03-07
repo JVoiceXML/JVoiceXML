@@ -133,4 +133,19 @@ public interface ConnectionInformation extends Serializable {
      * @since 0.7
      */
     String getProtocolVersion();
+    
+    /**
+     * Sets the session identifier. This will be accessible after the session
+     * has been created.
+     * @param id the session identifier
+     * @since 0.7.9
+     */
+    void setSessionIdentifier(final SessionIdentifier id);
+    
+    /**
+     * Retrieves the session identifier.
+     * @return the session identifier
+     * @since 0.7.9
+     */
+    SessionIdentifier getSessionIdentifier();
 }

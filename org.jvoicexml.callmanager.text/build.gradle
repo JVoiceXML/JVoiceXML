@@ -26,7 +26,7 @@ def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 dependencies {
 	jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
-    testCompile group: 'junit', name: 'junit', version: '4.13.1'
+    testCompile group: 'junit', name: 'junit', version: '4.13.2'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 
     compile project(':org.jvoicexml')

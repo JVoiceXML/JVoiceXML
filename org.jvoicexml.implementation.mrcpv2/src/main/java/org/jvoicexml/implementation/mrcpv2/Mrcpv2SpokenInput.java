@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2019 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2023 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -196,7 +196,7 @@ public final class Mrcpv2SpokenInput
     @Override
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type)
-            throws NoresourceError, IOException, UnsupportedFormatError {
+            throws NoresourceError, UnsupportedFormatError, IOException {
         final GrammarParser<?> parser = parsers.get(type.toString());
         if (parser == null) {
             throw new UnsupportedFormatError("'" + type + "' is not supported");

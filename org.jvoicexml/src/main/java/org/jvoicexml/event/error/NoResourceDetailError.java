@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2018 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2022 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,33 +18,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 package org.jvoicexml.event.error;
 
-import org.jvoicexml.event.ErrorEvent;
-
-
 /**
- * A run-time error occurred because a requested platform resource was not
- * available during execution.
- *
- * @author Dirk Schnelle-Walka
+ * An {@code error.noresource} with specific detail information
+.* @author Dirk Schnelle-Walka
+ * @since 0.7.9
  */
-public class NoresourceError
-        extends ErrorEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 7672280814345839868L;
-
+public class NoResourceDetailError extends NoresourceError {
+    /** The serial version UID */
+    private static final long serialVersionUID = 6456139552876751394L;
     /** The detail message. */
-    public static final String EVENT_TYPE = "error.noresource";
-
+    private final String detail;
+    
     /**
      * Constructs a new event with the event type as its detail message. The
      * cause is not initialized.
      *
+     * @param det the specifi detail message
      * @see #getEventType()
      */
-    public NoresourceError() {
+    public NoResourceDetailError(final String det) {
+        detail = det;
     }
 
     /**
@@ -55,11 +50,13 @@ public class NoresourceError
      *
      * @param message
      *        The detail message.
+     * @param det the specific detail message
      *
      * @see #getEventType()
      */
-    public NoresourceError(final String message) {
+    public NoResourceDetailError(final String det, final String message) {
         super(message);
+        detail = det;
     }
 
     /**
@@ -69,11 +66,13 @@ public class NoresourceError
      *
      * @param cause
      *        The cause.
+     * @param det the specific detail message
      *
      * @see #getEventType()
      */
-    public NoresourceError(final Throwable cause) {
+    public NoResourceDetailError(final String det, final Throwable cause) {
         super(cause);
+        detail = det;
     }
 
     /**
@@ -81,31 +80,31 @@ public class NoresourceError
      *
      * @param message
      *        The detail message.
+     * @param det the specific detail message
      * @param cause
      *        The cause.
      */
-    public NoresourceError(final String message, final Throwable cause) {
+    public NoResourceDetailError(final String det, final String message, final Throwable cause) {
         super(message, cause);
+        detail = det;
     }
 
     /**
-     * Appends detail information to the type information.
-     * @param str type prefix.
-     */
-    protected void appendSpecificationDetails(final StringBuilder str) {
-    }
-
-    
-    /**
+     * Appends the protocol and response code to the type.
+     * The event type has the following form
+     *
+     * <p>
+     * <code>
+     * &lt;NoResoureError.EVENT_TYPE&gt;.&lt;detail&gt;.
+     * </code>
+     * </p>
+     *
      * {@inheritDoc}
      */
     @Override
-    public final String getEventType() {
-        final StringBuilder str = new StringBuilder();
-
-        str.append(EVENT_TYPE);
-        appendSpecificationDetails(str);
-
-        return str.toString();
+    protected final void appendSpecificationDetails(final StringBuilder str) {
+        str.append('.');
+        str.append(detail);
     }
+
 }

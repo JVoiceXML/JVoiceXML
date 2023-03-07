@@ -297,6 +297,7 @@ distributions {
                 from configurations.jvxmlInterpreterGrammarRegex
                 from configurations.jvxmlImplementationJSAPI20 
                 from configurations.jvxmlImplementationLightweightBML 
+                from configurations.jvxmlImplementationMary
                 from configurations.jvxmlImplementationMrcpv2
                 from configurations.jvxmlImplementationText
 

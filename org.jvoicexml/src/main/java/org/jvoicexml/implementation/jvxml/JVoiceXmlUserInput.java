@@ -33,7 +33,9 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.GrammarImplementation;
@@ -119,7 +121,7 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
     @Override
     public int activateGrammars(final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
-            UnsupportedFormatError {
+            UnsupportedFormatError, SemanticError, NoauthorizationError {
         // Separate grammars for the DTMF and voice recognizer
         final Collection<GrammarImplementation<?>> voiceGrammars =
                 new java.util.ArrayList<GrammarImplementation<?>>();
@@ -223,9 +225,13 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      *                Error reading the grammar.
      * @exception UnsupportedFormatError
      *                Invalid grammar format.
+     * @exception SemanticError
+     *                semantic error in the grammar file
+     * @exception NoauthorizationError
+     *                 the grammar could not be loaded because of security constraints
      */
     private GrammarImplementation<?> loadGrammar(final GrammarDocument document)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+            throws NoresourceError, BadFetchError, UnsupportedFormatError, SemanticError, NoauthorizationError {
         final URI uri = document.getURI();
 
         // Check if the grammar has already been loaded

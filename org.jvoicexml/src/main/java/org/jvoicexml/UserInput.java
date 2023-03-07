@@ -24,7 +24,9 @@ package org.jvoicexml;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.interpreter.datamodel.DataModel;
@@ -148,10 +150,14 @@ public interface UserInput {
      *                The input resource is not available.
      * @exception UnsupportedFormatError
      *                the grammar format is not supported
+     * @exception SemanticError
+     *                semantic error in the grammar file
+     * @exception NoauthorizationError
+     *                 the grammar could not be loaded because of security constraints
      */
     int activateGrammars(Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,
-            UnsupportedFormatError;
+            UnsupportedFormatError, SemanticError, NoauthorizationError;
 
     /**
      * Deactivates the given grammars. Do nothing if the input resource is not

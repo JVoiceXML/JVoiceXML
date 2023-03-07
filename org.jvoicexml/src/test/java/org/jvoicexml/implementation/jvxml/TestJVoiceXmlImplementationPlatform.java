@@ -20,6 +20,8 @@
  */
 package org.jvoicexml.implementation.jvxml;
 
+import java.util.Collection;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,20 +33,21 @@ import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.implementation.InputStartedEvent;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
-import org.jvoicexml.mock.MockConnectionInformation;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.mockito.Mockito;
 
 /**
- * Test cases for {@link KeyedResourcePool}.
+ * Test cases for {@link JVoiceXmlImplementationPlatform}.
  * @author Dirk Schnelle-Walka
  */
 public final class TestJVoiceXmlImplementationPlatform {
@@ -93,7 +96,11 @@ public final class TestJVoiceXmlImplementationPlatform {
         Mockito.when(spokenInputFactory.createResource()).thenReturn(input);
         Mockito.when(spokenInputFactory.getType()).thenReturn("dummy");
         recognizerPool.addResourceFactory(spokenInputFactory);
-        info = new MockConnectionInformation(telephonyFactory.getType());
+        info = Mockito.mock(ConnectionInformation.class);
+        Mockito.when(info.getSystemOutput()).thenReturn("dummy");
+        Mockito.when(info.getCallControl()).thenReturn(telephonyFactory.getType());
+        Mockito.when(info.getUserInput()).thenReturn("dummy");
+        Mockito.when(info.getProfile()).thenReturn("VoiceXML21");
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
                 synthesizerPool, recognizerPool, info);
     }
@@ -226,5 +233,43 @@ public final class TestJVoiceXmlImplementationPlatform {
         Assert.assertFalse(platform.isUserInputActive());
         Assert.assertTrue(platform.isHungup());
         Assert.assertFalse(platform.isClosed());
+    }
+    
+    /**
+     * Test case for notifications about speech started from the {@link UserInput}.
+     * 
+     * @since 0.7.9
+     */
+    @Test
+    public void testInputStatusChangedInputStarted() throws JVoiceXMLEvent {
+        final UserInput input = platform.getUserInput();
+        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
+        types.add(BargeInType.SPEECH);
+        Mockito.when(input.getSupportedBargeInTypes()).thenReturn(types);
+        final JVoiceXmlSystemOutput output = (JVoiceXmlSystemOutput) platform.getSystemOutput();
+        final SynthesizedOutput synthesizedOutput = output.getSynthesizedOutput();
+        Mockito.when(synthesizedOutput.supportsBargeIn()).thenReturn(Boolean.TRUE);
+        final InputStartedEvent event = new InputStartedEvent(null, null, ModeType.VOICE);
+        platform.inputStatusChanged(event);
+        Mockito.verify(synthesizedOutput, Mockito.times(1)).cancelOutput(BargeInType.SPEECH);
+    }
+
+    /**
+     * Test case for notifications about speech started from the {@link UserInput}.
+     * 
+     * @since 0.7.9
+     */
+    @Test
+    public void testInputStatusChangedInputStartedNotSupported() throws JVoiceXMLEvent {
+        final UserInput input = platform.getUserInput();
+        final Collection<BargeInType> types = new java.util.ArrayList<BargeInType>();
+        types.add(BargeInType.SPEECH);
+        Mockito.when(input.getSupportedBargeInTypes()).thenReturn(types);
+        final JVoiceXmlSystemOutput output = (JVoiceXmlSystemOutput) platform.getSystemOutput();
+        final SynthesizedOutput synthesizedOutput = output.getSynthesizedOutput();
+        Mockito.when(synthesizedOutput.supportsBargeIn()).thenReturn(Boolean.FALSE);
+        final InputStartedEvent event = new InputStartedEvent(null, null, ModeType.VOICE);
+        platform.inputStatusChanged(event);
+        Mockito.verify(synthesizedOutput, Mockito.times(0)).cancelOutput(BargeInType.SPEECH);
     }
 }
