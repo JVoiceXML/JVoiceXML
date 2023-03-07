@@ -284,16 +284,22 @@ public final class Jsapi20SpokenInput
                     "application/srgs+xml", read);
             recognizer.processGrammars();
         } catch (EngineException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             throw new NoresourceError(ex.getMessage(), ex);
         } catch (EngineStateException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             throw new NoresourceError(ex.getMessage(), ex);
         } catch (IllegalArgumentException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             throw new SemanticError(ex.getMessage(), ex);
         } catch (javax.speech.recognition.GrammarException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             throw new SemanticError(ex.getMessage(), ex);
         } catch (ParserConfigurationException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             throw new SemanticError(ex.getMessage(), ex);
         } catch (SAXException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             throw new SemanticError(ex.getMessage(), ex);
         }
 
