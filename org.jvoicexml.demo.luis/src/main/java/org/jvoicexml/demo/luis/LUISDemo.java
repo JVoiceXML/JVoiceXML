@@ -123,7 +123,7 @@ public final class LUISDemo implements TextListener {
         final Session session = jvxml.createSession(client, id);
 
         session.call(uri);
-
+        LOGGER.info("waiting for input request");
         synchronized (lock) {
             lock.wait();
         }
@@ -157,6 +157,7 @@ public final class LUISDemo implements TextListener {
 
     @Override
     public void expectingInput(TextMessageEvent event) {
+        LOGGER.info("Received expecting input");
         synchronized (lock) {
             lock.notifyAll();
         }
