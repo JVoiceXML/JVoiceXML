@@ -110,7 +110,7 @@ public final class MixedInitiativeDemo {
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final MixedInitiativeDemo demo = new MixedInitiativeDemo();
-            final URI uri = MixedInitiativeDemo.class.getResource("/pizza.vxml").toURI();
+            final URI uri = MixedInitiativeDemo.class.getResource("/pizza-srgs.vxml").toURI();
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
