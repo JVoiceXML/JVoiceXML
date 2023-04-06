@@ -22,6 +22,7 @@
 package org.jvoicexml.demo.mixedinitiativedemo;
 
 import java.net.URI;
+import java.rmi.RemoteException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -29,11 +30,11 @@ import javax.naming.InitialContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
@@ -76,10 +77,10 @@ public final class MixedInitiativeDemo {
      * @exception JVoiceXMLEvent
      *                Error processing the call.
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
-        final JVoiceXml jvxml;
+    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, RemoteException {
+        final RemoteJVoiceXml jvxml;
         try {
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            jvxml = (RemoteJVoiceXml) context.lookup("RemoteJVoiceXml");
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 
