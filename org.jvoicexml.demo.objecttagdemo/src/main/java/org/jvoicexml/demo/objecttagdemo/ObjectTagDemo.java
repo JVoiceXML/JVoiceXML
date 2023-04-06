@@ -108,8 +108,8 @@ public final class ObjectTagDemo {
      *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
-        LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2019 by JVoiceXML group - "
+        LOGGER.info("Starting 'object tag' demo for JVoiceXML...");
+        LOGGER.info("(c) 2005-2023 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         try {
