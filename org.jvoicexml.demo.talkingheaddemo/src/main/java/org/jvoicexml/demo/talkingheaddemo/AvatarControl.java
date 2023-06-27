@@ -117,10 +117,10 @@ public final class AvatarControl {
          */
 
         List<String> lines;
-
         try {
+            File file = new File(".");
             lines = Files.readAllLines(
-                    Paths.get(/* args[0] */"./etc/default_room.csv"),
+                    Paths.get(/* args[0] */"./src/main/config/default_room.csv"),
                     Charset.defaultCharset());
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -233,27 +233,27 @@ public final class AvatarControl {
 
         clearGeneratedDirectory();
 
-        writeFile("etc\\voiceXML\\generated\\standard.srgs",
+        writeFile("build/voiceXML",
                 generateStandardGrammar());
 
-        writeFile("etc\\voiceXML\\generated\\ActionsList.vxml",
+        writeFile("build/voiceXML/ActionsList.vxml",
                 generatePromptActions());
 
         for (String obj : objectToVerbs.keySet()) {
-            writeFile("etc\\voiceXML\\generated\\ObjectAskVerbs_" + obj
+            writeFile("build/voiceXML/ObjectAskVerbs_" + obj
                     + ".vxml", generateObjectAskVerbs(obj));
-            writeFile("etc\\voiceXML\\generated\\ObjectAskVerbs_" + obj
+            writeFile("build/voiceXML/ObjectAskVerbs_" + obj
                     + ".srgs", generateObjectAskVerbsGrammar(obj));
-            writeFile("etc\\voiceXML\\generated\\SelectActionMenu_" + obj
+            writeFile("build/voiceXML/SelectActionMenu_" + obj
                     + ".vxml", generateObjectVerbsList(obj));
         }
 
         for (String verb : verbToObjects.keySet()) {
-            writeFile("etc\\voiceXML\\generated\\VerbAskObjects_" + verb
+            writeFile("build/voiceXML/VerbAskObjects_" + verb
                     + ".vxml", generateVerbAskObjects(verb));
-            writeFile("etc\\voiceXML\\generated\\VerbAskObjects_" + verb
+            writeFile("build/voiceXML/VerbAskObjects_" + verb
                     + ".srgs", generateVerbAskObjectsGrammar(verb));
-            writeFile("etc\\voiceXML\\generated\\SelectActionMenu_" + verb
+            writeFile("build/voiceXML/SelectActionMenu_" + verb
                     + ".vxml", generateVerbObjectsList(verb));
         }
 
@@ -264,7 +264,7 @@ public final class AvatarControl {
      */
     protected void clearGeneratedDirectory() {
         DirectoryStream<Path> paths = null;
-        Path path = Paths.get("etc\\voiceXML\\generated");
+        Path path = Paths.get("./build/voiceXML");
         if (Files.notExists(path)) {
             try {
                 Files.createDirectory(path);
@@ -350,7 +350,7 @@ public final class AvatarControl {
         badActionsSRGS = gc.toString();
         gc.reset();
 
-        String standardSRGS = readFile("etc\\templates\\object_verb.srgs");
+        String standardSRGS = readFile("./src/main/config/templates/object_verb.srgs");
         standardSRGS = String.format(standardSRGS, objectsSRGS + verbsSRGS
                 + actionsSRGS + badActionsSRGS);
         return standardSRGS;
@@ -398,10 +398,10 @@ public final class AvatarControl {
     protected boolean start() {
         // Start JVOICEXML
         final GenericClient client = new GenericClient();
-        final File file = new File("etc\\voiceXML\\DialogStart.vxml");
+        final File file = new File("build/voiceXML/DialogStart.vxml");
         final URI dialog = file.toURI();
 
-        String simpleEventString = readFile("etc\\templates\\SimpleEvent.vxml");
+        String simpleEventString = readFile("src/main/config/templates/SimpleEvent.vxml");
 
         queueEvent(new DummyEvent("Haben Sie gut geschlafen?",
                 "Das freut mich.", "Oh das tut mir Leid."));
@@ -415,7 +415,7 @@ public final class AvatarControl {
                                 triggeredEvent.getOfferText(),
                                 triggeredEvent.getAcceptText(),
                                 triggeredEvent.getRejectText()));
-                call(client, Paths.get("etc\\voiceXML\\generated\\temp.vxml")
+                call(client, Paths.get("build/voiceXML/temp.vxml")
                         .toUri());
                 try {
                     Thread.sleep(MAX_THREAD_SLEEP_TIME);
@@ -509,7 +509,7 @@ public final class AvatarControl {
             }
             b.append(sysNewLine);
         }
-        return String.format(readFile("etc\\templates\\ActionsList.vxml"),
+        return String.format(readFile("src/main/config/templates/ActionsList.vxml"),
                 b.toString());
     }
 
@@ -521,7 +521,7 @@ public final class AvatarControl {
      * @return the dialog part to ask a verb to an object
      */
     protected String generateObjectAskVerbs(final String obj) {
-        return String.format(readFile("etc\\templates\\ObjectAskVerbs.vxml"),
+        return String.format(readFile("src/main/config/templates/ObjectAskVerbs.vxml"),
                 obj, obj, obj);
     }
 
@@ -600,7 +600,7 @@ public final class AvatarControl {
             filled.append(sysNewLine);
             i++;
         }
-        return String.format(readFile("etc\\templates\\SelectActionMenu.vxml"),
+        return String.format(readFile("src/main/config/templates/SelectActionMenu.vxml"),
                 "SelectActionMenu", prompt.toString(), filled.toString());
     }
 
@@ -612,7 +612,7 @@ public final class AvatarControl {
      * @return the dialog part to ask an object to a verb
      */
     protected String generateVerbAskObjects(final String verb) {
-        return String.format(readFile("etc\\templates\\VerbAskObjects.vxml"),
+        return String.format(readFile("src/main/config/templates/VerbAskObjects.vxml"),
                 verb, verb, verb);
     }
 
@@ -691,7 +691,7 @@ public final class AvatarControl {
             filled.append(sysNewLine);
             i++;
         }
-        return String.format(readFile("etc\\templates\\SelectActionMenu.vxml"),
+        return String.format(readFile("src/main/config/templates/SelectActionMenu.vxml"),
                 "SelectActionMenu", prompt.toString(), filled.toString());
     }
 

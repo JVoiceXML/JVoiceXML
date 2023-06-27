@@ -57,6 +57,9 @@ public class DtmfRecognizerProperties {
     /** The default value for the terminating character. */
     public static final char DEFAULT_TERM_CHAR = '#';
 
+    /** Default inter digit timeout in MSEC. */
+    public static final int DEFAULT_INTER_DIGIT_TIMEOUT = 3000;
+
     /** The default no-input timeout in msec. */
     public static final int DEFAULT_NO_INPUT_TIMEOUT = 30000;
 
@@ -85,6 +88,7 @@ public class DtmfRecognizerProperties {
         setTermtimeout(DEFAULT_TERM_TIMEOUT);
         termchar = DEFAULT_TERM_CHAR;
         timeout = DEFAULT_NO_INPUT_TIMEOUT;
+        interdigittimeout = DEFAULT_INTER_DIGIT_TIMEOUT;
     }
 
     /**

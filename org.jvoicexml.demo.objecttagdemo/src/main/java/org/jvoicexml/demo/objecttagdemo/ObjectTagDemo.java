@@ -26,6 +26,7 @@ package org.jvoicexml.demo.objecttagdemo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.rmi.RemoteException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -34,11 +35,11 @@ import javax.naming.NamingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
@@ -77,11 +78,13 @@ public final class ObjectTagDemo {
      *            URI of the first document to load
      * @exception JVoiceXMLEvent
      *                Error processing the call.
+     * @throws RemoteException 
+     *                error obtaining a remote reference
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
-        JVoiceXml jvxml;
+    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, RemoteException {
+        RemoteJVoiceXml jvxml;
         try {
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 
@@ -105,8 +108,8 @@ public final class ObjectTagDemo {
      *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
-        LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2019 by JVoiceXML group - "
+        LOGGER.info("Starting 'object tag' demo for JVoiceXML...");
+        LOGGER.info("(c) 2005-2023 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         try {
@@ -119,6 +122,10 @@ public final class ObjectTagDemo {
         } catch (NamingException e) {
             LOGGER.error(
                     "error obtaining the initial context: " + e.getMessage(),
+                    e);
+        } catch (RemoteException e) {
+            LOGGER.error(
+                    "error obtaining the remote reference to JVoiceXML: " + e.getMessage(),
                     e);
         } catch (URISyntaxException e) {
             LOGGER.error("error creating a URI for the VoiceXML code: "

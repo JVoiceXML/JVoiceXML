@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xml:lang="en-US" xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <menu id="mainmenu">
+        <prompt>Please enter 1 to list the titles or 2 to watch a movie</prompt>
+        <choice dtmf="1" next="#list"/>
+        <choice dtmf="2" next="#watch"/>
+    </menu>
+    <form id="list">
+        <block>
+            <prompt>lord of the rings<break/>the magnificent seven<break/>two thousand one a space odyssey<break/>the matrix<break/>finding nemo<break/>spider man<break/>mystic river<break/>the italian job<break/>chicago<break/>a beautiful mind<break/>gladiator<break/>american beauty<break/>the magnificant seven</prompt>
+        </block>
+    </form>
+    <form id="watch">
+        <field name="movie">
+            <prompt timeout="10s">Which movie do you want to watch?</prompt>
+            <grammar src="movies.srgs" type="application/srgs+xml"/>
+            <noinput>Please say something!<reprompt/>
+            </noinput>
+            <noinput count="2">Please say a film title!<reprompt/>
+            </noinput>
+            <nomatch>Please say a film title!<reprompt/>
+            </nomatch>
+        </field>
+        <block>You can watch the film<value expr="movie"/>
+        </block>
+    </form>
+</vxml>

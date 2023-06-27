@@ -57,7 +57,7 @@
                 <value expr="topping" />?
             </prompt>
             <filled>
-                <if cond="go_ahead=='yes'">
+                <if cond="go_ahead=='Utilities.Confirm'">
                     <prompt>
                         The pizza will be delivered in 15 minutes.
                         Thanks for your order.

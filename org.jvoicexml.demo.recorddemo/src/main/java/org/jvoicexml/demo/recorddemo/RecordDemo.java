@@ -70,14 +70,14 @@ public final class RecordDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'record' demo for JVoiceXML...");
-        LOGGER.info("(c) 2008-2017 by JVoiceXML group - "
+        LOGGER.info("(c) 2008-2023 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final GenericClient client = new GenericClient();
         try {
             final URI uri = RecordDemo.class.getResource("/record.vxml")
                     .toURI();
-            Session session = client.call(uri, "jsapi20", "mary", "desktop");
+            Session session = client.call(uri, "jsapi20", "jsapi20", "desktop");
             session.waitSessionEnd();
             session.hangup();
         } catch (NamingException e) {

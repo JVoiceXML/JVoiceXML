@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.rmi.RemoteException;
 import java.util.Locale;
 
 import javax.naming.Context;
@@ -37,12 +38,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfInput;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
-import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -193,71 +193,19 @@ public final class InputDemo {
     }
 
     /**
-     * Print the given VoiceXML document to <code>stdout</code>. Does nothing if
-     * an error occurs.
-     *
-     * @param document
-     *            The VoiceXML document to print.
-     * @return VoiceXML document as an XML string, <code>null</code> in case of
-     *         an error.
-     */
-    private String printDocument(final VoiceXmlDocument document) {
-        final String xml;
-        try {
-            xml = document.toXml();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-
-            return null;
-        }
-
-        System.out.println(xml);
-
-        return xml;
-    }
-
-    /**
-     * Add the given document as a single document application.
-     * 
-     * @param document
-     *            The only document in this application.
-     * @return URI of the first document.
-     */
-    private URI addDocument(final VoiceXmlDocument document) {
-        MappedDocumentRepository repository;
-        try {
-            repository = (MappedDocumentRepository) context
-                    .lookup("MappedDocumentRepository");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the documentrepository", ne);
-
-            return null;
-        }
-
-        final URI uri;
-        try {
-            uri = repository.getUri("/root");
-        } catch (URISyntaxException e) {
-            LOGGER.error("error creating the URI", e);
-            return null;
-        }
-        repository.addDocument(uri, document.toString());
-
-        return uri;
-    }
-
-    /**
      * Call the VoiceXML interpreter context to process the given XML document.
      *
      * @param uri
      *            URI of the first document to load
      * @exception JVoiceXMLEvent
      *                Error processing the call
+     * @throws RemoteException 
+     *                  JVoiceXML not found
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
-        JVoiceXml jvxml;
+    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, RemoteException {
+        RemoteJVoiceXml jvxml;
         try {
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 
@@ -271,14 +219,13 @@ public final class InputDemo {
 
         session.call(uri);
 
+        final DtmfInput input = session.getDtmfInput();
         final char dtmf = readDTMF();
-
-        LOGGER.info("sending DTMF '" + dtmf + "'");
-
-        DtmfInput input = session.getDtmfInput();
-        input.addDtmf(dtmf);
-
-        session.waitSessionEnd();
+        if (dtmf > 0) {
+            LOGGER.info("sending DTMF '" + dtmf + "'");
+            input.addDtmf(dtmf);
+            session.waitSessionEnd();
+        }
 
         session.hangup();
     }
@@ -295,7 +242,12 @@ public final class InputDemo {
         final BufferedReader br = new BufferedReader(reader);
 
         try {
+            // Reading from stdin does not work from within gradle
             String dtmf = br.readLine();
+            if (dtmf == null) {
+                System.out.println("No input received. Did you start from gradle?");
+                return 0;
+            }
             dtmf = dtmf.trim();
 
             return dtmf.charAt(0);
@@ -314,19 +266,18 @@ public final class InputDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'input' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2019 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2023 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final InputDemo demo = new InputDemo();
 
         try {
             final VoiceXmlDocument document = demo.createDocument();
-            demo.printDocument(document);
-            final URI uri = demo.addDocument(document);
+            final URI uri = InputDemo.class.getResource("/movies.vxml").toURI();
 
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent | URISyntaxException
-                | ParserConfigurationException e) {
+                | ParserConfigurationException | RemoteException e) {
             LOGGER.error("error processing the document", e);
         }
     }

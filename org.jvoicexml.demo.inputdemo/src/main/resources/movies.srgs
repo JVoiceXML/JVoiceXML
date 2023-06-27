@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.w3.org/2001/06/grammar
                         http://www.w3.org/TR/speech-grammar/grammar.xsd">
-    <rule id="movies">
+    <rule id="movies" scope="public">
         <one-of>
             <item>
                 lord of the rings
