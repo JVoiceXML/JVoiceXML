@@ -58,10 +58,10 @@ document creation and a VoiceXML interpreter to process
 VoiceXML documents using JAVA standard APIs such as JSAPI~\cite{sun:jsapi} and
 JTAPI~\cite{sun:jsapi}.
 
-VoiceXML was previously hosted at SourceForge~\cite{sourceforge} as an open source project.
-You find everything that is related to this project under
-\url{http://sourceforge.net/projects/jvoicexml/}. Now, the code hase been made
+VoiceXML was previously hosted at SourceForge~\cite{sourceforge} as an open source project
+under \url{http://sourceforge.net/projects/jvoicexml/}. Now, the code hase been made
 available at GitHub at \url{https://github.com/JVoiceXML/JVoiceXML}.
+You find everything that is related to this project att GitHub.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work 
 any other operating systems that support Java 8, too.
@@ -96,17 +96,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 \subsection{Download the Source Archive}
 
 You can download a the source code for the available releases from 
-\url{https://github.com/JVoiceXML/JVoiceXML/releases}. Parts of the source code
-is part of the binary distribution and can be obtained by running the installer.
-Although this works, it is not the recommended way. Please use the Git
-repository as described in the following sections. 
+\url{https://github.com/JVoiceXML/JVoiceXML/releases}. The recommended way is to
+use the Git repository as described in the following sections. 
 
 \subsection{Git Repository}
 \label{sec:git-repository}
 
 If you want to stay at the current state of development you have to use
 the Git repository from GitHub\footnote{\url{http://github.com}}. This is also
-the preferred way. Some older stuff is still at Source Forge~\cite{sourceforge}.
+the preferred way. Some older stuff is still at Source Forge~\cite{sourceforge}
+but this is no longer actively maintained.
 
 This section describe the parameters to access the Git repository 
 using the command line. Feel free to grab the required parameters from
@@ -121,9 +120,6 @@ into the folder \texttt{JVoiceXML}. Please refer to
 section~\ref{sec:jvoicexml-core} if you want to checkout
 only a minimal set of projects. Here, the required projects
 to build the core project are marked as \emph{required}.
-
-Since all the third party libraries are checked a checkout may
-take a while.
 
 A screenshot from a checkout in eclipse is shown in
 figure~\ref{fig:eclipse-projects}.
@@ -171,6 +167,7 @@ Your IDE must support
 Parts of the code of JVoiceXML are using features from the JAVA 8 API, so that
 you will need at least JSE 8 to compile the code. You can download it
 for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
+While newer Java versions are available they are not proven to be supported.
 
 In case you are using another IDE, you will have to manually adapt
 the required library settings, e.g. gor code completion. The dependencies to all
@@ -181,9 +178,9 @@ libraries are listed in \lstinline{JVOICEXML_HOME/doc/libraries.xhtml}.
 \label{sec:eclipse}
 
 If you are not using eclipse as your favorite IDE, you may ignore this section.
-We are using the \emph{Eclipse IDE for Java EE Developers} version 4.6 (Neon))
-for the development of JVoiceXML. The subversion repository contains the eclipse
-project settings. This way, you there is no need to import the
+We are using the \emph{Eclipse IDE for Java EE Developers}
+for the development of JVoiceXML. The Git repository contains the eclipse
+project settings. This way, there is no need to import the
 project into eclipse. The project settings will be detected 
 automatically when you checkout the projects. However you are requested to configure the execution
 environment development for Java 8 \emph{JavaSE-1.8} to point to a valid JDK.
@@ -207,16 +204,15 @@ Software Update mechanism.
 Below is a list of the required update URLs.
 
 \begin{description}
-\item[Buildship] \url{https://projects.eclipse.org/projects/tools.buildship}
+\item[Buildship] \url{https://projects.eclipse.org/projects/tools.buildship} for Gradle support
 \item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update} (Note that you
 only need the 5.x version)
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
 edit the documentation) This will also require an existing \LaTeX installation.
+\item[Gitflow] for Gitflow support (optional for contributors).
 \item[Protocol Buffers Development Tools] \url{http://code.google.com/p/protobuf-dt/}
 (optional if you want to edit the protobuf files in the sub project
 \texttt{org.jvoicexml.mmi.events} or \texttt{org.jvoicexml.client.text})
-\item[Microsoft Visual Studio 2019] \url{https://visualstudio.microsoft.com/}
-Only required, if you are running on Windows
 \end{description}
 
 However, the preferred way to install the plugins is via the eclipse market place.
@@ -225,7 +221,7 @@ However, the preferred way to install the plugins is via the eclipse market plac
 \label{sec:gradle}
 
 JVoiceXML is being built by Gradle. It is recommended that
-you use at least Gradle 3.0. 
+you use Gradle 6.9.1 as Gradle 7.0 is not yet supported.. 
 If you don't have Gradle installed, you can download the current release
 from \url{http://www.gradle.org}. This should not be necessary if Gradle is builtin
 your IDE.
@@ -269,6 +265,13 @@ The documentation is being written using \LaTeX. If you want to edit the
 documentation you will need to install a \LaTeX system like MiKTeX
 \url{http://miktex.org} for windows or tetex on Linux systems.
 
+For Linux you will need the packages
+\begin{itemize}
+  \item texlive-latex-base
+  \item texlive-fonts-recommended
+  \item texlive-fonts-extra
+  \item texlive-fonts-extra
+\end{itemize}
 This is not needed if you do not want to author the documentation or create a
 distribution.
 
@@ -302,7 +305,7 @@ figure~\ref{fig:main-components}.
 These components can be mapped to the packages as shown in
 figure~\ref{fig:main-packages}. Specializations mainfest as subpackages thereof.
 For instance, the JSAPI 1.0 implementation platform resides in package 
-\lstinline{org.jvoicexml.implementation.jsapi10} as a subpackage of
+\lstinline{org.jvoicexml.implementation.jsapi20} as a subpackage of
 \lstinline{org.jvoicexml.implementation}.
 \begin{figure}
 \includegraphics[width=\linewidth]{main-packages.png}
