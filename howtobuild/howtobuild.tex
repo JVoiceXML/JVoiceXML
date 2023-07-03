@@ -347,16 +347,15 @@ implementation platform.
 architecture.
 \item[org.jvoicexml.callmanager.mmi.http] Event and transport layer
 based on HTTP for \texttt{org.jvoicexml.callmanager.mmi}.
-\item[org.jvoicexml.callmanager.mmi.umundo] Event and transport layer
-based on umundo for \texttt{org.jvoicexml.callmanager.mmi}.
 \item[org.jvoicexml.callmanager.mmi.socket] Event and transport layer
 based on sockets for \texttt{org.jvoicexml.callmanager.mmi}.
 \item[org.jvoicexml.callmanager.sip] Demo implementation for SIP based access to
 JVoiceXML.
 \item[org.jvoicexml.callmanager.text] Demo implementation for text based access to
 JVoiceXML.
-\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
-JSAPI 1.0~\cite{sun:jsapi}.
+\item[org.jvoicexml.documentserver.jetty] Demo document server implementation platform based on Jetty.
+\item[org.jvoicexml.documentserver.schemestrategy.file] Access document resources via the file protocol
+\item[org.jvoicexml.documentserver.schemestrategy.http] Access document resources via the HTTP or HTTPS protocol
 \item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
 JSAPI 2.0~\cite{jcp:jsr113}.
 \item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
@@ -371,11 +370,14 @@ MRCPv2.
 text based access.
 \item[org.jvoicexml.interpreter.datamodel.ecmascript] ECMAscript data model
 (required)
+\item[org.jvoicexml.interpreter.grammar.luis] Demo implementation for custom
+grammar type extensions based on Microsoft LUIS
 \item[org.jvoicexml.interpreter.grammar.regex] Demo implementation for custom
-grammar type extensions
+grammar type extensions based on regular expressions
 \item[org.jvoicexml.jndi] JNDI support for JVoiceXML (required)
 \item[org.jvoicexml.mmi.events] A library to author MMI events.
 \item[org.jvoicexml.profile.vxml21] VoiceXML 2.1 profile for JVoiceXML.
+\item[org.jvoicexml.profile.mmi] MMI Profile baed on the VoiceXML 2.1 profile for JVoiceXML.
 \item[org.jvoicexml.srgs] SRGS processor (required)
 \item[org.jvoicexml.xml] The JVoiceXML XML library (required)
 \end{description}
@@ -423,73 +425,17 @@ building and configuring the environment.
 
 \subsection{Project \texttt{org.jvoicexml}}
 
-
-\subsubsection{Libraries Needed to Compile JVoiceXML}
-\label{sec:libr-need-comp}
-
-\begin{description}
-\item[log4j] Version 1.2.17 \\
-URL \url{http://logging.apache.org/log4j} \\
-JVoiceXML uses log4j~\cite{apache:log4j} for logging. We think that log4j has 
-some advantages
-over \texttt{java.util.logging} and appears to be more mature and reliable.
-
-The output of SUN's own logging framework can be redirected to log4j via the
-system property
-\begin{lstlisting}
--Djava.util.logging.config.file=${config}/logging.properties
-\end{lstlisting}
-
-This file contains the description of a logging handler that forwards all
-request to log4j. Hence, both the log4j logging framework and SUN's logging
-framework can be configured through the log4.xml configuration file.
-\item[Jetty] Version 9.2.2 \\
-URL\url{http://download.eclipse.org/jetty/} \\
-Embedded web server to serve, e.g., generated grammar files.
-\item[Commons Pool] Vesion 1.5.5 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-The pooling of implementation platform resources is based on commons
-pool.
-\item[Commons HTTP Client] Version 4.2.3 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-The HTTP client library is used to retrieve VoiceXML documents from a web
-server.
-\item[Commons HTTP Core] Version 4.2.3 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-Basic HTTP functionality for Commons HTTP Client.
-\item[Commons Codec] Version 1.4 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-This library is required by the Commons HTTP Client to add attachments to the
-POST and GET requests.
-\item[Commons Lang] Version 3.3.2 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-Used by HTTP Core and Commons Pool.
-\item[Commons Logging] Version 1.1.1 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-Used by HTTP Core and Commons Pool.
-\end{description}
-
-\subsubsection{Libraries Needed at Run-time}
-
-Besides the libraries named in section~\ref{sec:libr-need-comp} the following
-libraries are needed to run JVoiceXML.
-
-\subsubsection{Other Libraries}
-
-Besides the libraries named above there are also other libraries in the
-3rdparty folder. These libraries are used by more than one other implementation
-platforms and are kept here as a general pool. Libraries that are used only by
-one single implementation platform are located in the implementation platform's
-3rdparty library directory.
-
+This project is the core of the Voice Browser.
 
 \subsubsection{Creating a Configuration}
 \label{sec:create-configuration}
 
-Currently there are eleven implementations for the implementation platform
-that reside in co-projects, refer to section~\ref{sec:git-repository}.
+There are several implementations for the implementation platform available
+that reside in co-projects, refer to section~\ref{sec:git-repository}. Multiple
+implementation platforms can be active at the same time.
 
-The file \texttt{\$JVOICEXML\_HOME/gradle.properties} contains templates for all
+The file \texttt{\$JVOICEXML\_HOME/gradle.properties} (see Apeendix \ref{sec:gradle-properties}) 
+contains templates for all
 the switches and settings that may be used to enable or disable certain
 implementation platforms or adapt needed configuration settings.
 
@@ -528,7 +474,7 @@ debug JVoiceXML.
 This section explains the most important targets of the main build file
 \texttt{build.gradle} in the main subproject. All others build files from the
 implementation platforms
-are called from this central point. Just start ant without any target specified
+are called from this central point. Just start gralde without any target specified
 if you want to build everything. Call
 \begin{lstlisting}
 gradle tasks
@@ -564,9 +510,9 @@ Call
 \begin{lstlisting}
 gradle <target>
 \end{lstlisting}
-to run ant for the the given target.
+to run Gradle for the the given target.
 
-The ANT launch configurations for eclipse are part of the Git repository. They
+The Gradle launch configurations for eclipse are part of the Git repository. They
 are available as a shortcut in the run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
 \begin{figure}
 \includegraphics[width=\linewidth]{eclipse-launch.png}
@@ -585,15 +531,6 @@ JVoiceXML.
 
 This project has to be build after the main project.
 
-\subsubsection{Third party libraries}
-\label{sec:config-third-party-libr}
-
-\begin{description}
-\item[spring framework] Version 4.2.0 \\
-URL \url{http://www.springsource.org} \\
-Beans configuration as IoC 
-\end{description}
-
 \subsection{Project \texttt{org.jvoicexml.xml}}
 \label{sec:org.jvoicexml.xml}
 
@@ -610,19 +547,7 @@ This project provides an SRGS processor.
 \subsection{Project \texttt{org.jvoicexml.interpreter.ecmascript}}
 \label{sec:org.jvoicexml.srgs}
 
-This project provides a datamodel based on ECMAscript.
-
-\subsubsection{Third party libraries}
-\label{sec:config-third-party-libr}
-
-\begin{description}
-\item[Rhino] Version 1.7Rv \\
-URL \url{http://www.mozilla.org/rhino/} \\
-JVoiceXML uses Rhino from Mozilla to enable scripting.
-\item[JSONsimple] Version 1.1 \\
-URL \url{http://code.google.com/p/json-simple} \\
-Helps to serialize and deserialize JSON formatted strings into ECMAscript.
-\end{description}
+This project provides a datamodel based on ECMAscript using Thino (\url{http://www.mozilla.org/rhino/})
 
 \section{Remote Java Applications}
 \subsection{Project \texttt{org.jvoicexml.client}}
@@ -1402,6 +1327,14 @@ a commit between two snapshots.
 \bibliography{howtobuild}
 \bibliographystyle{plain}
 
+\newpage
+
+\appendix
+
+\section{gradle.properties}
+\label{sec:gradle-properties}
+
+\lstinputlisting{../gradle.properties}
 
 \end{document}
 
