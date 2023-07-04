@@ -553,31 +553,28 @@ This project provides a datamodel based on ECMAscript using Thino (\url{http://w
 \subsection{Project \texttt{org.jvoicexml.client}}
 
 This project contains the basic classes that are needed to implement a
-client that can connect remotely to JVoiceXML.
+client that can connect remotely to JVoiceXML. Depending on the used 
+implementation platform additional client specializations may be needed
+as detailed in section \ref{sec:implementation-platforms}.
 
-\subsubsection{Third party libraries}
-
-This platform makes use of the \lstinline{org.jvoicexml.jndi} library
-to connect to JVoiceXML (see section\ref{sec:jndi}). In addition specialized
-libraries from the implementation platform (see section
-\ref{sec:implementation-platforms}) maybe required.
 
 \subsection{Project \texttt{org.jvoicexml.jndi}}
 \label{sec:jndi}
 
-This project provides JNDI support for JVoiceXML. This is not required at run
+This project provides JNDI support for JVoiceXML. Depending on the implementation platform this is not required at run
 time but in order to build JVoiceXML.
 
 JNDI offers remote access to JVoiceXML, e.g. the ability to run the
 shutdown script or to run the demos.
 
 The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 \begin{lstlisting}
-jvxml.jndi.repository=text
-jvxml.jndi.port=1099
+JVOICEXML_JNDI_REPOSITORY = text
+JVOICEXML_JNDI_PORT = 1099
+JVOICEXML_JNDI_CLASSERVER_PORT = 9698
 \end{lstlisting}
 
 The configuration ANT script also adapts the settings in the
@@ -586,118 +583,36 @@ the \texttt{jndi.properties} in the demos or your application.
 
 The repository entry must match the repository that you are using for your
 client. Otherwise JVoiceXML will not be able to load the needed resources of
-the server side.
+the server side. This limits the usage of JNDI to one platform only.
 
 \section{Implementation Platforms}
 \label{sec:implementation-platforms}
 
-\subsection{Project \texttt{org.jvoicexml.implementation.jsapi10}}
-\label{sec:implementation-jsapi10}
-
-This project provides an implementation platform for JSAPI 1.0 compliant
-speech engines. Besides a general hook for those engines there are also
-extensions for FreeTTS and Sphinx 4 bases on these hooks to demonstrate the
-capabilities.
-
-\subsubsection{Project Specific Configuration}
-
-The project settings for this subproject can be adapted by the following
-properties in the \texttt{platforms.xml}
-
-\begin{description}
-\item[jvxml.jsapi10.talkingJava] If set to
-\texttt{true} the Talking Java wrapper for Microsoft's speech engine will be
-used. In this case you need also to specifiy a value for
-\texttt{jvxml.jsapi10.talkingJava.path}
-\item[jvxml.jsapi10.talkingJava.path] A path that is used to locate the DLLs
-that are required to use Talking Java as sthe speech engine.
-\end{description}
-
-\subsubsection{Third party libraries}
-\label{sec:jsapi10-third-party-libr}
-
-\begin{description}
-\item[JSAPI 1.0] Version 1.0 \\
-URL n/a \\
-Java Speech API v1.0 (JSAPI)~\cite{sun:jsapi} to address speech recognition and
-speech synthesis issues. It is a pure API layer without any concrete TTS or ASR
-implementations which have to be added in addition. 
-\item[Talking Java] Version n/a \\
-URL \url{http://www.cloudgarden.com} \\
-Talking Java is an implementation of the JSAPI 1.0 utilizing Microsoft's
-SAPI4 and SAPI5 speech engines. Note that the delivered version is only free
-for personal use. If you intend to use it in a commercial corporate or
-institutional context, you will have to buy a license. 
-Please refer to \url{http://www.cloudgarden.com}.
-\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jsapi20}}
 \label{sec:implementation-jsapi20}
 
 This project contains a first draft of an implementation platform to enable
-JSAPI 2.0 support for JVoiceXML.
+JSAPI 2.0 support for JVoiceXML. JSAPI 2.0 is being developed within the Java 
+Community Process (JCP)~\cite{jcp} under JSR-113~\cite{jcp:jsr113}.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following
-properties in the \texttt{platforms.xml}
+The project settings for this subproject can be adapted by the following ANT
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 
 \begin{description}
-\item[jvxml.jsapi20.default] A value of \texttt{true} will result in a
+\item[JVOICEXML\_IMPLEMENTATION\_JSAPI20] A value of \texttt{true} will enable this implementation
+platform and enable evaluation of the subsequent settings.
+\item[JVOICEXML\_IMPLEMENTATION\_JSAPI20\_FREETTSSPHINX] A value of \texttt{true} will result in a
 configuration that uses FreeTTS and Sphinx4 as speech engines.
 \texttt{jvxml.jsapi10.talkingJava.path}
-\item[jvxml.jsapi20.sapi]  A value of \texttt{true} will result in a
+\item[JVOICEXML\_IMPLEMENTATION\_JSAPI20\_SAPI]  A value of \texttt{true} will result in a
 configuration that uses the SAPI implementation as speech engines.
-\item[jvxml.jsapi20.mac]  A value of \texttt{true} will result in a
-configuration that uses the the TTS of MacOS X for speech synthesis.
 \end{description}
 
-\subsubsection{Third party libraries}
-\label{sec:jsapi20-third-party-libr}
-
-\begin{description}
-\item[JSAPI 2.0] Version 2.0 \\
-URL \url{http://jsapi.sourceforge.net} \\
-JSAPI 2.0 is being developed within the Java Community Process (JCP)~\cite{jcp}
-under JSR-113~\cite{jcp:jsr113}.
-
-This open source library library provides a framework to ease the development of
-JSAPI 2.0 compliant speech engines. The project also provides custom extensions for
-FreeTTS and sphinx.
-
-Note that the used library is a snapshot from the jsapi SVN repository.
-\item[jlibrtp] Version 0.2 (snapshot)\\
-URL \url{http://jlibrtp.sourceforge.net} \\
-jlibrtp is used to enable streaming of audio data via the RTP protocol.This
-is being used to stream the audio coming from the JSAPI 2.0 compliant
-engines to the client. The project URL is \url{http://jlibrtp.sourceforge.net}.
-
-Note that the used library is a snapshot from the jlibrtp SVN repository.
-\item[FreeTTS] Version 1.2.2 (snapshot)\\
-URL \url{http://freetts.sourceforge.net} \\
-Open source speech synthesis as one option to add TTS capabilities for the JSAPI
-2.0 implementation platform.
-\item[CMU Sphinx 4] Version n/a (snapshot)\\
-URL \url{http://fcmusphinx.sourceforge.net} \\
-Open source speech recognizer from the Carnegie Mellon University as one option
-to add ASR capabilities for the JSAPI 2.0 implementation platform.
-\item[org.jvoicexml.jsapi2.sapi] Version n/a (snapshot) \\
-URL \url{http://jsapi.sourceforge.net} \\
-SAPI 5.4 compatible TTS and ASR engine that makes use of the Microsoft Windows
-speech recognition and speech synthesis capabilities that can be used as an
-implementation for the JSAPI 2.0 implementation platform on Windows systems.
-
-In addition, you will need \texttt{Jsapi2SapiBridge.dll} or
-\texttt{Jsapi2SapiBridge\_x64.dll} in your library path.
-
-\item[org.jvoicexml.jsapi2.mac] Version n/a (snapshot) \\
-URL \url{http://jsapi.sourceforge.net} \\
-Speech synthesis bridge as one option to add TTS capabilities for the JSAPI
-2.0 implementation platform on Mac OSX.
-
-In addition, you will need \texttt{lniJsapi2MacBridge.jnilib} in your library
-path.
-\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jtapi}}
 
@@ -709,40 +624,18 @@ does not have any speech functionality.
 \subsubsection{Project Specific Configuration}
 
 The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 \begin{lstlisting}
-jtapi.sip.providername=net.sourceforge.gjtapi.raw.mjsip.MjSipProvider
-jtapi.sip.address=127.0.0.1:4242
-jtapi.sip.terminal = sip:jvoicexml@127.0.0.1:4242
-jtapi.sip.port=4242
-jtapi.sip.inputType=jsapi20
-jtapi.sip.outputType=jsapi20
+JVOICEXML_IMPLEMENTATION_JTAPI = false
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PROVIDERNAME = net.sourceforge.gjtapi.raw.mjsip.MjSipProvider
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_ADDRESS = 127.0.0.1:4246
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_TERMINAL = sip:jvoicexml@127.0.0.1:4247
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PORT = 4246
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_INPUTTYPE = jsapi20
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_OUTPUTTYPE = jsapi20
 \end{lstlisting}
-
-\subsubsection{Third party libraries}
-\label{sec:jtapi-third-party-libr}
-
-\begin{description}
-\item[JTAPI 1.3] Version 1.3 \\
-URL n/a \\
-The Java Telephony API.
-\item[Generic JTAPI] Version 1.9 RC2 \\
-URL \url{http://gjtapi.sourceforge.net} \\
-GJTAPI is used to simply the use of the JTAPI layer. Besides the core library
-we other providers are required.
-\item[mjsip] Version n/a \\
-URL \url{http://mjsip.org} \\
-MjSIP provides an easy way to have SIP functionality. Unfortunately, this
-project uses the GPL license which makes is unusable in commercial
-applications. It should be replaced by JainSIP.
-\item[jainsip] Version 1.1 \\
-URL n/a \\
-SIP implementation layer that can be used as an alternative to mjsip.
-\item[stun4j] Version n/a \\
-URL n/a
-\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.marc}}
 
@@ -760,20 +653,11 @@ into your VoiceXML files.
 \subsection{Project \texttt{org.jvoicexml.implementation.mary}}
 
 This implementation integrates the Mary TTS system into JVoiceXML. It is
-designed to be used with other implementation platforms like JSAPI 1.0, see
-section~\ref{sec:implementation-jsapi10}.
+designed to be used with other implementation platforms like JSAPI 2.0, see
+section~\ref{sec:implementation-jsapi20}.
 
 Note that you will need a Mary 5.1.0  TTS server running if you want to use this
 demo. 
-
-\subsubsection{Third party libraries}
-\label{sec:mary-third-party-libr}
-
-\begin{description}
-\item[mary client] Version 5.1 \\
-URL \url{http://mary.dfki.de} \\
-Communication of clients like JVoiceXML with the Mary TTS server.
-\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mrcpv2}}
 
@@ -782,7 +666,7 @@ starting phase and currently it is not usable.
 
 This implementation platform requires the presence of an MRCPv2 server. An open
 source solution based on FreeTTS and sphinx 4 can be downloaded from
-\url{http://cairo.sourceforge.net}.
+\url{https://github.com/JVoiceXML/cairo}.
 
 To make use of this implementation platform, JVoiceXML must be called with a SIP
 phone. We used the xlite phone which can be downloaded for free from
@@ -791,27 +675,19 @@ phone. We used the xlite phone which can be downloaded for free from
 \subsubsection{Project Specific Configuration}
 
 The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 \begin{lstlisting}
-mrcpv2.sip.address=127.0.0.1:4242
-mrcpv2.sip.port=4242
-mrcpv2.sip.cairo.sip.address=sip:cairo@speechforge.org
-mrcpv2.sip.cairo.sip.host=127.0.0.1
-mrcpv2.sip.cairo.sip.port=5050
+JVOICEXML_IMPLEMENTATION_MRCPV2 = false
+JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_ADDRESS = sip:cairogate@127.0.0.1
+JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_PORT = 5090
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_ADDRESS = sip:cairo@127.0.0.1
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_HOST = 127.0.0.1
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_PORT = 15050
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_RCV_RTP_PORT = 42150
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_XMIT_RTP_PORT = 42050
 \end{lstlisting}
-
-\subsubsection{Third party libraries}
-\label{sec:mrcpv2-third-party-libr}
-
-\paragraph{mrcp4j}
-
-Mrcp4j provides the core functionality for the MRCPv2 integration.
-
-\paragraph{Cairo}
-
-Cairo is required as a means for communication with MRCPv2 resources.
 
 \subsection{Project \texttt{org.jvoicexml.implementation.text}}
 
@@ -819,15 +695,18 @@ The text based implementation platform provides a text based input and output.
 This means that you receive the system output as Java strings and you are able
 to provide input via Java strings.
 
-\subsubsection{Third party libraries}
-\label{sec:text-third-party-libr}
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following ANT
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 
 \begin{description}
-\item[protobuf] Version 2.5.0 \\
-URL \url{http://code.google.com/p/protobuf} \\
-Serialization and deserialization of messages sent between clients and
-JVoiceXML.
+\item[JVOICEXML\_IMPLEMENTATION\_TEXT] A value of \texttt{true} will enable this implementation
+platform.
 \end{description}
+
 
 \subsection{Project \texttt{org.jvoicexml.callmanger.mmi}}
 
@@ -866,19 +745,6 @@ via sockets. MMI events are received as XML.
 This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
 to author MMI compatible events (see section\ref{sec:mmi-events}).
 
-\subsection{Project \texttt{org.jvoicexml.mmi.umundo}}
-
-This project contains an implementation of the Event and Transport Layer
-via umundo\footnote{\url{https://github.com/tklab-tud/umundo}}.
-MMI events are received as protopuf messages.
-
-\subsubsection{Third party libraries}
-
-\begin{description}
-\item[protobuf] Version 2.5.0 \\
-URL \url{http://code.google.com/p/protobuf} \\
-Serialization and deserialization of MMI messages.
-\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.callmanager.mmi.servlet}}
 \label{sec:mmi-servlet}
@@ -1333,6 +1199,9 @@ a commit between two snapshots.
 
 \section{gradle.properties}
 \label{sec:gradle-properties}
+
+Customizable settings of JVoiceXML. Create a copy of this file in the
+\texttt{\$HOME/.gradle} folder for local modifications.
 
 \lstinputlisting{../gradle.properties}
 
