@@ -46,6 +46,7 @@ dependencies {
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
     compile project(':org.jvoicexml.client.mrcpv2')
+    compile project(':org.jvoicexml.implementation.mrcpv2')
     compile project(':org.jvoicexml.zanzibar')
     
     compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
@@ -124,6 +125,7 @@ task copyReferencedLibraries(type: Copy) {
          'org.speechforge.cairo.server*.jar',
          'org.mrcp4j*.jar',
          'org.jvoicexml.client.mrcpv2*.jar',
+         'org.jvoicexml.implementation.mrcpv2*.jar',
          'org.jvoicexml.zanzibar*.jar',
          'jain-sip-api*.jar',
          'jain-sip-ri*.jar',
