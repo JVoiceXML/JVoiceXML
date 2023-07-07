@@ -30,10 +30,10 @@ def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 dependencies {
     jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
-    compile fileTree(dir: './3rdparty/gjtapi1.9/lib', include: ['*.jar'])
+    compile fileTree(dir: './3rdparty/gjtapi1.10/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jainsip1.19/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jtapi1.3/lib', include: ['*.jar'])
-    compile fileTree(dir: './3rdparty/mjsip/lib', include: ['*.jar'])
+    compile fileTree(dir: './3rdparty/mjsip1.6/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/stun4j/lib', include: ['*.jar'])
     
     testCompile group: 'junit', name: 'junit', version: '4.13.2'
