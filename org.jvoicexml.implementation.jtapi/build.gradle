@@ -110,7 +110,7 @@ task copyReferencedLibraries(type: Copy) {
 
 task copyConfiguration(type: Copy) {
     from configurations.jvxmlConfiguration.files {
-        include 'ua'
+        include 'mjsip.cfg.txt'
     }
 
     into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
