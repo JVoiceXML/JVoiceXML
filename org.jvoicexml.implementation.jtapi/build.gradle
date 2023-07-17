@@ -111,12 +111,27 @@ task copyReferencedLibraries(type: Copy) {
 task copyConfiguration(type: Copy) {
     from configurations.jvxmlConfiguration.files {
         include 'mjsip.cfg.txt'
+        include 'MjSip.properties'
     }
 
     filter{ it.replaceAll('@sip.terminal@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_TERMINAL}")}
     filter{ it.replaceAll('@sip.port@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PORT}")}
+    filter{ it.replaceAll('@configDir@', "build/config")}
 
     into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
+}
+
+task copyConfigurationDistribution(type: Copy) {
+    from configurations.jvxmlConfiguration.files {
+        include 'mjsip.cfg.txt'
+        include 'MjSip.properties'
+    }
+
+    filter{ it.replaceAll('@sip.terminal@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_TERMINAL}")}
+    filter{ it.replaceAll('@sip.port@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PORT}")}
+    filter{ it.replaceAll('@configDir@', "config")}
+
+    into "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}"
 }
 
 jar {
@@ -128,6 +143,7 @@ jar {
     dependsOn xsltCallmanagerDistribution
     dependsOn copyReferencedLibraries
     dependsOn copyConfiguration
+    dependsOn copyConfigurationDistribution
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML JTAPI implementation platform",
@@ -145,6 +161,7 @@ jar {
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-callmanager.xml")
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-implementation.xml")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/MjSip.properties")
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mjsip.cg.txt")
 }
 
