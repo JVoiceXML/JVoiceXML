@@ -113,6 +113,9 @@ task copyConfiguration(type: Copy) {
         include 'mjsip.cfg.txt'
     }
 
+    filter{ it.replaceAll('@sip.terminal@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_TERMINAL}")}
+    filter{ it.replaceAll('@sip.port@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PORT}")}
+
     into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
 }
 
@@ -142,7 +145,7 @@ jar {
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-callmanager.xml")
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-implementation.xml")
-    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/ua")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mjsip.cg.txt")
 }
 
 publishing {
