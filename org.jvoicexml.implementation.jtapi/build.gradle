@@ -30,10 +30,10 @@ def jvxmlConfigurationDir = "${projectDir}/src/main/config"
 dependencies {
     jvxmlConfiguration fileTree(jvxmlConfigurationDir)
 
-    compile fileTree(dir: './3rdparty/gjtapi1.9/lib', include: ['*.jar'])
+    compile fileTree(dir: './3rdparty/gjtapi1.10/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jainsip1.19/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/jtapi1.3/lib', include: ['*.jar'])
-    compile fileTree(dir: './3rdparty/mjsip/lib', include: ['*.jar'])
+    compile fileTree(dir: './3rdparty/mjsip1.6/lib', include: ['*.jar'])
     compile fileTree(dir: './3rdparty/stun4j/lib', include: ['*.jar'])
     
     testCompile group: 'junit', name: 'junit', version: '4.13.2'
@@ -101,18 +101,37 @@ task copyReferencedLibraries(type: Copy) {
     from(configurations.compile) {
          include 'gjtapi*.jar',
          'jainsip.jar',
-         'jtapi-1.3.1*.jar'
-         'mjsip*.jar'
-         'Stun4J*.jar'
+         'jtapi-1.3.1*.jar',
+         'Stun4J*.jar',
+         'sip.jar',
+         'ua.jar'
     }
 }
 
 task copyConfiguration(type: Copy) {
     from configurations.jvxmlConfiguration.files {
-        include 'ua'
+        include 'mjsip.cfg.txt'
+        include 'MjSip.properties'
     }
 
+    filter{ it.replaceAll('@sip.terminal@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_TERMINAL}")}
+    filter{ it.replaceAll('@sip.port@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PORT}")}
+    filter{ it.replaceAll('@configDir@', "build/config")}
+
     into "${project(':org.jvoicexml').copyConfiguration.destinationDir}"
+}
+
+task copyConfigurationDistribution(type: Copy) {
+    from configurations.jvxmlConfiguration.files {
+        include 'mjsip.cfg.txt'
+        include 'MjSip.properties'
+    }
+
+    filter{ it.replaceAll('@sip.terminal@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_TERMINAL}")}
+    filter{ it.replaceAll('@sip.port@', "${JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PORT}")}
+    filter{ it.replaceAll('@configDir@', "config")}
+
+    into "${project(':org.jvoicexml').copyConfigurationDistribution.destinationDir}"
 }
 
 jar {
@@ -124,6 +143,7 @@ jar {
     dependsOn xsltCallmanagerDistribution
     dependsOn copyReferencedLibraries
     dependsOn copyConfiguration
+    dependsOn copyConfigurationDistribution
 
     manifest {
         attributes("Implementation-Title": "JVoiceXML JTAPI implementation platform",
@@ -141,7 +161,8 @@ jar {
 clean {
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-callmanager.xml")
     delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/jtapi-implementation.xml")
-    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/ua")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/MjSip.properties")
+    delete file("${project(':org.jvoicexml').copyConfiguration.destinationDir}/mjsip.cg.txt")
 }
 
 publishing {

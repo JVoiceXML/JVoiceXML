@@ -20,7 +20,7 @@
 # Change these parameters in order to customize how log-files are handled.
 # By default log files are placed into the ./log folder, they are not rotated,
 # and the maximum size is 2M.
-#
+#   
 
 # Log level. Only logs with a level less or equal to this are written.
 # Default value: debug_level=3

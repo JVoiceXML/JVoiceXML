@@ -100,6 +100,7 @@ public final class JtapiCallManager extends BaseCallManager
             // We can not use the JTtapPeerFactory since this factory
             // uses the system class loader.
             final ClassLoader loader = JtapiPeer.class.getClassLoader();
+            Thread.currentThread().setContextClassLoader(loader);
             final String peerName = GenericJtapiPeer.class.getCanonicalName();
             @SuppressWarnings("unchecked")
             final Class<JtapiPeer> peerClass =
