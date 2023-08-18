@@ -228,10 +228,11 @@ your IDE.
 
 The build file allows you to override the settings by using a custom 
 properties file \texttt{gradle.properties} in the \texttt{\$\{HOME\}/.gradle}
-directory.
+directory. This will be referred to as your \emph{your copy} later in this document.
 
 Since almost all IDEs feature support for Gradle, at least with the help of plugins, it will be possible to
 use your favorite IDE.
+
 
 \subsubsection{Gradle Support for Eclipse}
 \label{sec:gradle-eclipse}
@@ -399,7 +400,6 @@ you will need to checkout the folloging projects:
 A simple demo to test that implementation platform to start with is
 \lstinline{org.jvoicexml.demo.helloworld}.
 
-
 For a \emph{text} based configuration
 you will need
 \begin{itemize}
@@ -432,7 +432,8 @@ This project is the core of the Voice Browser.
 
 There are several implementations for the implementation platform available
 that reside in co-projects, refer to section~\ref{sec:git-repository}. Multiple
-implementation platforms can be active at the same time.
+implementation platforms can be active at the same time. They will be activated at runtime
+if the corresponding configuration file is found in the config folder.
 
 The file \texttt{\$JVOICEXML\_HOME/gradle.properties} (see Apeendix \ref{sec:gradle-properties}) 
 contains templates for all
@@ -496,14 +497,20 @@ If successful, you will find at minimum the following jar archives:
 to create and parse VoiceXML documents. This file is being build from the
 project \texttt{org.jvoicexml.xml} which is described in
 section~\ref{sec:org.jvoicexml.xml}.
-\item jvxml-client.jar This jar contains the files needed to build
+\item org.jvoicexml,client.jar This jar contains the files needed to build
 a client.
 \item org.jvoicexml.jndi.jar JNDI support for JVoiceXML
+\item org.jvoicexml.srgs
 \item some other jars, depending on your configuration settings
 \end{itemize}
 
 \item[javadoc]
 Create JAVADOC documentation from the JAVA files in the directory.
+\item[run] Build all the configured implementation platforms
+via \texttt{gradle.properties}, copy their configuration files into a
+temporary configuration folder and start the JVoiceXML voice browser.
+\item[shutdown] Remotely shutdown the JVoiceXML voice browser.
+\item[distribution] Create a distribution for all subprojects.
 \end{description}
 
 Call
@@ -567,7 +574,7 @@ time but in order to build JVoiceXML.
 JNDI offers remote access to JVoiceXML, e.g. the ability to run the
 shutdown script or to run the demos.
 
-The project settings for this subproject can be adapted by the following ANT
+The project settings for this subproject can be adapted by the following 
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
@@ -577,7 +584,7 @@ JVOICEXML_JNDI_PORT = 1099
 JVOICEXML_JNDI_CLASSERVER_PORT = 9698
 \end{lstlisting}
 
-The configuration ANT script also adapts the settings in the
+The Gradle build script also adapts the settings in the
 \texttt{jndi.properties} to the configured port. Make sure to also adapt
 the \texttt{jndi.properties} in the demos or your application.
 
@@ -598,7 +605,7 @@ Community Process (JCP)~\cite{jcp} under JSR-113~\cite{jcp:jsr113}.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following ANT
+The project settings for this subproject can be adapted by the following 
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
@@ -613,6 +620,14 @@ configuration that uses FreeTTS and Sphinx4 as speech engines.
 configuration that uses the SAPI implementation as speech engines.
 \end{description}
 
+\subsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if one of the following configuration files is found in the configuration
+folder
+\begin{lstlisting}
+\item jsapi-20-implementation.xml
+\item jsapi-20-sapi-implementation.xml
+\end{lstlisting}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jtapi}}
 
@@ -623,7 +638,7 @@ does not have any speech functionality.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following ANT
+The project settings for this subproject can be adapted by the following
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
@@ -637,18 +652,13 @@ JVOICEXML_IMPLEMENTATION_JTAPI_SIP_INPUTTYPE = jsapi20
 JVOICEXML_IMPLEMENTATION_JTAPI_SIP_OUTPUTTYPE = jsapi20
 \end{lstlisting}
 
-\subsection{Project \texttt{org.jvoicexml.implementation.marc}}
+\subsection{Implementation Platform Configuration Files}
 
-This implementation integrates MARC system into JVoiceXML. This platform
-only provides the output part and is designed to be used with other
-implementation platforms like JSAPI 2.0, see
-section~\ref{sec:implementation-jsapi20}.
-
-Note that you will need a MARC instance running if you want to use this
-demo. MARC can be downloaded from \url{http://marc.limsi.fr/}.
-
-This implementation platform will allow for the integration of MARC BML commands
-into your VoiceXML files.
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{lstlisting}
+\item mary-implementation.xml
+\end{lstlisting}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mary}}
 
@@ -658,6 +668,27 @@ section~\ref{sec:implementation-jsapi20}.
 
 Note that you will need a Mary 5.1.0  TTS server running if you want to use this
 demo. 
+
+\subsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if one of the following configuration files is found in the configuration
+folder
+\begin{lstlisting}
+\item jsapi-20-implementation.xml
+\item jsapi-20-sapi-implementation.xml
+\end{lstlisting}
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following ANT
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
+
+\begin{description}
+\item[JVOICEXML\_IMPLEMENTATION\_MARY] A value of \texttt{true} will enable this implementation
+platform.
+\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mrcpv2}}
 
@@ -671,6 +702,13 @@ source solution based on FreeTTS and sphinx 4 can be downloaded from
 To make use of this implementation platform, JVoiceXML must be called with a SIP
 phone. We used the xlite phone which can be downloaded for free from
 \url{http://www.counterpath.com}.
+
+\subsubsection{Depending Subprojects}
+
+This implementation plaform depends on the following projects.
+\begin{lstlisting}
+\item \texttt{org.jvoicexml.callmanager.sip}
+\end{lstlisting}
 
 \subsubsection{Project Specific Configuration}
 

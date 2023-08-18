@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><mmi:mmi xmlns="http://www.w3.org/2008/04/mmi-arch" xmlns:mmi="http://www.w3.org/2008/04/mmi-arch"><mmi:StartRequest mmi:Context="context1" mmi:RequestID="request1" mmi:Source="source1" mmi:Target="target1"><mmi:ContentURL mmi:href="http://nowhere"/></mmi:StartRequest></mmi:mmi>

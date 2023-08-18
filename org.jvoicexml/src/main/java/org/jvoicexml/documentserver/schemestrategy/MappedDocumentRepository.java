@@ -45,7 +45,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public interface MappedDocumentRepository {
     /**

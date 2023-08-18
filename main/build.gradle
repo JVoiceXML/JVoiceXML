@@ -588,7 +588,7 @@ run {
 }
 
 task(runDebug, type: JavaExec) {
-    dependsOn createJvxmlRunConfiguration
+    dependsOn createJvxmlRunConfiguration   
 
     version = JVOICEXML_VERSION
 
