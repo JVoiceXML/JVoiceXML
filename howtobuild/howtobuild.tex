@@ -361,10 +361,9 @@ JVoiceXML.
 JSAPI 2.0~\cite{jcp:jsr113}.
 \item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
 JTAPI 1.3~\cite{sun:jtapi}.
+\item[org.jvoicexml.implementation.lightweightbml] Demo implementation platform BML support
 \item[org.jvoicexml.implementation.mary] Demo implementation platform for
 the Mary Open TTS system.
-\item[org.jvoicexml.implementation.marc] Demo implementation platform for
-the MARC.
 \item[org.jvoicexml.implementation.mrcpv2] Demo implementation platform for
 MRCPv2.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
@@ -578,11 +577,12 @@ The project settings for this subproject can be adapted by the following
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
-\begin{lstlisting}
-JVOICEXML_JNDI_REPOSITORY = text
-JVOICEXML_JNDI_PORT = 1099
-JVOICEXML_JNDI_CLASSERVER_PORT = 9698
-\end{lstlisting}
+\begin{description}
+\item[JVOICEXMLJNDI\_REPOSITORY] id of the classloader repository that is used by the target implementation platform, e.g.
+\texttt{text} for the text implementation plaform. 
+\item[JVOICEXML\_JNDI\_PORT] Port number of the RMI registry
+\item[JVOICEXMLJNDI\_CLASSERVER\_PORT] Port number of the classloader to enable automated cde download via RMI
+\end{description}
 
 The Gradle build script also adapts the settings in the
 \texttt{jndi.properties} to the configured port. Make sure to also adapt
@@ -591,6 +591,14 @@ the \texttt{jndi.properties} in the demos or your application.
 The repository entry must match the repository that you are using for your
 client. Otherwise JVoiceXML will not be able to load the needed resources of
 the server side. This limits the usage of JNDI to one platform only.
+
+\subsubsection{Implementation Platform Configuration Files}
+
+At runtime, JNDI support will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item jvxml-jndi.xml
+\end{itemize}
 
 \section{Implementation Platforms}
 \label{sec:implementation-platforms}
@@ -614,20 +622,21 @@ Appendix~\ref{sec:gradle-properties}):
 \item[JVOICEXML\_IMPLEMENTATION\_JSAPI20] A value of \texttt{true} will enable this implementation
 platform and enable evaluation of the subsequent settings.
 \item[JVOICEXML\_IMPLEMENTATION\_JSAPI20\_FREETTSSPHINX] A value of \texttt{true} will result in a
-configuration that uses FreeTTS and Sphinx4 as speech engines.
-\texttt{jvxml.jsapi10.talkingJava.path}
+configuration that uses FreeTTS and Sphinx4 as speech engines and copy that configuration file to the temporary
+configuration folder.
 \item[JVOICEXML\_IMPLEMENTATION\_JSAPI20\_SAPI]  A value of \texttt{true} will result in a
-configuration that uses the SAPI implementation as speech engines.
+configuration that uses the SAPI implementation as speech engines and copy that configuration file to the temporary
+configuration folder.
 \end{description}
 
-\subsection{Implementation Platform Configuration Files}
+\subsubsection{Implementation Platform Configuration Files}
 
 At runtime, this platform will be enabled if one of the following configuration files is found in the configuration
 folder
-\begin{lstlisting}
+\begin{itemize}
 \item jsapi-20-implementation.xml
 \item jsapi-20-sapi-implementation.xml
-\end{lstlisting}
+\end{itemize}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jtapi}}
 
@@ -652,13 +661,38 @@ JVOICEXML_IMPLEMENTATION_JTAPI_SIP_INPUTTYPE = jsapi20
 JVOICEXML_IMPLEMENTATION_JTAPI_SIP_OUTPUTTYPE = jsapi20
 \end{lstlisting}
 
-\subsection{Implementation Platform Configuration Files}
+\subsubsection{Implementation Platform Configuration Files}
 
 At runtime, this platform will be enabled if the following configuration file is found in the configuration
 folder
-\begin{lstlisting}
+\begin{itemize}
 \item mary-implementation.xml
-\end{lstlisting}
+\end{itemize}
+
+\subsection{Project \texttt{org.jvoicexml.implementation.lightweightbml}}
+
+This implementation provides support for BML JVoiceXML as a lightweight means to show an avatar
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
+
+\begin{description}
+\item[JVOICEXML\_IMPLEMENTATION\_BML] A value of \texttt{true} will enable this implementation
+platform and copy that configuration file to the temporary configruation folder.
+\end{description}
+
+\subsubsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item lightweightbml-implementation.xml
+\end{itemize}
+
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mary}}
 
@@ -669,26 +703,26 @@ section~\ref{sec:implementation-jsapi20}.
 Note that you will need a Mary 5.1.0  TTS server running if you want to use this
 demo. 
 
-\subsection{Implementation Platform Configuration Files}
-
-At runtime, this platform will be enabled if one of the following configuration files is found in the configuration
-folder
-\begin{lstlisting}
-\item jsapi-20-implementation.xml
-\item jsapi-20-sapi-implementation.xml
-\end{lstlisting}
-
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following ANT
+The project settings for this subproject can be adapted by the following 
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
 
 \begin{description}
 \item[JVOICEXML\_IMPLEMENTATION\_MARY] A value of \texttt{true} will enable this implementation
-platform.
+platform and copy that configuration file to the temporary configuration folder.
 \end{description}
+
+\subsubsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item mary-implementation.xml
+\end{itemize}
+
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mrcpv2}}
 
@@ -706,9 +740,10 @@ phone. We used the xlite phone which can be downloaded for free from
 \subsubsection{Depending Subprojects}
 
 This implementation plaform depends on the following projects.
-\begin{lstlisting}
+\begin{itemize}
+\item \texttt{org.jvoicexml.client.mrcpv2}
 \item \texttt{org.jvoicexml.callmanager.sip}
-\end{lstlisting}
+\end{itemize}
 
 \subsubsection{Project Specific Configuration}
 
@@ -727,11 +762,44 @@ JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_RCV_RTP_PORT = 42150
 JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_XMIT_RTP_PORT = 42050
 \end{lstlisting}
 
+\subsubsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item mrcpv2-implementation.xml
+\end{itemize}
+
+\subsubsection{Project \texttt{org.jvoicexml.callmanager.sip}}
+
+Call manager for the MRCPv2 implementation platform which will be built in case this implementation platform is enabled.
+
+\subsubsubsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item sip-callmanager.xml
+\end{itemize}
+ 
+\subsubsection{Project \texttt{org.jvoicexml.client.mrcpv2}}
+
+Client configuration files used by the MRCPv2 implementation platform and the SIP call manager.
+
 \subsection{Project \texttt{org.jvoicexml.implementation.text}}
+\label{sec:text-implemenation-platform}
 
 The text based implementation platform provides a text based input and output.
 This means that you receive the system output as Java strings and you are able
 to provide input via Java strings.
+
+\subsubsection{Depending Subprojects}
+
+This implementation plaform depends on the following projects.
+\begin{itemize}
+\item \texttt{org.jvoicexml.client.txt}
+\item \texttt{org.jvoicexml.callmanager.text}
+\end{itemize}
 
 \subsubsection{Project Specific Configuration}
 
@@ -745,6 +813,17 @@ Appendix~\ref{sec:gradle-properties}):
 platform.
 \end{description}
 
+\subsubsection{Project \texttt{org.jvoicexml.callmanger.text}}
+
+This callmanager aims at accessing JVoiceXML as a server for text based
+access under development. In contrast to the text based implementation platform this callmanager
+does not require JNDI.
+
+\subsubsection{Project \texttt{org.jvoicexml.client.text}}
+
+Client configuration files used by the text implementation platform and the text call manager.
+
+\section {MMI Support}
 
 \subsection{Project \texttt{org.jvoicexml.callmanger.mmi}}
 
@@ -827,21 +906,6 @@ URL \url{http://code.google.com/p/protobuf} \\
 Serialization and deserialization of MMI messages.
 \end{description}
 
-\subsection{Project \texttt{org.jvoicexml.callmanger.sip}}
-
-This callmanager aims at supporting SIP based access to JVoiceXML.
-
-\subsubsection{Third party libraries}
-
-\paragraph{jainsip1.2}
-
-JainSIP provides a SIP stack for Java.
-
-\subsection{Project \texttt{org.jvoicexml.callmanger.text}}
-
-This callmanager aims at accessing JVoiceXML as a server for text based
-access. In contrast to the text based implementation platform this callmanager
-does not require JNDI.
 
 \subsubsection{Third party libraries}
 
@@ -898,7 +962,7 @@ JVoiceXML plug-in
 \label{voicexml-unit}
 
 This component is an approach to establish unit testing capabilities for
-VoiceXML.
+VoiceXML. VoiceXML unit makes use of the text implementation platform~\ref{sec:text-implemenation-platform}.
 
 \section{System test}
 
