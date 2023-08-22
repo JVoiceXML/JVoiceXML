@@ -338,46 +338,19 @@ configurations settings.
 The core of JVoiceXML comprises the following sub-projects:
 
 \begin{description}
-\item[org.jvoicexml] The core of the interpreter (required)
-\item[org.jvoicexml.config] JVoiceXML configuration based on spring (required)
+\item[org.jvoicexml] The core of the interpreter
+\item[org.jvoicexml.config] JVoiceXML configuration based on spring
 \item[org.jvoicexml.client] Client libraries to interacti with JVoiceXML
-remotely. (required)
-\item[org.jvoicexml.client.text] Text client for the text based
-implementation platform.
-\item[org.jvoicexml.callmanager.mmi] Demo implementation for the W3C MMI
-architecture.
-\item[org.jvoicexml.callmanager.mmi.http] Event and transport layer
-based on HTTP for \texttt{org.jvoicexml.callmanager.mmi}.
-\item[org.jvoicexml.callmanager.mmi.socket] Event and transport layer
-based on sockets for \texttt{org.jvoicexml.callmanager.mmi}.
-\item[org.jvoicexml.callmanager.sip] Demo implementation for SIP based access to
-JVoiceXML.
-\item[org.jvoicexml.callmanager.text] Demo implementation for text based access to
-JVoiceXML.
+remotely.
 \item[org.jvoicexml.documentserver.jetty] Demo document server implementation platform based on Jetty.
 \item[org.jvoicexml.documentserver.schemestrategy.file] Access document resources via the file protocol
 \item[org.jvoicexml.documentserver.schemestrategy.http] Access document resources via the HTTP or HTTPS protocol
-\item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
-JSAPI 2.0~\cite{jcp:jsr113}.
-\item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
-JTAPI 1.3~\cite{sun:jtapi}.
-\item[org.jvoicexml.implementation.lightweightbml] Demo implementation platform BML support
-\item[org.jvoicexml.implementation.mary] Demo implementation platform for
-the Mary Open TTS system.
-\item[org.jvoicexml.implementation.mrcpv2] Demo implementation platform for
-MRCPv2.
-\item[org.jvoicexml.implementation.text] Demo implementation platform for
-text based access.
 \item[org.jvoicexml.interpreter.datamodel.ecmascript] ECMAscript data model
-(required)
 \item[org.jvoicexml.interpreter.grammar.luis] Demo implementation for custom
 grammar type extensions based on Microsoft LUIS
 \item[org.jvoicexml.interpreter.grammar.regex] Demo implementation for custom
 grammar type extensions based on regular expressions
-\item[org.jvoicexml.jndi] JNDI support for JVoiceXML (required)
-\item[org.jvoicexml.mmi.events] A library to author MMI events.
-\item[org.jvoicexml.profile.vxml21] VoiceXML 2.1 profile for JVoiceXML.
-\item[org.jvoicexml.profile.mmi] MMI Profile baed on the VoiceXML 2.1 profile for JVoiceXML.
+\item[org.jvoicexml.jndi] JNDI support for JVoiceXML
 \item[org.jvoicexml.srgs] SRGS processor (required)
 \item[org.jvoicexml.xml] The JVoiceXML XML library (required)
 \end{description}
@@ -556,13 +529,22 @@ This project provides an SRGS processor.
 This project provides a datamodel based on ECMAscript using Thino (\url{http://www.mozilla.org/rhino/})
 
 \section{Remote Java Applications}
+
+Remote applications initate calls to the call manager to create a session in JVoiceXML
+as shown in figure~\ref{fig:remote-application-access}. In turn ASR, TTS and telephony resources
+are associated with this session that can be used to interact with the user in the created session.
+\begin{figure}
+\includegraphics[width=\linewidth]{remote-application-access.png}
+\caption{Remote application access}
+\label{fig:remote-application-access}
+\end{figure}
+
 \subsection{Project \texttt{org.jvoicexml.client}}
 
 This project contains the basic classes that are needed to implement a
 client that can connect remotely to JVoiceXML. Depending on the used 
 implementation platform additional client specializations may be needed
 as detailed in section \ref{sec:implementation-platforms}.
-
 
 \subsection{Project \texttt{org.jvoicexml.jndi}}
 \label{sec:jndi}
@@ -571,7 +553,8 @@ This project provides JNDI support for JVoiceXML. Depending on the implementatio
 time but in order to build JVoiceXML.
 
 JNDI offers remote access to JVoiceXML, e.g. the ability to run the
-shutdown script or to run the demos.
+shutdown script or to run the demos. Conceptually, JNDI can be perceived as a JNDI
+call manager. 
 
 The project settings for this subproject can be adapted by the following 
 properties in your copy of the \texttt{gradle.properties} file in the
@@ -603,6 +586,7 @@ folder
 \section{Implementation Platforms}
 \label{sec:implementation-platforms}
 
+Implementation
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jsapi20}}
 \label{sec:implementation-jsapi20}
@@ -774,7 +758,7 @@ folder
 
 Call manager for the MRCPv2 implementation platform which will be built in case this implementation platform is enabled.
 
-\subsubsubsection{Implementation Platform Configuration Files}
+\paragraph{Implementation Platform Configuration Files}
 
 At runtime, this platform will be enabled if the following configuration file is found in the configuration
 folder
