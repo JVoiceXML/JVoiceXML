@@ -586,7 +586,21 @@ folder
 \section{Implementation Platforms}
 \label{sec:implementation-platforms}
 
-Implementation
+Implementation platforms comprise external resources, like
+\begin{itemize}
+  \item Telephony
+  \item ASR
+  \item TTS
+\end{itemize}
+as shown in figure~\ref{fig:implementation-platform}.
+\begin{figure}
+\includegraphics[width=\linewidth]{implementation-platform.png}
+\caption{Implementation Platform}
+\label{fig:implementation-platform}
+\end{figure}
+
+This section gives an overview of provided implementation platforms for JVoiceXML
+and how to configure them.
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jsapi20}}
 \label{sec:implementation-jsapi20}
@@ -597,7 +611,7 @@ Community Process (JCP)~\cite{jcp} under JSR-113~\cite{jcp:jsr113}.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following 
+The project settings for this subproject can be adapted by the follow   ing 
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
