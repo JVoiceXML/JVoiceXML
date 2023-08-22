@@ -745,7 +745,7 @@ This implementation plaform depends on the following projects.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following ANT
+The project settings for this subproject can be adapted by the following
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
@@ -801,7 +801,7 @@ This implementation plaform depends on the following projects.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following ANT
+The project settings for this subproject can be adapted by the following 
 properties in your copy of the \texttt{gradle.properties} file in the
 \texttt{\${HOME}/.gradle} folder of the core project (see 
 Appendix~\ref{sec:gradle-properties}):
@@ -811,15 +811,50 @@ Appendix~\ref{sec:gradle-properties}):
 platform.
 \end{description}
 
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item text-implementation.xml
+\end{itemize}
+
 \subsubsection{Project \texttt{org.jvoicexml.callmanger.text}}
 
 This callmanager aims at accessing JVoiceXML as a server for text based
 access under development. In contrast to the text based implementation platform this callmanager
 does not require JNDI.
 
+\paragraph{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation by the following
+properties
+
 \subsubsection{Project \texttt{org.jvoicexml.client.text}}
 
 Client configuration files used by the text implementation platform and the text call manager.
+
+\section{Document Server}
+
+A document server provides access for JVoiceXML to VoiceXML documents, grammar files and 
+other related documents.
+
+\subsection{Project \texttt{org.jvoicexml.documentserver.jetty}}
+
+This document server provides a small document storage based on Jetty.
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation by the following
+properties
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item jetty-documentrepository.xml
+\end{itemize}
 
 \section {MMI Support}
 
