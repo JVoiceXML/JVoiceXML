@@ -843,10 +843,10 @@ other related documents.
 
 This document server provides a small document storage based on Jetty.
 
+
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject currently does not support adaptation by the following
-properties
+The project settings for this subproject currently does not support adaptation.
 
 \paragraph{Implementation Platform Configuration Files}
 
@@ -854,6 +854,39 @@ At runtime, this platform will be enabled if the following configuration file is
 folder
 \begin{itemize}
 \item jetty-documentrepository.xml
+\end{itemize}
+
+\subsection{org.jvoicexml.documentserver.schemestrategy.file}
+
+Support to access file based resources.
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item file-schemestrategy.xml
+\end{itemize}
+
+\subsection{org.jvoicexml.documentserver.schemestrategy.http}
+
+Support to access HTTP and HTTPS based resources.
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if one of the following configuration files is found in the configuration
+folder
+\begin{itemize}
+\item http-schemestrategy.xml
+\item https-schemestrategy.xml
 \end{itemize}
 
 \section {MMI Support}
