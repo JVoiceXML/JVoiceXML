@@ -342,21 +342,13 @@ The core of JVoiceXML comprises the following sub-projects:
 \item[org.jvoicexml.config] JVoiceXML configuration based on spring
 \item[org.jvoicexml.client] Client libraries to interacti with JVoiceXML
 remotely.
-\item[org.jvoicexml.documentserver.jetty] Demo document server implementation platform based on Jetty.
-\item[org.jvoicexml.documentserver.schemestrategy.file] Access document resources via the file protocol
-\item[org.jvoicexml.documentserver.schemestrategy.http] Access document resources via the HTTP or HTTPS protocol
-\item[org.jvoicexml.interpreter.datamodel.ecmascript] ECMAscript data model
-\item[org.jvoicexml.interpreter.grammar.luis] Demo implementation for custom
-grammar type extensions based on Microsoft LUIS
-\item[org.jvoicexml.interpreter.grammar.regex] Demo implementation for custom
-grammar type extensions based on regular expressions
 \item[org.jvoicexml.jndi] JNDI support for JVoiceXML
 \item[org.jvoicexml.srgs] SRGS processor (required)
 \item[org.jvoicexml.xml] The JVoiceXML XML library (required)
 \end{description}
 
 The most convenient configuration setting is the one for \emph{JSAPI 2.0}. Here,
-you will need to checkout the folloging projects:
+you will need to configure for the folloging projects:
 \begin{itemize}
   \item org.jvoicexml
   \item org.jvoicexml.client
@@ -368,12 +360,12 @@ you will need to checkout the folloging projects:
   \item org.jvoicexml.profile.vxml21
   \item org.jvoicexml.xml
 \end{itemize}
+See also section~\ref{sec:implementation-jsapi20}.
 
 A simple demo to test that implementation platform to start with is
 \lstinline{org.jvoicexml.demo.helloworld}.
 
-For a \emph{text} based configuration
-you will need
+For a \emph{text} based configuration you will need
 \begin{itemize}
   \item org.jvoicexml
   \item org.jvoicexml.client
@@ -386,6 +378,7 @@ you will need
   \item org.jvoicexml.profile.vxml21
   \item org.jvoicexml.xml
 \end{itemize}
+See also section~\ref{sec:text-implemenation-platform}.
 
 A simple demo to test that implementation platform is
 \lstinline{org.jvoicexml.demo.text}.
@@ -911,6 +904,39 @@ At runtime, this platform will be enabled if the following configuration file is
 folder
 \begin{itemize}
 \item ecmascript-datamodel.xml
+\end{itemize}
+
+\section{Grammars}
+
+JVoiceXML ships with the following grammar beyond what is defined in the VoiceXML specification~\cite{w3.org:voicexml}.
+
+
+\subsection{Project \texttt{org.jvoicexml.interpreter.grammar.luis}}
+
+\subsubsection{Project Specific Configuration}
+
+A grammar extension to communicate with Microsoft LUIS.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item luis-grammar.xml
+\end{itemize}
+
+\subsection{Project \texttt{org.jvoicexml.interpreter.grammar.regex}}
+
+\subsubsection{Project Specific Configuration}
+
+A grammar extension to use regulare expressions as grammar.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item regex-grammar.xml
 \end{itemize}
 
 \section {MMI Support}
