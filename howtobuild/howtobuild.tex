@@ -116,10 +116,7 @@ git clone  https://github.com/JVoiceXML/JVoiceXML.git
 \end{lstlisting}
 
 This will check out all projects of JVoiceXML
-into the folder \texttt{JVoiceXML}. Please refer to
-section~\ref{sec:jvoicexml-core} if you want to checkout
-only a minimal set of projects. Here, the required projects
-to build the core project are marked as \emph{required}.
+into the folder \texttt{JVoiceXML}. 
 
 A screenshot from a checkout in eclipse is shown in
 figure~\ref{fig:eclipse-projects}.
@@ -158,7 +155,7 @@ Your IDE must support
 
 \begin{itemize}
 \item JavaSE 8
-\item Gradle
+\item Gradle 6.9.1
 \end{itemize}
 
 \subsection{JAVA}
@@ -728,7 +725,7 @@ To make use of this implementation platform, JVoiceXML must be called with a SIP
 phone. We used the xlite phone which can be downloaded for free from
 \url{http://www.counterpath.com}.
 
-The text implementation platform comprises several projects as shown in figure~\ref{fig:MRCPv2-implementation-platform-projects}.
+The MRCPv2 implementation platform comprises several projects as shown in figure~\ref{fig:MRCPv2-implementation-platform-projects}.
 \begin{figure}
 \includegraphics[width=\linewidth]{MRCPv2-implementation-platform-projects.png}
 \caption{MRCPv2 Implementation Platform Projects}
@@ -960,6 +957,25 @@ folder
 This callmanager allows for accessing JVoiceXML as a modality component in
 the W3C MMI architectural pattern~\cite{w3c:2012:mmi_arch}.
 
+The MMI support comprises several projects as shown in figure~\ref{fig:MMI-projects}.
+\begin{figure}
+\includegraphics[width=\linewidth]{MMI-projects.png}
+\caption{MMI Projects}
+\label{fig:MMI-projects}
+\end{figure}
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
+
+\begin{description}
+\item[JVOICEXML\_PROFILE\_MMI] A value of \texttt{true} will enable MMI support.
+\item[JVOICEXML\_PROFILE\_MMI\_HTTP] A value of \texttt{true} will use HTTP as ETL
+\item[JVOICEXML\_PROFILE\_MMI\_SOCKET] A value of \texttt{true} will use sockets as ETL
+\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.mmi.http}}
 
@@ -971,11 +987,6 @@ via HTTP. MMI events are received as XML.
 
 This project contains an implementation of the Event and Transport Layer
 via sockets. MMI events are received as XML.
-
-\subsubsection{Third party libraries}
-
-This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
-to author MMI compatible events (see section\ref{sec:mmi-events}).
 
 
 \subsection{Project \texttt{org.jvoicexml.callmanager.mmi.servlet}}
@@ -996,17 +1007,7 @@ This project is a library to author MMI compatible events that can be used in
 the MMI architectural pattern from the W3C.
 
 Currently the library is able to generate events in XML format and for
-protobuf~\cite{google:protobuf}. The generation of Java files for protobuf
-support requires the download of the \texttt{protoc} compiler. The \texttt{protoc}
-executable can be downloaded from \url{http://code.google.com/p/protobuf/downloads/list}.
-
-The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
-\begin{lstlisting}
-mmi.protoc=protoc
-\end{lstlisting}
+protobuf~\cite{google:protobuf}. 
 
 \section{Demo Programs}
 
