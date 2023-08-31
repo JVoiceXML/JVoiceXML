@@ -1571,7 +1571,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final JVoiceXmlApplication subdialgApp = new JVoiceXmlApplication(observer);
         subdialgApp.addDocument(resolvedUri, doc);
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
-                subdialogContext, application, parameters, bus, model);
+                subdialogContext, subdialgApp, parameters, bus, model);
         thread.start();
     }
 
