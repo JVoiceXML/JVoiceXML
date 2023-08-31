@@ -1564,7 +1564,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                         observer, subdialogModel);
         final EventBus bus = context.getEventBus();
         interpreter.setState(InterpreterState.WAITING);
-        // Start the subdialog thread
+        // Start the subdialog thread in a new application
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("using new application for subdialog");
+        }
+        final JVoiceXmlApplication subdialgApp = new JVoiceXmlApplication(observer);
+        subdialgApp.addDocument(resolvedUri, doc);
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
                 subdialogContext, application, parameters, bus, model);
         thread.start();

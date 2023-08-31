@@ -135,6 +135,9 @@ final class SubdialogExecutorThread extends Thread {
                     new ExceptionWrapper(e.getMessage(), e);
             eventbus.publish(wrapper);
         } finally {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("abandonned subdialog application");
+            }
             unregisterReturnEventHandler(handler);
             model.deleteScope(Scope.DIALOG);
         }
