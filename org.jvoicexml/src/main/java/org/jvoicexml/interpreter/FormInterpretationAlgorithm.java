@@ -1548,30 +1548,31 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
 
-        // Prepare running the subdialog in an own thread.
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
+        // Prepare running the subdialog in an own thread in a new application.
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating new context and application for subdialog");
+        }
+        final DocumentDescriptor descriptor = new DocumentDescriptor(resolvedUri,
                 DocumentDescriptor.MIME_TYPE_XML);
         descriptor.addParameters(parameters);
-        final VoiceXmlDocument doc = context.loadDocument(descriptor);
-        application.addDocument(resolvedUri, doc);
-        
-        final ScopeObserver observer = new ScopeObserver();
         // TODO acquire the configuration object
         final Configuration configuration = context.getConfiguration();
         final DataModel subdialogModel = model.newInstance();
+        final ScopeObserver observer = new ScopeObserver();
         final VoiceXmlInterpreterContext subdialogContext =
                 new VoiceXmlInterpreterContext(session, configuration,
                         observer, subdialogModel);
+        final JVoiceXmlApplication subdialgApplication = new JVoiceXmlApplication(observer);
+        subdialogContext.setApplication(subdialgApplication);
+        final VoiceXmlDocument doc = subdialogContext.loadDocument(descriptor);
+        subdialgApplication.addDocument(resolvedUri, doc);
+        
         final EventBus bus = context.getEventBus();
         interpreter.setState(InterpreterState.WAITING);
-        // Start the subdialog thread in a new application
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("using new application for subdialog");
-        }
-        final JVoiceXmlApplication subdialgApp = new JVoiceXmlApplication(observer);
-        subdialgApp.addDocument(resolvedUri, doc);
+        
+        // Start interpreting the subdialog
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
-                subdialogContext, subdialgApp, parameters, bus, model);
+                subdialogContext, subdialgApplication, parameters, bus, model);
         thread.start();
     }
 
