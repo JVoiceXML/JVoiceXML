@@ -1190,6 +1190,23 @@ The class comment has to contain the following information:
 The name of the author and the purpose have to be replaced by their proper
 values.
 
+\section{Feature Development and Bugfixes}
+
+The devlopment of JVoiceXML is based on Gitflow. A general description of Gitflow is available
+at \url{https://docs.github.com/en/get-started/quickstart/github-flow} and illustrated in
+figure~\ref{fig:gitflow}.
+\begin{figure}
+\includegraphics[width=\linewidth]{gitflow.png}
+\caption{Gitflow usage}
+\label{fig:gitflow}
+\end{figure}
+
+Each feature or bug must have a corresponding issue entry in JVoiceXML's issue tracker
+at \url{https://github.com/JVoiceXML/JVoiceXML/issues}. A feature branch is created
+per issue and then merged back to develop once it is proven to be working. In order to
+map commit messages to issues, they should be prefixex with \texttt{\#{\textless}issue number{\textgreater}}.
+This allows GitHub to show them in the corresponding issues.
+
 \section{Releases}
 
 This section describes the required steps to create a new release for
