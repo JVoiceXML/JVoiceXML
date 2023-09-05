@@ -45,7 +45,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \begin{abstract}
 This documents describes the steps you have to perform, when you want
 to build JVoiceXML or develop code for the JVoiceXML project. It gives
-information about the requirements of your development environment 
+information about the the build system, requirements of your development environment 
 and our coding conventions.
 \end{abstract}
 
@@ -58,12 +58,12 @@ document creation and a VoiceXML interpreter to process
 VoiceXML documents using JAVA standard APIs such as JSAPI~\cite{sun:jsapi} and
 JTAPI~\cite{sun:jsapi}.
 
-VoiceXML was previously hosted at SourceForge~\cite{sourceforge} as an open source project.
-You find everything that is related to this project under
-\url{http://sourceforge.net/projects/jvoicexml/}. Now, the code hase been made
+VoiceXML was previously hosted at SourceForge~\cite{sourceforge} as an open source project
+under \url{http://sourceforge.net/projects/jvoicexml/}. Now, the code hase been made
 available at GitHub at \url{https://github.com/JVoiceXML/JVoiceXML}.
+You find everything that is related to this project at GitHub.
 
-This document refers to UNIX and Windows systems. JVoiceXML will work 
+This document refers to UNIX and Windows systems. JVoiceXML will work on
 any other operating systems that support Java 8, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
@@ -96,17 +96,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 \subsection{Download the Source Archive}
 
 You can download a the source code for the available releases from 
-\url{https://github.com/JVoiceXML/JVoiceXML/releases}. Parts of the source code
-is part of the binary distribution and can be obtained by running the installer.
-Although this works, it is not the recommended way. Please use the Git
-repository as described in the following sections. 
+\url{https://github.com/JVoiceXML/JVoiceXML/releases}. The recommended way is to
+use the Git repository as described in the following sections. 
 
 \subsection{Git Repository}
 \label{sec:git-repository}
 
 If you want to stay at the current state of development you have to use
 the Git repository from GitHub\footnote{\url{http://github.com}}. This is also
-the preferred way. Some older stuff is still at Source Forge~\cite{sourceforge}.
+the preferred way. Some older stuff is still at Source Forge~\cite{sourceforge}
+but this is no longer actively maintained.
 
 This section describe the parameters to access the Git repository 
 using the command line. Feel free to grab the required parameters from
@@ -117,13 +116,7 @@ git clone  https://github.com/JVoiceXML/JVoiceXML.git
 \end{lstlisting}
 
 This will check out all projects of JVoiceXML
-into the folder \texttt{JVoiceXML}. Please refer to
-section~\ref{sec:jvoicexml-core} if you want to checkout
-only a minimal set of projects. Here, the required projects
-to build the core project are marked as \emph{required}.
-
-Since all the third party libraries are checked a checkout may
-take a while.
+into the folder \texttt{JVoiceXML}. 
 
 A screenshot from a checkout in eclipse is shown in
 figure~\ref{fig:eclipse-projects}.
@@ -143,17 +136,15 @@ is built by the project \lstinline{org.jvoicexm.xml}.
 \label{sec:required-software}
 
 Since JVoiceXML is written in JAVA you will at least need a
-JAVA compiler, see section~\ref{sec:ide}, an editor or preferably a JAVA
+JAVA compiler, see section~\ref{sec:java}, an editor or preferably a JAVA
 IDE, see section~\ref{sec:ide}, and Gradle, to build the
-binaries. All used third party libraries can be downloaded from the CVS, SVN or
-comparable repository or from their home pages. The file
-\texttt{doc/libraries.xhtml} contains a list of all used libraries.
-
+binaries. All used third party libraries will be downloaded by the
+Gradle build system, see section~\ref{sec:gradle}.
 
 \subsection{IDE}
 \label{sec:ide}
 
-JVoiceXML is being developed using eclipse 4.6, but you can use the IDE of your
+JVoiceXML is being developed using eclipse, but you can use the IDE of your
 choice to edit the sources and compile the binaries. You can even use a simple
 text editor to perform this job. Nevertheless there are some restriction that
 you cannot work around.
@@ -162,28 +153,28 @@ Your IDE must support
 
 \begin{itemize}
 \item JavaSE 8
-\item Gradle
+\item Gradle 6.9.1
 \end{itemize}
 
 \subsection{JAVA}
 \label{sec:java}
 
 Parts of the code of JVoiceXML are using features from the JAVA 8 API, so that
-you will need at least JSE 8 to compile the code. You can download it
+you will need at JSE 8 to compile the code. You can download it
 for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
+While newer Java versions are available they are not proven to be supported.
 
 In case you are using another IDE, you will have to manually adapt
-the required library settings, e.g. gor code completion. The dependencies to all
+the required library settings, e.g. for code completion. The dependencies to all
 libraries are listed in \lstinline{JVOICEXML_HOME/doc/libraries.xhtml}.
-
 
 \subsubsection{Eclipse settings}
 \label{sec:eclipse}
 
 If you are not using eclipse as your favorite IDE, you may ignore this section.
-We are using the \emph{Eclipse IDE for Java EE Developers} version 4.6 (Neon))
-for the development of JVoiceXML. The subversion repository contains the eclipse
-project settings. This way, you there is no need to import the
+We are using the \emph{Eclipse IDE for Java EE Developers}
+for the development of JVoiceXML. The Git repository contains the eclipse
+project settings. This way, there is no need to import the
 project into eclipse. The project settings will be detected 
 automatically when you checkout the projects. However you are requested to configure the execution
 environment development for Java 8 \emph{JavaSE-1.8} to point to a valid JDK.
@@ -207,35 +198,35 @@ Software Update mechanism.
 Below is a list of the required update URLs.
 
 \begin{description}
-\item[Buildship] \url{https://projects.eclipse.org/projects/tools.buildship}
+\item[Buildship] \url{https://projects.eclipse.org/projects/tools.buildship} for Gradle support
 \item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update} (Note that you
 only need the 5.x version)
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
 edit the documentation) This will also require an existing \LaTeX installation.
+\item[Gitflow] for Gitflow support (optional for contributors).
 \item[Protocol Buffers Development Tools] \url{http://code.google.com/p/protobuf-dt/}
 (optional if you want to edit the protobuf files in the sub project
 \texttt{org.jvoicexml.mmi.events} or \texttt{org.jvoicexml.client.text})
-\item[Microsoft Visual Studio 2019] \url{https://visualstudio.microsoft.com/}
-Only required, if you are running on Windows
 \end{description}
 
-However, the preferred way to install the plugins is via the eclipse market place.
+The preferred way to install the plugins is via the eclipse market place.
 
 \subsection{Gradle}
 \label{sec:gradle}
 
 JVoiceXML is being built by Gradle. It is recommended that
-you use at least Gradle 3.0. 
-If you don't have Gradle installed, you can download the current release
+you use Gradle 6.9.1 as Gradle 7.0 is not yet supported.. 
+If you don't have Gradle installed, you can download this release
 from \url{http://www.gradle.org}. This should not be necessary if Gradle is builtin
 your IDE.
 
 The build file allows you to override the settings by using a custom 
 properties file \texttt{gradle.properties} in the \texttt{\$\{HOME\}/.gradle}
-directory.
+directory. This will be referred to as your \emph{your copy} later in this document.
 
 Since almost all IDEs feature support for Gradle, at least with the help of plugins, it will be possible to
 use your favorite IDE.
+
 
 \subsubsection{Gradle Support for Eclipse}
 \label{sec:gradle-eclipse}
@@ -269,6 +260,13 @@ The documentation is being written using \LaTeX. If you want to edit the
 documentation you will need to install a \LaTeX system like MiKTeX
 \url{http://miktex.org} for windows or tetex on Linux systems.
 
+For Linux you will need the packages
+\begin{itemize}
+  \item texlive-latex-base
+  \item texlive-fonts-recommended
+  \item texlive-fonts-extra
+  \item texlive-fonts-extra
+\end{itemize}
 This is not needed if you do not want to author the documentation or create a
 distribution.
 
@@ -276,7 +274,7 @@ distribution.
 
 JVoiceXML comprises several projects. Some of them are described in more
 detail in the following section. All these projects follow some conventions
-that should help to stay oriented.
+that should ease staying oriented.
 
 The base namespace for all projects is \lstinline{org.jvoicexml}. Dependent 
 projects may extend this namespace. For instance the namespace for the
@@ -300,13 +298,13 @@ figure~\ref{fig:main-components}.
 \label{fig:main-components}
 \end{figure}
 These components can be mapped to the packages as shown in
-figure~\ref{fig:main-packages}. Specializations mainfest as subpackages thereof.
-For instance, the JSAPI 1.0 implementation platform resides in package 
-\lstinline{org.jvoicexml.implementation.jsapi10} as a subpackage of
-\lstinline{org.jvoicexml.implementation}.
+figure~\ref{fig:main-packages}. Specializations manifest as subpackages thereof.
+For instance, the JSAPI 2.0 implementation platform resides in package 
+\lstinline{org.jvoicexml.implementation.jsapi20} as a subpackage of
+\lstinline{org.jvoicexml.implementation} (but in another project).
 \begin{figure}
 \includegraphics[width=\linewidth]{main-packages.png}
-\caption{Main pacakages of JVoiceXML}
+\caption{Main packages of JVoiceXML}
 \label{fig:main-packages}
 \end{figure}
 
@@ -325,60 +323,31 @@ Gradle
 \ref{sec:create-configuration})
 \end{description}
 
-Demo projects may have an additional folder \texttt{config} to hold
-configurations settings. 
+Some projects, e.g. demo projects may have an additional folder \texttt{config} to hold
+configurations settings or configuration templates for that project. 
 
 \section{JVoiceXML Core}
 \label{sec:jvoicexml-core}
 
-The core of JVoiceXML comprises the following sub-projects:
+The core of JVoiceXML comprises the following sub-projects, also shown in~\ref{fig:core-projects}:
+\begin{figure}
+\includegraphics[width=\linewidth]{core-projects.png}
+\caption{Core projects of JVoiceXML}
+\label{fig:core-projects}
+\end{figure}
 
 \begin{description}
-\item[org.jvoicexml] The core of the interpreter (required)
-\item[org.jvoicexml.config] JVoiceXML configuration based on spring (required)
+\item[org.jvoicexml] The core of the interpreter
+\item[org.jvoicexml.config] JVoiceXML configuration based on spring
 \item[org.jvoicexml.client] Client libraries to interacti with JVoiceXML
-remotely. (required)
-\item[org.jvoicexml.client.text] Text client for the text based
-implementation platform.
-\item[org.jvoicexml.callmanager.mmi] Demo implementation for the W3C MMI
-architecture.
-\item[org.jvoicexml.callmanager.mmi.http] Event and transport layer
-based on HTTP for \texttt{org.jvoicexml.callmanager.mmi}.
-\item[org.jvoicexml.callmanager.mmi.umundo] Event and transport layer
-based on umundo for \texttt{org.jvoicexml.callmanager.mmi}.
-\item[org.jvoicexml.callmanager.mmi.socket] Event and transport layer
-based on sockets for \texttt{org.jvoicexml.callmanager.mmi}.
-\item[org.jvoicexml.callmanager.sip] Demo implementation for SIP based access to
-JVoiceXML.
-\item[org.jvoicexml.callmanager.text] Demo implementation for text based access to
-JVoiceXML.
-\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
-JSAPI 1.0~\cite{sun:jsapi}.
-\item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
-JSAPI 2.0~\cite{jcp:jsr113}.
-\item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
-JTAPI 1.3~\cite{sun:jtapi}.
-\item[org.jvoicexml.implementation.mary] Demo implementation platform for
-the Mary Open TTS system.
-\item[org.jvoicexml.implementation.marc] Demo implementation platform for
-the MARC.
-\item[org.jvoicexml.implementation.mrcpv2] Demo implementation platform for
-MRCPv2.
-\item[org.jvoicexml.implementation.text] Demo implementation platform for
-text based access.
-\item[org.jvoicexml.interpreter.datamodel.ecmascript] ECMAscript data model
-(required)
-\item[org.jvoicexml.interpreter.grammar.regex] Demo implementation for custom
-grammar type extensions
-\item[org.jvoicexml.jndi] JNDI support for JVoiceXML (required)
-\item[org.jvoicexml.mmi.events] A library to author MMI events.
-\item[org.jvoicexml.profile.vxml21] VoiceXML 2.1 profile for JVoiceXML.
-\item[org.jvoicexml.srgs] SRGS processor (required)
-\item[org.jvoicexml.xml] The JVoiceXML XML library (required)
+remotely.
+\item[org.jvoicexml.jndi] JNDI support for JVoiceXML
+\item[org.jvoicexml.srgs] SRGS processor 
+\item[org.jvoicexml.xml] The JVoiceXML XML library 
 \end{description}
 
 The most convenient configuration setting is the one for \emph{JSAPI 2.0}. Here,
-you will need to checkout the folloging projects:
+you will need to configure for the folloging projects:
 \begin{itemize}
   \item org.jvoicexml
   \item org.jvoicexml.client
@@ -390,13 +359,12 @@ you will need to checkout the folloging projects:
   \item org.jvoicexml.profile.vxml21
   \item org.jvoicexml.xml
 \end{itemize}
+See also section~\ref{sec:implementation-jsapi20}.
 
 A simple demo to test that implementation platform to start with is
 \lstinline{org.jvoicexml.demo.helloworld}.
 
-
-For a \emph{text} based configuration
-you will need
+For a \emph{text} based configuration you will need
 \begin{itemize}
   \item org.jvoicexml
   \item org.jvoicexml.client
@@ -409,6 +377,7 @@ you will need
   \item org.jvoicexml.profile.vxml21
   \item org.jvoicexml.xml
 \end{itemize}
+See also section~\ref{sec:text-implemenation-platform}
 
 A simple demo to test that implementation platform is
 \lstinline{org.jvoicexml.demo.text}.
@@ -420,73 +389,18 @@ building and configuring the environment.
 
 \subsection{Project \texttt{org.jvoicexml}}
 
-
-\subsubsection{Libraries Needed to Compile JVoiceXML}
-\label{sec:libr-need-comp}
-
-\begin{description}
-\item[log4j] Version 1.2.17 \\
-URL \url{http://logging.apache.org/log4j} \\
-JVoiceXML uses log4j~\cite{apache:log4j} for logging. We think that log4j has 
-some advantages
-over \texttt{java.util.logging} and appears to be more mature and reliable.
-
-The output of SUN's own logging framework can be redirected to log4j via the
-system property
-\begin{lstlisting}
--Djava.util.logging.config.file=${config}/logging.properties
-\end{lstlisting}
-
-This file contains the description of a logging handler that forwards all
-request to log4j. Hence, both the log4j logging framework and SUN's logging
-framework can be configured through the log4.xml configuration file.
-\item[Jetty] Version 9.2.2 \\
-URL\url{http://download.eclipse.org/jetty/} \\
-Embedded web server to serve, e.g., generated grammar files.
-\item[Commons Pool] Vesion 1.5.5 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-The pooling of implementation platform resources is based on commons
-pool.
-\item[Commons HTTP Client] Version 4.2.3 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-The HTTP client library is used to retrieve VoiceXML documents from a web
-server.
-\item[Commons HTTP Core] Version 4.2.3 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-Basic HTTP functionality for Commons HTTP Client.
-\item[Commons Codec] Version 1.4 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-This library is required by the Commons HTTP Client to add attachments to the
-POST and GET requests.
-\item[Commons Lang] Version 3.3.2 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-Used by HTTP Core and Commons Pool.
-\item[Commons Logging] Version 1.1.1 \\
-URL \url{http://jakarta.apache.org/commons/} \\
-Used by HTTP Core and Commons Pool.
-\end{description}
-
-\subsubsection{Libraries Needed at Run-time}
-
-Besides the libraries named in section~\ref{sec:libr-need-comp} the following
-libraries are needed to run JVoiceXML.
-
-\subsubsection{Other Libraries}
-
-Besides the libraries named above there are also other libraries in the
-3rdparty folder. These libraries are used by more than one other implementation
-platforms and are kept here as a general pool. Libraries that are used only by
-one single implementation platform are located in the implementation platform's
-3rdparty library directory.
-
+This project is the core of the Voice Browser.
 
 \subsubsection{Creating a Configuration}
 \label{sec:create-configuration}
 
-Currently there are eleven implementations for the implementation platform
-that reside in co-projects, refer to section~\ref{sec:git-repository}.
+There are several variants of implementation platforms available
+that reside in co-projects, refer to section~\ref{sec:git-repository}. Multiple
+implementation platforms can be active at the same time. They will be activated at runtime
+if the corresponding configuration file is found in the config folder.
 
-The file \texttt{\$JVOICEXML\_HOME/gradle.properties} contains templates for all
+The file \texttt{\$JVOICEXML\_HOME/gradle.properties} (see Apeendix \ref{sec:gradle-properties}) 
+contains templates for all
 the switches and settings that may be used to enable or disable certain
 implementation platforms or adapt needed configuration settings.
 
@@ -498,8 +412,8 @@ Once you changed the settings cd to the main subproject and call
 \begin{lstlisting}
 gradle run
 \end{lstlisting}
-to start the Voice Browser.
-and stopped it by
+to cactivate your configuration and start the Voice Browser.
+You may stop it by
 \begin{lstlisting}
 gradle shutdown
 \end{lstlisting}
@@ -525,7 +439,7 @@ debug JVoiceXML.
 This section explains the most important targets of the main build file
 \texttt{build.gradle} in the main subproject. All others build files from the
 implementation platforms
-are called from this central point. Just start ant without any target specified
+are called from this central point. Just start gradle without any target specified
 if you want to build everything. Call
 \begin{lstlisting}
 gradle tasks
@@ -547,23 +461,29 @@ If successful, you will find at minimum the following jar archives:
 to create and parse VoiceXML documents. This file is being build from the
 project \texttt{org.jvoicexml.xml} which is described in
 section~\ref{sec:org.jvoicexml.xml}.
-\item jvxml-client.jar This jar contains the files needed to build
+\item org.jvoicexml,client.jar This jar contains the files needed to build
 a client.
 \item org.jvoicexml.jndi.jar JNDI support for JVoiceXML
+\item org.jvoicexml.srgs
 \item some other jars, depending on your configuration settings
 \end{itemize}
 
 \item[javadoc]
 Create JAVADOC documentation from the JAVA files in the directory.
+\item[run] Build all the configured implementation platforms
+via \texttt{gradle.properties}, copy their configuration files into a
+temporary configuration folder and start the JVoiceXML voice browser.
+\item[shutdown] Remotely shutdown the JVoiceXML voice browser.
+\item[distribution] Create a distribution for all subprojects.
 \end{description}
 
 Call
 \begin{lstlisting}
 gradle <target>
 \end{lstlisting}
-to run ant for the the given target.
+to run Gradle for the the given target.
 
-The ANT launch configurations for eclipse are part of the Git repository. They
+The Gradle launch configurations for eclipse are part of the Git repository. They
 are available as a shortcut in the run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
 \begin{figure}
 \includegraphics[width=\linewidth]{eclipse-launch.png}
@@ -582,15 +502,6 @@ JVoiceXML.
 
 This project has to be build after the main project.
 
-\subsubsection{Third party libraries}
-\label{sec:config-third-party-libr}
-
-\begin{description}
-\item[spring framework] Version 4.2.0 \\
-URL \url{http://www.springsource.org} \\
-Beans configuration as IoC 
-\end{description}
-
 \subsection{Project \texttt{org.jvoicexml.xml}}
 \label{sec:org.jvoicexml.xml}
 
@@ -604,172 +515,113 @@ This project has to be build before the main project.
 
 This project provides an SRGS processor.
 
-\subsection{Project \texttt{org.jvoicexml.interpreter.ecmascript}}
-\label{sec:org.jvoicexml.srgs}
-
-This project provides a datamodel based on ECMAscript.
-
-\subsubsection{Third party libraries}
-\label{sec:config-third-party-libr}
-
-\begin{description}
-\item[Rhino] Version 1.7Rv \\
-URL \url{http://www.mozilla.org/rhino/} \\
-JVoiceXML uses Rhino from Mozilla to enable scripting.
-\item[JSONsimple] Version 1.1 \\
-URL \url{http://code.google.com/p/json-simple} \\
-Helps to serialize and deserialize JSON formatted strings into ECMAscript.
-\end{description}
-
 \section{Remote Java Applications}
+
+Remote applications initate calls to the call manager to create a session in JVoiceXML
+as shown in figure~\ref{fig:remote-application-access}. In turn ASR, TTS and telephony resources
+are associated with this session that can be used to interact with the user in the created session.
+\begin{figure}
+\includegraphics[width=\linewidth]{remote-application-access.png}
+\caption{Remote application access}
+\label{fig:remote-application-access}
+\end{figure}
+
 \subsection{Project \texttt{org.jvoicexml.client}}
 
 This project contains the basic classes that are needed to implement a
-client that can connect remotely to JVoiceXML.
-
-\subsubsection{Third party libraries}
-
-This platform makes use of the \lstinline{org.jvoicexml.jndi} library
-to connect to JVoiceXML (see section\ref{sec:jndi}). In addition specialized
-libraries from the implementation platform (see section
-\ref{sec:implementation-platforms}) maybe required.
+client that can connect remotely to JVoiceXML. Depending on the used 
+implementation platform additional client specializations may be needed
+as detailed in section \ref{sec:implementation-platforms}.
 
 \subsection{Project \texttt{org.jvoicexml.jndi}}
 \label{sec:jndi}
 
-This project provides JNDI support for JVoiceXML. This is not required at run
+This project provides JNDI support for JVoiceXML. Depending on the implementation platform this is not required at run
 time but in order to build JVoiceXML.
 
 JNDI offers remote access to JVoiceXML, e.g. the ability to run the
-shutdown script or to run the demos.
+shutdown script or to run the demos. Conceptually, JNDI can be perceived as a JNDI
+call manager. 
 
-The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
-\begin{lstlisting}
-jvxml.jndi.repository=text
-jvxml.jndi.port=1099
-\end{lstlisting}
+The project settings for this subproject can be adapted by the following 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
+\begin{description}
+\item[JVOICEXMLJNDI\_REPOSITORY] id of the classloader repository that is used by the target implementation platform, e.g.
+\texttt{text} for the text implementation plaform. 
+\item[JVOICEXML\_JNDI\_PORT] Port number of the RMI registry
+\item[JVOICEXMLJNDI\_CLASSERVER\_PORT] Port number of the classloader to enable automated cde download via RMI
+\end{description}
 
-The configuration ANT script also adapts the settings in the
+The Gradle build script also adapts the settings in the
 \texttt{jndi.properties} to the configured port. Make sure to also adapt
 the \texttt{jndi.properties} in the demos or your application.
 
 The repository entry must match the repository that you are using for your
 client. Otherwise JVoiceXML will not be able to load the needed resources of
-the server side.
+the server side. This limits the usage of JNDI to one platform only.
+
+\subsubsection{Implementation Platform Configuration Files}
+
+At runtime, JNDI support will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item jvxml-jndi.xml
+\end{itemize}
 
 \section{Implementation Platforms}
 \label{sec:implementation-platforms}
 
-\subsection{Project \texttt{org.jvoicexml.implementation.jsapi10}}
-\label{sec:implementation-jsapi10}
+Implementation platforms comprise external resources, like
+\begin{itemize}
+  \item Telephony
+  \item ASR
+  \item TTS
+\end{itemize}
+as shown in figure~\ref{fig:implementation-platform}.
+\begin{figure}
+\includegraphics[width=\linewidth]{implementation-platform.png}
+\caption{Implementation Platform}
+\label{fig:implementation-platform}
+\end{figure}
 
-This project provides an implementation platform for JSAPI 1.0 compliant
-speech engines. Besides a general hook for those engines there are also
-extensions for FreeTTS and Sphinx 4 bases on these hooks to demonstrate the
-capabilities.
-
-\subsubsection{Project Specific Configuration}
-
-The project settings for this subproject can be adapted by the following
-properties in the \texttt{platforms.xml}
-
-\begin{description}
-\item[jvxml.jsapi10.talkingJava] If set to
-\texttt{true} the Talking Java wrapper for Microsoft's speech engine will be
-used. In this case you need also to specifiy a value for
-\texttt{jvxml.jsapi10.talkingJava.path}
-\item[jvxml.jsapi10.talkingJava.path] A path that is used to locate the DLLs
-that are required to use Talking Java as sthe speech engine.
-\end{description}
-
-\subsubsection{Third party libraries}
-\label{sec:jsapi10-third-party-libr}
-
-\begin{description}
-\item[JSAPI 1.0] Version 1.0 \\
-URL n/a \\
-Java Speech API v1.0 (JSAPI)~\cite{sun:jsapi} to address speech recognition and
-speech synthesis issues. It is a pure API layer without any concrete TTS or ASR
-implementations which have to be added in addition. 
-\item[Talking Java] Version n/a \\
-URL \url{http://www.cloudgarden.com} \\
-Talking Java is an implementation of the JSAPI 1.0 utilizing Microsoft's
-SAPI4 and SAPI5 speech engines. Note that the delivered version is only free
-for personal use. If you intend to use it in a commercial corporate or
-institutional context, you will have to buy a license. 
-Please refer to \url{http://www.cloudgarden.com}.
-\end{description}
+This section gives an overview of provided implementation platforms for JVoiceXML
+and how to configure them.
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jsapi20}}
 \label{sec:implementation-jsapi20}
 
 This project contains a first draft of an implementation platform to enable
-JSAPI 2.0 support for JVoiceXML.
+JSAPI 2.0 support for JVoiceXML. JSAPI 2.0 is being developed within the Java 
+Community Process (JCP)~\cite{jcp} under JSR-113~\cite{jcp:jsr113}.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following
-properties in the \texttt{platforms.xml}
+The project settings for this subproject can be adapted by the follow   ing 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 
 \begin{description}
-\item[jvxml.jsapi20.default] A value of \texttt{true} will result in a
-configuration that uses FreeTTS and Sphinx4 as speech engines.
-\texttt{jvxml.jsapi10.talkingJava.path}
-\item[jvxml.jsapi20.sapi]  A value of \texttt{true} will result in a
-configuration that uses the SAPI implementation as speech engines.
-\item[jvxml.jsapi20.mac]  A value of \texttt{true} will result in a
-configuration that uses the the TTS of MacOS X for speech synthesis.
+\item[JVOICEXML\_IMPLEMENTATION\_JSAPI20] A value of \texttt{true} will enable this implementation
+platform and enable evaluation of the subsequent settings.
+\item[JVOICEXML\_IMPLEMENTATION\_JSAPI20\_FREETTSSPHINX] A value of \texttt{true} will result in a
+configuration that uses FreeTTS and Sphinx4 as speech engines and copy that configuration file to the temporary
+configuration folder.
+\item[JVOICEXML\_IMPLEMENTATION\_JSAPI20\_SAPI]  A value of \texttt{true} will result in a
+configuration that uses the SAPI implementation as speech engines and copy that configuration file to the temporary
+configuration folder.
 \end{description}
 
-\subsubsection{Third party libraries}
-\label{sec:jsapi20-third-party-libr}
+\subsubsection{Implementation Platform Configuration Files}
 
-\begin{description}
-\item[JSAPI 2.0] Version 2.0 \\
-URL \url{http://jsapi.sourceforge.net} \\
-JSAPI 2.0 is being developed within the Java Community Process (JCP)~\cite{jcp}
-under JSR-113~\cite{jcp:jsr113}.
-
-This open source library library provides a framework to ease the development of
-JSAPI 2.0 compliant speech engines. The project also provides custom extensions for
-FreeTTS and sphinx.
-
-Note that the used library is a snapshot from the jsapi SVN repository.
-\item[jlibrtp] Version 0.2 (snapshot)\\
-URL \url{http://jlibrtp.sourceforge.net} \\
-jlibrtp is used to enable streaming of audio data via the RTP protocol.This
-is being used to stream the audio coming from the JSAPI 2.0 compliant
-engines to the client. The project URL is \url{http://jlibrtp.sourceforge.net}.
-
-Note that the used library is a snapshot from the jlibrtp SVN repository.
-\item[FreeTTS] Version 1.2.2 (snapshot)\\
-URL \url{http://freetts.sourceforge.net} \\
-Open source speech synthesis as one option to add TTS capabilities for the JSAPI
-2.0 implementation platform.
-\item[CMU Sphinx 4] Version n/a (snapshot)\\
-URL \url{http://fcmusphinx.sourceforge.net} \\
-Open source speech recognizer from the Carnegie Mellon University as one option
-to add ASR capabilities for the JSAPI 2.0 implementation platform.
-\item[org.jvoicexml.jsapi2.sapi] Version n/a (snapshot) \\
-URL \url{http://jsapi.sourceforge.net} \\
-SAPI 5.4 compatible TTS and ASR engine that makes use of the Microsoft Windows
-speech recognition and speech synthesis capabilities that can be used as an
-implementation for the JSAPI 2.0 implementation platform on Windows systems.
-
-In addition, you will need \texttt{Jsapi2SapiBridge.dll} or
-\texttt{Jsapi2SapiBridge\_x64.dll} in your library path.
-
-\item[org.jvoicexml.jsapi2.mac] Version n/a (snapshot) \\
-URL \url{http://jsapi.sourceforge.net} \\
-Speech synthesis bridge as one option to add TTS capabilities for the JSAPI
-2.0 implementation platform on Mac OSX.
-
-In addition, you will need \texttt{lniJsapi2MacBridge.jnilib} in your library
-path.
-\end{description}
+At runtime, this platform will be enabled if one of the following configuration files is found in the configuration
+folder
+\begin{itemize}
+\item jsapi-20-implementation.xml
+\item jsapi-20-sapi-implementation.xml
+\end{itemize}
 
 \subsection{Project \texttt{org.jvoicexml.implementation.jtapi}}
 
@@ -780,72 +632,82 @@ does not have any speech functionality.
 
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
+The project settings for this subproject can be adapted by the following
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 \begin{lstlisting}
-jtapi.sip.providername=net.sourceforge.gjtapi.raw.mjsip.MjSipProvider
-jtapi.sip.address=127.0.0.1:4242
-jtapi.sip.terminal = sip:jvoicexml@127.0.0.1:4242
-jtapi.sip.port=4242
-jtapi.sip.inputType=jsapi20
-jtapi.sip.outputType=jsapi20
+JVOICEXML_IMPLEMENTATION_JTAPI = false
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PROVIDERNAME = net.sourceforge.gjtapi.raw.mjsip.MjSipProvider
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_ADDRESS = 127.0.0.1:4246
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_TERMINAL = sip:jvoicexml@127.0.0.1:4247
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_PORT = 4246
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_INPUTTYPE = jsapi20
+JVOICEXML_IMPLEMENTATION_JTAPI_SIP_OUTPUTTYPE = jsapi20
 \end{lstlisting}
 
-\subsubsection{Third party libraries}
-\label{sec:jtapi-third-party-libr}
+\subsubsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item mary-implementation.xml
+\end{itemize}
+
+\subsection{Project \texttt{org.jvoicexml.implementation.lightweightbml}}
+
+This implementation provides support for BML JVoiceXML as a lightweight means to show an avatar
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 
 \begin{description}
-\item[JTAPI 1.3] Version 1.3 \\
-URL n/a \\
-The Java Telephony API.
-\item[Generic JTAPI] Version 1.9 RC2 \\
-URL \url{http://gjtapi.sourceforge.net} \\
-GJTAPI is used to simply the use of the JTAPI layer. Besides the core library
-we other providers are required.
-\item[mjsip] Version n/a \\
-URL \url{http://mjsip.org} \\
-MjSIP provides an easy way to have SIP functionality. Unfortunately, this
-project uses the GPL license which makes is unusable in commercial
-applications. It should be replaced by JainSIP.
-\item[jainsip] Version 1.1 \\
-URL n/a \\
-SIP implementation layer that can be used as an alternative to mjsip.
-\item[stun4j] Version n/a \\
-URL n/a
+\item[JVOICEXML\_IMPLEMENTATION\_BML] A value of \texttt{true} will enable this implementation
+platform and copy that configuration file to the temporary configruation folder.
 \end{description}
 
-\subsection{Project \texttt{org.jvoicexml.implementation.marc}}
+\subsubsection{Implementation Platform Configuration Files}
 
-This implementation integrates MARC system into JVoiceXML. This platform
-only provides the output part and is designed to be used with other
-implementation platforms like JSAPI 2.0, see
-section~\ref{sec:implementation-jsapi20}.
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item lightweightbml-implementation.xml
+\end{itemize}
 
-Note that you will need a MARC instance running if you want to use this
-demo. MARC can be downloaded from \url{http://marc.limsi.fr/}.
-
-This implementation platform will allow for the integration of MARC BML commands
-into your VoiceXML files.
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mary}}
 
 This implementation integrates the Mary TTS system into JVoiceXML. It is
-designed to be used with other implementation platforms like JSAPI 1.0, see
-section~\ref{sec:implementation-jsapi10}.
+designed to be used with other implementation platforms like JSAPI 2.0, see
+section~\ref{sec:implementation-jsapi20}.
 
 Note that you will need a Mary 5.1.0  TTS server running if you want to use this
 demo. 
 
-\subsubsection{Third party libraries}
-\label{sec:mary-third-party-libr}
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 
 \begin{description}
-\item[mary client] Version 5.1 \\
-URL \url{http://mary.dfki.de} \\
-Communication of clients like JVoiceXML with the Mary TTS server.
+\item[JVOICEXML\_IMPLEMENTATION\_MARY] A value of \texttt{true} will enable this implementation
+platform and copy that configuration file to the temporary configuration folder.
 \end{description}
+
+\subsubsection{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item mary-implementation.xml
+\end{itemize}
+
 
 \subsection{Project \texttt{org.jvoicexml.implementation.mrcpv2}}
 
@@ -854,103 +716,275 @@ starting phase and currently it is not usable.
 
 This implementation platform requires the presence of an MRCPv2 server. An open
 source solution based on FreeTTS and sphinx 4 can be downloaded from
-\url{http://cairo.sourceforge.net}.
+\url{https://github.com/JVoiceXML/cairo}.
 
 To make use of this implementation platform, JVoiceXML must be called with a SIP
 phone. We used the xlite phone which can be downloaded for free from
 \url{http://www.counterpath.com}.
 
+The MRCPv2 implementation platform comprises several projects as shown in figure~\ref{fig:MRCPv2-implementation-platform-projects}.
+\begin{figure}
+\includegraphics[width=\linewidth]{MRCPv2-implementation-platform-projects.png}
+\caption{MRCPv2 Implementation Platform Projects}
+\label{fig:MRCPv2-implementation-platform-projects}
+\end{figure}
+
+\subsubsection{Depending Subprojects}
+
+This implementation plaform depends on the following projects.
+\begin{itemize}
+\item \texttt{org.jvoicexml.client.mrcpv2}
+\item \texttt{org.jvoicexml.callmanager.sip}
+\end{itemize}
+
 \subsubsection{Project Specific Configuration}
 
-The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
+The project settings for this subproject can be adapted by the following
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 \begin{lstlisting}
-mrcpv2.sip.address=127.0.0.1:4242
-mrcpv2.sip.port=4242
-mrcpv2.sip.cairo.sip.address=sip:cairo@speechforge.org
-mrcpv2.sip.cairo.sip.host=127.0.0.1
-mrcpv2.sip.cairo.sip.port=5050
+JVOICEXML_IMPLEMENTATION_MRCPV2 = false
+JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_ADDRESS = sip:cairogate@127.0.0.1
+JVOICEXML_IMPLEMENTATION_MRCPV2_SIP_PORT = 5090
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_ADDRESS = sip:cairo@127.0.0.1
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_HOST = 127.0.0.1
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_PORT = 15050
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_RCV_RTP_PORT = 42150
+JVOICEXML_IMPLEMENTATION_MRCPV2_CAIRO_BASE_XMIT_RTP_PORT = 42050
 \end{lstlisting}
 
-\subsubsection{Third party libraries}
-\label{sec:mrcpv2-third-party-libr}
+\subsubsection{Implementation Platform Configuration Files}
 
-\paragraph{mrcp4j}
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item mrcpv2-implementation.xml
+\end{itemize}
 
-Mrcp4j provides the core functionality for the MRCPv2 integration.
+\subsubsection{Project \texttt{org.jvoicexml.callmanager.sip}}
 
-\paragraph{Cairo}
+Call manager for the MRCPv2 implementation platform which will be built in case this implementation platform is enabled.
 
-Cairo is required as a means for communication with MRCPv2 resources.
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item sip-callmanager.xml
+\end{itemize}
+ 
+\subsubsection{Project \texttt{org.jvoicexml.client.mrcpv2}}
+
+Client configuration files used by the MRCPv2 implementation platform and the SIP call manager.
 
 \subsection{Project \texttt{org.jvoicexml.implementation.text}}
+\label{sec:text-implemenation-platform}
 
 The text based implementation platform provides a text based input and output.
 This means that you receive the system output as Java strings and you are able
 to provide input via Java strings.
 
-\subsubsection{Third party libraries}
-\label{sec:text-third-party-libr}
+The text implementation platform comprises several projects as shown in figure~\ref{fig:text-implementation-platform-projects}.
+\begin{figure}
+\includegraphics[width=\linewidth]{text-implementation-platform-projects.png}
+\caption{Text Implementation Platform Projects}
+\label{fig:text-implementation-platform-projects}
+\end{figure}
+
+\subsubsection{Depending Subprojects}
+
+This implementation plaform depends on the following projects.
+\begin{itemize}
+\item \texttt{org.jvoicexml.client.txt}
+\item \texttt{org.jvoicexml.callmanager.text}
+\end{itemize}
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
 
 \begin{description}
-\item[protobuf] Version 2.5.0 \\
-URL \url{http://code.google.com/p/protobuf} \\
-Serialization and deserialization of messages sent between clients and
-JVoiceXML.
+\item[JVOICEXML\_IMPLEMENTATION\_TEXT] A value of \texttt{true} will enable this implementation
+platform.
 \end{description}
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item text-implementation.xml
+\end{itemize}
+
+\subsubsection{Project \texttt{org.jvoicexml.callmanger.text}}
+
+This callmanager aims at accessing JVoiceXML as a server for text based
+access under development. In contrast to the text based implementation platform this callmanager
+does not require JNDI.
+
+\paragraph{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation by the following
+properties
+
+\subsubsection{Project \texttt{org.jvoicexml.client.text}}
+
+Client configuration files used by the text implementation platform and the text call manager.
+
+\section{Document Server}
+
+A document server provides access for JVoiceXML to VoiceXML documents, grammar files and 
+other related documents.
+
+\subsection{Project \texttt{org.jvoicexml.documentserver.jetty}}
+
+This document server provides a small document repository based on Jetty. A document repository 
+might be used for storing intermediate documents that are generated while processing a VoiceXML document.
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item jetty-documentrepository.xml
+\end{itemize}
+
+\subsection{org.jvoicexml.documentserver.schemestrategy.file}
+
+Support to access file based resources.
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item file-schemestrategy.xml
+\end{itemize}
+
+\subsection{org.jvoicexml.documentserver.schemestrategy.http}
+
+Support to access HTTP and HTTPS based resources.
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if one of the following configuration files is found in the configuration
+folder
+\begin{itemize}
+\item http-schemestrategy.xml
+\item https-schemestrategy.xml
+\end{itemize}
+
+\section{Data Model}
+
+The data model is a repository for both user- and system-defined data and properties.
+The data model API does not assume any particular underlying
+representation of the data or any specific access language, thus allowing
+implementations to plug in different concrete data model languages.
+
+
+\subsection{Project \texttt{org.jvoicexml.interpreter.datamodel.ecmascript}}
+
+A data model based on ECMAscript.
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item ecmascript-datamodel.xml
+\end{itemize}
+
+\section{Grammars}
+
+JVoiceXML ships with the following grammar beyond what is defined in the VoiceXML specification~\cite{w3.org:voicexml}.
+
+
+\subsection{Project \texttt{org.jvoicexml.interpreter.grammar.luis}}
+
+\subsubsection{Project Specific Configuration}
+
+A grammar extension to communicate with Microsoft LUIS.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item luis-grammar.xml
+\end{itemize}
+
+\subsection{Project \texttt{org.jvoicexml.interpreter.grammar.regex}}
+
+\subsubsection{Project Specific Configuration}
+
+A grammar extension to use regulare expressions as grammar.
+
+\paragraph{Implementation Platform Configuration Files}
+
+At runtime, this platform will be enabled if the following configuration file is found in the configuration
+folder
+\begin{itemize}
+\item regex-grammar.xml
+\end{itemize}
+
+\section {MMI Support}
 
 \subsection{Project \texttt{org.jvoicexml.callmanger.mmi}}
 
 This callmanager allows for accessing JVoiceXML as a modality component in
 the W3C MMI architectural pattern~\cite{w3c:2012:mmi_arch}.
 
-\subsubsection{Third party libraries}
+The MMI support comprises several projects as shown in figure~\ref{fig:MMI-projects}.
+\begin{figure}
+\includegraphics[width=\linewidth]{MMI-projects.png}
+\caption{MMI Projects}
+\label{fig:MMI-projects}
+\end{figure}
 
-This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
-to author MMI compatible events (see section~\ref{sec:mmi-events}).
-Support for VoiceXML snippets is gained by the use of the MMI Servlet
-(see section~\ref{sec:mmi-servlet}).
-In addition an implemention of an Event and Transport Layer is needed.
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject can be adapted by the following 
+properties in your copy of the \texttt{gradle.properties} file in the
+\texttt{\${HOME}/.gradle} folder of the core project (see 
+Appendix~\ref{sec:gradle-properties}):
+
+\begin{description}
+\item[JVOICEXML\_PROFILE\_MMI] A value of \texttt{true} will enable MMI support.
+\item[JVOICEXML\_PROFILE\_MMI\_HTTP] A value of \texttt{true} will use HTTP as ETL
+\item[JVOICEXML\_PROFILE\_MMI\_SOCKET] A value of \texttt{true} will use sockets as ETL
+\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.mmi.http}}
 
 This project contains an implementation of the Event and Transport Layer
 via HTTP. MMI events are received as XML.
 
-\subsubsection{Third party libraries}
-
-This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
-to author MMI compatible events (see section\ref{sec:mmi-events}).
-
-\paragraph{jetty9.2.2}
-
-Used as an embedded HTTP server.
 
 \subsection{Project \texttt{org.jvoicexml.mmi.socket}}
 
 This project contains an implementation of the Event and Transport Layer
 via sockets. MMI events are received as XML.
 
-\subsubsection{Third party libraries}
-
-This platform makes use of the \lstinline{org.jvoicexml.mmi.event} library
-to author MMI compatible events (see section\ref{sec:mmi-events}).
-
-\subsection{Project \texttt{org.jvoicexml.mmi.umundo}}
-
-This project contains an implementation of the Event and Transport Layer
-via umundo\footnote{\url{https://github.com/tklab-tud/umundo}}.
-MMI events are received as protopuf messages.
-
-\subsubsection{Third party libraries}
-
-\begin{description}
-\item[protobuf] Version 2.5.0 \\
-URL \url{http://code.google.com/p/protobuf} \\
-Serialization and deserialization of MMI messages.
-\end{description}
 
 \subsection{Project \texttt{org.jvoicexml.callmanager.mmi.servlet}}
 \label{sec:mmi-servlet}
@@ -962,11 +996,6 @@ or \lstinline{StartRequest} of the MMI events.
 The resulting web archive must be deployed manually to a servlet container
 of your choice (see section \ref{sec:tomcat}).
 
-\subsubsection{Third party libraries}
-
-\paragraph{servlet API}
-
-Servlet API needed for the Servlets.
 
 \subsection{Project \texttt{org.jvoicexml.mmi.events}}
 \label{sec:mmi-events}
@@ -975,45 +1004,7 @@ This project is a library to author MMI compatible events that can be used in
 the MMI architectural pattern from the W3C.
 
 Currently the library is able to generate events in XML format and for
-protobuf~\cite{google:protobuf}. The generation of Java files for protobuf
-support requires the download of the \texttt{protoc} compiler. The \texttt{protoc}
-executable can be downloaded from \url{http://code.google.com/p/protobuf/downloads/list}.
-
-The project settings for this subproject can be adapted by the following ANT
-properties in your copy of the \texttt{ant.properties} file in the
-\texttt{personal-props} folder of the core project (see 
-section~\ref{sec:adapt-ant}):
-\begin{lstlisting}
-mmi.protoc=protoc
-\end{lstlisting}
-
-\subsubsection{Third party libraries}
-
-\begin{description}
-\item[protobuf] Version 2.5.0 \\
-URL \url{http://code.google.com/p/protobuf} \\
-Serialization and deserialization of MMI messages.
-\end{description}
-
-\subsection{Project \texttt{org.jvoicexml.callmanger.sip}}
-
-This callmanager aims at supporting SIP based access to JVoiceXML.
-
-\subsubsection{Third party libraries}
-
-\paragraph{jainsip1.2}
-
-JainSIP provides a SIP stack for Java.
-
-\subsection{Project \texttt{org.jvoicexml.callmanger.text}}
-
-This callmanager aims at accessing JVoiceXML as a server for text based
-access. In contrast to the text based implementation platform this callmanager
-does not require JNDI.
-
-\subsubsection{Third party libraries}
-
-No special libraries.
+protobuf~\cite{google:protobuf}. 
 
 \section{Demo Programs}
 
@@ -1030,15 +1021,17 @@ be embedded into other projects.
 \item[org.jvoicexml.demo.inputdemo] A small cinema application
 \item[org.jvoicexml.demo.jtapidemo] SIP based access to JVoiceXML calling the
 hello world servlet demo (not functional)
-\item[org.jvoicexml.demo.marcdemo] Demo to show how the interaction with MARC.
 \item[org.jvoicexml.demo.mixedinitiativedemo] Demo to show how the mix\-ed
 initiative capabilities.
+\item[org.jvoicexml.mmi.simpledemo] Demo to show MMI capabilities.
 \item[org.jvoicexml.demo.objecttagdemo] Demo to show how the object tag can be
 used.
 \item[org.jvoicexml.demo.recorddemo] Demo for the record tag
 \item[org.jvoicexml.demo.scriptdemo] Demo for scripting functionality with a
 weird dialog flow
+\item[org.jvoicexml.demo.simpleinputdemo] A simple input demo
 \item[org.jvoicexml.demo.subdialogdemo] Demo to show a subdialog
+\item[org.jvoicexml.demo.talkingheaddemo] Demo to show the talking head in action
 \item[org.jvoicexml.demo.textdemo] Demo to show how to use the text platform
 \item[org.jvoicexml.demo.voicexmlcreationdemo] Demo for the VoiceXML XML library
 \end{description}
@@ -1066,16 +1059,21 @@ JVoiceXML plug-in
 \label{voicexml-unit}
 
 This component is an approach to establish unit testing capabilities for
-VoiceXML.
+VoiceXML. VoiceXML unit makes use of the text implementation platform~\ref{sec:text-implemenation-platform}.
+
+It consists of the following projects
+\begin{description}
+\item[org.jvoicexml.voicexmlunit] VoiceXML unit test framewortk
+\item[org.jvoicexml.voicexmlunit.demo] Demo test project
+\end{description}
+
+\subsubsection{Project Specific Configuration}
+
+The project settings for this subproject currently does not support adaptation.
 
 \section{System test}
 
 The system test implements the W3C's conformance test for VoiceXML 2.1.
-
-\begin{description}
-\item[org.jvoicexml.voicexmlunit] VoiceXML unit test framewortk
-\item[org.jvoicexml.voicexmlunit] Demo test project
-\end{description}
 
 In addition you will need the following sub-projects:
 \begin{itemize}
@@ -1093,7 +1091,6 @@ The documentation comprise the following sub-projects:
 \begin{description}
 \item[howtobuild] The how to build JVoiceXML documentation (this document)
 \item[userguide] A tutorial to start working with JVoiceXML
-\item[htdocs] The HTML web pages
 \end{description}
 
 Both guides are written in \LaTeX and you will need to have a \LaTeX compiler
@@ -1190,49 +1187,49 @@ The class comment has to contain the following information:
 The name of the author and the purpose have to be replaced by their proper
 values.
 
+\section{Feature Development and Bugfixes}
+
+The devlopment of JVoiceXML is based on Gitflow. A general description of Gitflow is available
+at \url{https://docs.github.com/en/get-started/quickstart/github-flow} and illustrated in
+figure~\ref{fig:gitflow}.
+\begin{figure}
+\includegraphics[width=\linewidth]{gitflow.png}
+\caption{Gitflow usage}
+\label{fig:gitflow}
+\end{figure}
+
+Each feature or bug must have a corresponding issue entry in JVoiceXML's issue tracker
+at \url{https://github.com/JVoiceXML/JVoiceXML/issues}. A feature branch is created
+per issue and then merged back to develop once it is proven to be working. In order to
+map commit messages to issues, they should be prefixex with \texttt{\#{\textless}issue number{\textgreater}}.
+This allows GitHub to show them in the corresponding issues.
+
 \section{Releases}
 
 This section describes the required steps to create a new release for
 JVoice\-XML.
+Before you start make sure that Java 8 is used as the default JVM.
 
 \subsection{Creation of a Release Workspace}
 
 New releases are \emph{never} built from the workspace to ensure that there are
 no changes in the workspace that are not reflected in the SVN repository.
-Therefore change to an empty directory and copy the following files from the
-\texttt{org.jvoicexml} project to this new folder:
-\begin{enumerate}
-  \item nightly.xml
-  \item all jars from the \texttt{3rdparty/svnant/lib} folder
-\end{enumerate}
-Open a command prompt at this directory and call
-\begin{lstlisting}
-ant -f nightly.xml checkout
-\end{lstlisting}
-
-The next step is to adjust you local settings. This can easily be done by
-copying the contents of the personal-props directory of your development copy
-of JVoiceXML to the personal-props directory of the new copy.
+Therefore change to an empty directory and do a fresh checkout.
 
 
 \subsection{Unit Tests}
 
 There are many unit tests based on JUnit to ensure the correctness of the
 classes written for JVoiceXML. Some tests need customized settings, e.g. to
-start the Mary TTS server. These settings are maintained in the file
-\texttt{config-props/test.properties} and can be overridden with a
-personalized copy in the folder \texttt{personal-props}.
+start the Mary TTS server. These settings are maintained in your local copy of the
+\texttt{gradle.properties}.
 
-The unit tests are started from the core project
-\texttt{org.jvoicexml}. It is the entry point of the unit tests of the various subproject. Therefore, change to the core directory of the release copy and call
+Open a command prompt at this directory and call
 \begin{lstlisting}
-cd org.jvoicexml
-ant -f nightly.xml unittests
+gradelw testClasses
 \end{lstlisting}
-This will take some time. The results of the unit tests of all sub-projects can
-be viewed using your favorite web browser by opening
-\texttt{org.jvoicexml/dist/unittests/html/index.html} after the tests are
-finished. There must not be any errors or failures in the summary. Note that
+
+After the tests are finished. There must not be any errors or failures in the summary. Note that
 some tests require an active Internet connection. 
 
 If you detect any errors correct identify the cause for it, correct them
@@ -1241,44 +1238,22 @@ have been fixed, restart from the beginning to make a new release.
 
 \subsection{Create the Distribution}
 
-After the unit test ran successfully, the binary distribution can be built. The
-ANT script \texttt{distribution.xml} contains the needed targets.
-Update the version number in the file \texttt{config-props/ant.properties}
-and comment the version number in the copy in the folder
-\texttt{personal-props}. The JVoiceXML version number consists of
+After the unit test ran successfully, the binary distribution can be built.
+Update the version number in the project's \texttt{gradle.properties}
+and comment the version number in you local copy of this file.The JVoiceXML version number consists of
 \begin{lstlisting}
- <major-version>.<minor-version>.<bug-fix-level>.<EA|GA>
+ <major-version>.<minor-version>[-SNAPSHOT]
 \end{lstlisting}
-\textbf{E}arly \textbf{A}ccess (EA) versions are intended for intermediate
-versions while \textbf{G}eneral \textbf{A}vailability (GA) versions are the
-main versions that are available for download via the SourceForge file
-downloads.
 
 Create a distribution configuration by calling
 \begin{lstlisting}
-ant -f configuration createDistributionConfiguration
+gradelw :main:distZipt
 \end{lstlisting}
-
-Call
-\begin{lstlisting}
-ant -f distribution.xml
-\end{lstlisting}
-to create the release. Make sure that the Javadoc output does not show any
-errors. In case there are errors, correct them and repeat the creation of the
-distributable.
-
-All intermediate files are stored in the folder \texttt{dist/version}. The
-distributable can be found in the folder of the core project after the
-executing the ANT target.
 
 \subsection{Test the Installation}
 
-Run the installer to install the created distribution.
-\begin{lstlisting}
-java -jar jvxml-install-<version>.jar
-\end{lstlisting}
+Unpack the distribution into a new folder
 Select all available packages and test the installation. 
-Copy the jsapi2.jar to the lib folder of the installed version.
 Start the voice browser and check if there are any errors in the log when
 JVoiceXML starts.
 
@@ -1292,67 +1267,18 @@ the release process from the beginning.
 
 \subsection{Tag the Release}
 
-Commit the ANT properties file with the new version number.
+Commit the gradle properties file with the new version number.
 
-The next step serves to tag the code of the release version. Therefore, you
-will have to supply values for the properties
-\begin{lstlisting}
-svn.username=
-svn.password=
-\end{lstlisting}
-in the ANT properties in the folder \texttt{personal-props}.
-
-Call
-\begin{lstlisting}
-ant -f distribution.xml tag
-\end{lstlisting}
-to create copies of the source code in the SVN folder
-\begin{lstlisting}
-.../<subproject>/tags/<version>
-\end{lstlisting}
+The next step serves to tag the code of the release version. 
 
 \subsection{Upload the Distribution}
 
-The upload comprises two parts:
-\begin{enumerate}
-  \item Javadoc upload
-  \item Release upload
-\end{enumerate}
-
-Uploading requires the following properties in your personal copy of the ANT
-properties:
-\begin{lstlisting}
-nightly.sf.user=
-nightly.sf.password=
-\end{lstlisting}
-
-In order to upload the Javadoc, you first have to create the
-destination folder at SourceForge. The name of the folder is
-\begin{lstlisting}
-/home/groups/j/jv/jvoicexml/htdocs/api/<version>
-\end{lstlisting}
-Make sure that the group can write the new folder and that other can access it.
-The generated documentation can be copied by executing
-\begin{lstlisting}
-ant -f distribution.xml uploadJavadoc
-\end{lstlisting}
-
-The release is uploaded by 
-\begin{lstlisting}
-ant -f distribution.xml upload
-\end{lstlisting}
-
-\subsection{Update of the Website}
-
-The web site needs some adaption to point to the new release when users click
-on the download link. The download links can be found at the page
-\texttt{downloads.html} in the project \texttt{htdocs}. Update the link
-to the new release and commit the changes.
+Uplaod the release to the GitHub home page.
 
 \subsection{Prepare the Further Development}
 
-Prepare the next version by incrementing th version number in the ANT
-properties file in the folder \texttt{config-props} and committing that file.
+Prepare the next version by incrementing the version number in the project's Gradle
+properties file  and committing that file.
 
 \subsection{Creation of Snapshots for Maven}
 
@@ -1363,42 +1289,43 @@ a free repository hosting service using Nexus for open soource projects.
 Therefore deployers are requested to sign up for their servie. Detailed
 instructions are given at \url{https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide}.
 
-Create the file \texttt{settings.xml} in the \texttt{.m2} folder in your
-home directory with the following contents:
+Prepare values for the following properties in your local copy of the Gradle properties.
 
 \begin{lstlisting}[language=XML]
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-         http://maven.apache.org/xsd/settings-1.0.0.xsd">>
-  <servers>
-    <server>
-      <id>sonatype-nexus-snapshots</id>
-      <username>your user name</username>
-      <password>your password</password>
-    </server>
-    <server>
-      <id>sonatype-nexus-staging</id>
-      <username>your user name</username>
-      <password>your password</password>
-    </server>
-  </servers>
-</settings>
+# Settings for signing
+# Currently, signing does not work with PGP 2.1 and newer
+signing.keyId = PGP_SIGNING_KEY
+signing.password = PGP_SIGNING_PASSWORD
+signing.secretKeyRingFile = PGP_SECRET_KEY_RING
+
+# Sonatype credentials
+JVOICEXML_OSSRH_USERNAME=MUST-BE-SUPPLIED-VALUE
+JVOICEXML_OSSRH_PASSWORD=MUST-BE-SUPPLIED-VALUE
 \end{lstlisting}
 
-Insert your user name and your password at the marked entries.
 Afterwards call 
 \begin{lstlisting}
-ant -f distribution.xml dist-maven-snapshot
+gradelw publish
 \end{lstlisting}
-in the core project \lstinline{org.jvoicexml}.
 
 The snapshots will use the SVN version number to differentiate between different
 snapshots of the same jar. Consequently, you will have to have at least
 a commit between two snapshots.
+
 \bibliography{howtobuild}
 \bibliographystyle{plain}
 
+\newpage
+
+\appendix
+
+\section{gradle.properties}
+\label{sec:gradle-properties}
+
+Customizable settings of JVoiceXML. Create a copy of this file in the
+\texttt{\$HOME/.gradle} folder for local modifications.
+
+\lstinputlisting{../gradle.properties}
 
 \end{document}
 
