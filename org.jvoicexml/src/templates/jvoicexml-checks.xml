@@ -26,10 +26,6 @@
         <module name="IllegalImport" />
         <module name="RedundantImport" />
         <module name="UnusedImports" />
-        <module name="LineLength">
-            <property name="ignorePattern"
-                value="\$HeadURL|\$Date|@see|@link|import|a href=" />
-        </module>
         <module name="MethodLength" />
         <module name="ParameterNumber" />
         <module name="EmptyForIteratorPad" />
@@ -82,6 +78,10 @@
             <property name="illegalPattern" value="true" />
             <property name="ignoreComments" value="true" />
         </module>
+    </module>
+    <module name="LineLength">
+        <property name="ignorePattern"
+            value="\$HeadURL|\$Date|@see|@link|import|a href=" />
     </module>
     <module name="JavadocPackage">
         <property name="severity" value="info" />
