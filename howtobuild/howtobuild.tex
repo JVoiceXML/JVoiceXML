@@ -45,7 +45,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \begin{abstract}
 This documents describes the steps you have to perform, when you want
 to build JVoiceXML or develop code for the JVoiceXML project. It gives
-information about the requirements of your development environment 
+information about the the build system, requirements of your development environment 
 and our coding conventions.
 \end{abstract}
 
@@ -61,9 +61,9 @@ JTAPI~\cite{sun:jsapi}.
 VoiceXML was previously hosted at SourceForge~\cite{sourceforge} as an open source project
 under \url{http://sourceforge.net/projects/jvoicexml/}. Now, the code hase been made
 available at GitHub at \url{https://github.com/JVoiceXML/JVoiceXML}.
-You find everything that is related to this project att GitHub.
+You find everything that is related to this project at GitHub.
 
-This document refers to UNIX and Windows systems. JVoiceXML will work 
+This document refers to UNIX and Windows systems. JVoiceXML will work on
 any other operating systems that support Java 8, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
@@ -136,17 +136,15 @@ is built by the project \lstinline{org.jvoicexm.xml}.
 \label{sec:required-software}
 
 Since JVoiceXML is written in JAVA you will at least need a
-JAVA compiler, see section~\ref{sec:ide}, an editor or preferably a JAVA
+JAVA compiler, see section~\ref{sec:java}, an editor or preferably a JAVA
 IDE, see section~\ref{sec:ide}, and Gradle, to build the
-binaries. All used third party libraries can be downloaded from the CVS, SVN or
-comparable repository or from their home pages. The file
-\texttt{doc/libraries.xhtml} contains a list of all used libraries.
-
+binaries. All used third party libraries will be downloaded by the
+Gradle build system, see section~\ref{sec:gradle}.
 
 \subsection{IDE}
 \label{sec:ide}
 
-JVoiceXML is being developed using eclipse 4.6, but you can use the IDE of your
+JVoiceXML is being developed using eclipse, but you can use the IDE of your
 choice to edit the sources and compile the binaries. You can even use a simple
 text editor to perform this job. Nevertheless there are some restriction that
 you cannot work around.
@@ -162,14 +160,13 @@ Your IDE must support
 \label{sec:java}
 
 Parts of the code of JVoiceXML are using features from the JAVA 8 API, so that
-you will need at least JSE 8 to compile the code. You can download it
+you will need at JSE 8 to compile the code. You can download it
 for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
 While newer Java versions are available they are not proven to be supported.
 
 In case you are using another IDE, you will have to manually adapt
-the required library settings, e.g. gor code completion. The dependencies to all
+the required library settings, e.g. for code completion. The dependencies to all
 libraries are listed in \lstinline{JVOICEXML_HOME/doc/libraries.xhtml}.
-
 
 \subsubsection{Eclipse settings}
 \label{sec:eclipse}
@@ -212,14 +209,14 @@ edit the documentation) This will also require an existing \LaTeX installation.
 \texttt{org.jvoicexml.mmi.events} or \texttt{org.jvoicexml.client.text})
 \end{description}
 
-However, the preferred way to install the plugins is via the eclipse market place.
+The preferred way to install the plugins is via the eclipse market place.
 
 \subsection{Gradle}
 \label{sec:gradle}
 
 JVoiceXML is being built by Gradle. It is recommended that
 you use Gradle 6.9.1 as Gradle 7.0 is not yet supported.. 
-If you don't have Gradle installed, you can download the current release
+If you don't have Gradle installed, you can download this release
 from \url{http://www.gradle.org}. This should not be necessary if Gradle is builtin
 your IDE.
 
@@ -326,8 +323,8 @@ Gradle
 \ref{sec:create-configuration})
 \end{description}
 
-Demo projects may have an additional folder \texttt{config} to hold
-configurations settings. 
+Some projects, e.g. demo projects may have an additional folder \texttt{config} to hold
+configurations settings or configuration templates for that project. 
 
 \section{JVoiceXML Core}
 \label{sec:jvoicexml-core}
@@ -345,8 +342,8 @@ The core of JVoiceXML comprises the following sub-projects, also shown in~\ref{f
 \item[org.jvoicexml.client] Client libraries to interacti with JVoiceXML
 remotely.
 \item[org.jvoicexml.jndi] JNDI support for JVoiceXML
-\item[org.jvoicexml.srgs] SRGS processor (required)
-\item[org.jvoicexml.xml] The JVoiceXML XML library (required)
+\item[org.jvoicexml.srgs] SRGS processor 
+\item[org.jvoicexml.xml] The JVoiceXML XML library 
 \end{description}
 
 The most convenient configuration setting is the one for \emph{JSAPI 2.0}. Here,
@@ -397,7 +394,7 @@ This project is the core of the Voice Browser.
 \subsubsection{Creating a Configuration}
 \label{sec:create-configuration}
 
-There are several implementations for the implementation platform available
+There are several variants of implementation platforms available
 that reside in co-projects, refer to section~\ref{sec:git-repository}. Multiple
 implementation platforms can be active at the same time. They will be activated at runtime
 if the corresponding configuration file is found in the config folder.
@@ -415,8 +412,8 @@ Once you changed the settings cd to the main subproject and call
 \begin{lstlisting}
 gradle run
 \end{lstlisting}
-to start the Voice Browser.
-and stopped it by
+to cactivate your configuration and start the Voice Browser.
+You may stop it by
 \begin{lstlisting}
 gradle shutdown
 \end{lstlisting}
@@ -442,7 +439,7 @@ debug JVoiceXML.
 This section explains the most important targets of the main build file
 \texttt{build.gradle} in the main subproject. All others build files from the
 implementation platforms
-are called from this central point. Just start gralde without any target specified
+are called from this central point. Just start gradle without any target specified
 if you want to build everything. Call
 \begin{lstlisting}
 gradle tasks
