@@ -4,10 +4,7 @@
   <local-check-config name="JVoiceXML Checks" location="/org.jvoicexml/src/templates/jvoicexml-checks.xml" type="project" description="">
     <additional-data name="protect-config-file" value="false"/>
   </local-check-config>
-  <fileset name="src" enabled="true" check-config-name="JVoiceXML Checks" local="true">
+  <fileset name="src" enabled="true" check-config-name="JVoiceXML Checkstyle" local="false">
     <file-match-pattern match-pattern="src/main/java/.*\.java$" include-pattern="true"/>
-  </fileset>
-  <fileset name="test" enabled="true" check-config-name="JVoiceXML Checks" local="true">
-    <file-match-pattern match-pattern="src/test/java/.*\.java$" include-pattern="true"/>
   </fileset>
 </fileset-config>
