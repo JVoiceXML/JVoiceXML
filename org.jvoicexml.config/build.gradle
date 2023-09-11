@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
+    id 'checkstyle'
 }
 
 repositories {
@@ -18,6 +19,10 @@ configurations {
     jvxmlConfiguration
 }
 def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
+}
 
 dependencies {
 	jvxmlConfiguration fileTree(jvxmlConfigurationDir)

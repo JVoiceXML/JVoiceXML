@@ -9,6 +9,7 @@ plugins {
     id 'com.github.eerohele.saxon-gradle' version '0.8.0'
     id 'maven-publish'
     id 'signing'
+    id 'checkstyle'
 }
 
 repositories {
@@ -26,6 +27,10 @@ configurations {
 }
 
 def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
+}
 
 dependencies {
     jvxmlConfiguration fileTree(jvxmlConfigurationDir)

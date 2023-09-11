@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
 }
 
 repositories {
@@ -15,6 +16,10 @@ configurations {
 }
 
 def jvxmlConfigurationDir = "${projectDir}/src/main/config"
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
+}
 
 dependencies {
     jvxmlConfiguration fileTree(jvxmlConfigurationDir)

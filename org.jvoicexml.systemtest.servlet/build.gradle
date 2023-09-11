@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'war'
+    id 'checkstyle'
 }
 
 repositories {
@@ -16,6 +17,10 @@ sourceSets {
             exclude '**'
         }
     }
+}
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
 }
 
 dependencies {

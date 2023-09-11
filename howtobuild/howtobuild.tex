@@ -1141,6 +1141,12 @@ The following source sets may be defined where only src is mandatory.
 \item[test] Regular expression to filter test files is \verb!src/test/java/.*\.java$!
 \end{description}
 
+In order ro run checkstyle from the command line execute
+\begin{lstlisting}
+gradle checkstyleMain
+\end{lstlisting}
+
+
 Developers are requested to use the \texttt[language=Java]{@inheritDoc}
 JAVADOC tag in favor of a \texttt[language=Java]{@see} reference for inherited documentation.
 Pros of the \texttt[language=Java]{@inheritDoc} tag, taken 
