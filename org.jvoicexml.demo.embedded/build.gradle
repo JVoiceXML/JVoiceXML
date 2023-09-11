@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
 }
 
 repositories {
@@ -8,6 +9,10 @@ repositories {
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
+}
 
 dependencies {
     if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {

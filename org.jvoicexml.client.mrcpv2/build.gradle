@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
+    id 'checkstyle'
 }
 
 repositories {
@@ -18,6 +19,10 @@ targetCompatibility = 1.8
 
 group = JVOICEXML_GROUP
 version = JVOICEXML_VERSION
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
+}
 
 dependencies {
     compile project(':org.jvoicexml')

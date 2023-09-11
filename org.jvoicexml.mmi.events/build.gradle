@@ -11,6 +11,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
+    id 'checkstyle'
 }
 
 apply plugin: 'com.google.protobuf'
@@ -37,6 +38,10 @@ sourceSets {
             exclude '**'
         }
     }
+}
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
 }
 
 dependencies {

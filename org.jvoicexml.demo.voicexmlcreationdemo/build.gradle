@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
 }
 
 repositories {
@@ -10,6 +11,10 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
+}
 
 dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
