@@ -1116,7 +1116,7 @@ All developers are requested to execute the \emph{checkstyle} target
 of our ANT buildfile, see section~\ref{sec:main-build-file}. 
 There are plug-ins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
-\texttt{etc} and is called \texttt{jvoicexml-checks.xml}.
+\texttt{templates} and is called \texttt{jvoicexml-checks.xml}.
 
 With the help of the checkstyle plugin these tests can be run automatically
 and visualized inside eclipse. Therefore, each project has to be configured to
@@ -1128,6 +1128,18 @@ figure~\ref{fig:eclipse-project-checkstyle}.
 \label{fig:eclipse-project-checkstyle}
 \end{figure}
 
+For the local checks, restrict the checks for the source code sets as shown in
+figure~\ref{fig:eclipse-project-checkstyle-source-sets}. 
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-project-checkstyle-source-sets.png}
+\caption{Source set configurations of checkstyle within eclipse}
+\label{fig:eclipse-project-checkstyle-source-sets}
+\end{figure}
+The following source sets may be defined where only src is mandatory.
+\begin{description}
+\item[src] Regular expression to filter source files is \verb!src/main/java/.*\.java$!
+\item[test] Regular expression to filter test files is \verb!src/test/java/.*\.java$!
+\end{description}
 
 Developers are requested to use the \texttt[language=Java]{@inheritDoc}
 JAVADOC tag in favor of a \texttt[language=Java]{@see} reference for inherited documentation.
