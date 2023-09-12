@@ -231,6 +231,24 @@ public final class TestGrammar {
 
     /**
      * Test method for
+     * {@link org.jvoicexml.xml.srgs.Grammar#getWeight()
+     * 
+     * @exception Exception
+     *                test failed
+     */
+    @Test
+    public void testGetWeight() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        Assert.assertNull(grammar.getWeight());
+        Assert.assertEquals(1.0f, grammar.getWeightAsFloat(), .1f);
+        grammar.setWeight(1.2f);
+        Assert.assertEquals("1.2", grammar.getWeight());
+        Assert.assertEquals(1.2f, grammar.getWeightAsFloat(), .1f);
+    }
+    
+    /**
+     * Test method for
      * {@link org.jvoicexml.xml.srgs.Grammar#Grammar(org.w3c.dom.Node)}.
      * 
      * @exception Exception

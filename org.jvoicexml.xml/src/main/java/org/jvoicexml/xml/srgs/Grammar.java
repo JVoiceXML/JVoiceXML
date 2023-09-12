@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2019 JVoiceXML group
+ * Copyright (C) 2005-2023 JVoiceXML group
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -740,9 +740,26 @@ public final class Grammar
      * @see #ATTRIBUTE_WEIGHT
      */
     public String getWeight() {
-        return getAttribute(ATTRIBUTE_TYPE);
+        return getAttribute(ATTRIBUTE_WEIGHT);
     }
 
+    /**
+     * Retrieve the weight attribute as a float value. 
+     *
+     * @return Value of the weight attribute, {@code 1.0} in case no
+     * weight is specified.
+     * @see #ATTRIBUTE_WEIGHT
+     * @exception NumberFormatException if the obtained weight value is
+     *                  no float.
+     */
+    public float getWeightAsFloat() {
+        final String weight = getWeight();
+        if (weight == null) {
+            return 1.0f;
+        }
+        return Float.parseFloat(weight);
+    }
+    
     /**
      * Set the weight attribute.
      *
@@ -751,6 +768,18 @@ public final class Grammar
      */
     public void setWeight(final String weight) {
         setAttribute(ATTRIBUTE_WEIGHT, weight);
+    }
+
+    /**
+     * Set the weight attribute.
+     *
+     * @param weight Value of the weight attribute.
+     * @see #ATTRIBUTE_WEIGHT
+     * @since 0.7.9
+     */
+    public void setWeight(final float weight) {
+        final String str = Float.toString(weight);
+        setWeight(str);
     }
 
     /**
