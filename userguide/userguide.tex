@@ -94,7 +94,10 @@ any other operating systems that support Java 8, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should be written
-differently or should be added.
+differently or should be added. Please, use the issues at GitHub for any
+such request at \url{https://github.com/JVoiceXML/JVoiceXML/issues}.
+This is also a good source to check for other open issues or limitations
+of JVoiceXML. 
 
 Also, this documentation is still not complete and requires further work.
 Please share your experience with us and help to improve the documentation by
@@ -185,44 +188,54 @@ This approch is described in more detail in section~\ref{cha:callmanager}.
 \label{sec:required-software}
 
 JVoiceXML is written in JAVA and you will at least need a JAVA compiler, an 
-editor or preferably a JAVA IDE, see section~\ref{sec:ide}, and ANT, see 
-section~\ref{sec:ant}, to build and run the binaries for the 
+editor or preferably a JAVA IDE, see section~\ref{sec:ide}, and Gradle, see 
+section~\ref{sec:gradle}, to build and run the binaries for the 
 clients. Tomcat~\cite{apache:tomcat} from the Apache Software Foundation can be
 used as a servlet container.
 
 \subsection{IDE}
 \label{sec:ide}
 
-You can use the IDE of your choice to edit the sources and compile the 
-demos. You can even use a simple text editor to perform this job.
-Nevertheless there are some restriction that you cannot work around.
+JVoiceXML is being developed using eclipse, but you can use the IDE of your
+choice to edit the sources and compile the binaries. You can even use a simple
+text editor to perform this job. Nevertheless there are some restriction that
+you cannot work around.
 
-Your IDE must support at least J2SE 1.7. The demos use ANT 1.7 for compilation. 
-ANT is not required but used as a means of IDE independent project setup.
+Your IDE must support
+\begin{itemize}
+\item JavaSE 8
+\item Gradle 6.9.1
+\end{itemize}
 
 \subsection{JAVA}
 \label{sec:java}
 
-Parts of the code of JVoiceXML are using features from the JAVA 7 API, so that
-you will need at least J2SE 7 to compile the code. You can download it
-for free from \url{http://java.sun.com}.
+Parts of the code of JVoiceXML are using features from the JAVA 8 API, so that
+you will need at JSE 8 to compile the code. You can download it
+for free from \url{http://oracle.com/technetwork/java/javase/downloads/index.html}.
+While newer Java versions are available they are not proven to be supported.
 
 For now, you will need to do some programming to call your applications, but
 this is subject of change in later revisions.
 
-\subsection{ANT}
-\label{sec:ant}
+\subsection{Gradle}
+\label{sec:gradle}
 
-The demos are being built by an ANT build file to keep it IDE independent. It is
-recommended that you use at least ANT 1.7.0. 
-If you don't have ANT installed, you can download the current release
-from \url{http://ant.apache.org}.
+The demos are being built by Gradle. It is recommended that
+you use Gradle 6.9.1 as Gradle 7.0 is not yet supported. 
+If you don't have Gradle installed, you can download this release
+from \url{http://www.gradle.org}. This should not be necessary if Gradle is builtin
+your IDE.
 
-Nearly all IDEs feature an ANT integration. This allows to use the scripts with
-your favorite IDE.
+The build file allows you to override the settings by using a custom 
+properties file \texttt{gradle.properties} in the \texttt{\$\{HOME\}/.gradle}
+directory. This will be referred to as your \emph{your copy} later in this document.
 
-The demos of this user guide do not rely on ANT, so you do not need to install
-ANT if you play with the examples of this user guide.
+Since almost all IDEs feature support for Gradle, at least with the help of plugins, it will be possible to
+use your favorite IDE.
+
+The demos of this user guide do not rely on Gradle, so you do not need to install
+Gradle if you play with the examples of this user guide.
 
 \subsection{Tomcat}
 \label{sec:tomcat}
@@ -245,24 +258,14 @@ additional software as it is described in the following section.
 \section{Installation}
 \label{sec:installation}
 
-You can download the compiled voice browser as \texttt{jvxml-VERSION.zip} from 
-\url{http://jvoicexml.sourceforge.net/downloads.htm}.
-\texttt{VERSION} has to be replaced by the used version number, e.g. 0.7.0.GA.
-Unpack the zipped distribution file and open a command prompt in that
-directory. Call the installer 
+You can download the compiled voice browser as \texttt{jvoicexml-VERSION.zip} from 
+\url{https://github.com/JVoiceXML/JVoiceXML/releases}.
+\texttt{VERSION} has to be replaced by the used version number, e.g. 0.7.9.
+Unpack the zipped distribution file to install the voicebrowser into a directory of your
+choice. In the rest of this document this directory will be referred as \lstinline{JVOICEXML_HOME}.
 
-\begin{lstlisting}
-java -jar jvxml-install-VERSION.jar
-\end{lstlisting}
-
-For windows double-clicking the jar should do the trick. 
-
-This will install the browser into a directory of your choice. In the rest of 
-this document this directory will be referred as \lstinline{JVOICEXML_HOME}.
-
-JVoiceXML is shipped with different implementation platforms. Install only
-those platforms that you intend to use. The configuration issues of each
-platform is described in the following sections.
+JVoiceXML is shipped with different implementation platforms which are all
+active at the same time.
 
 For this user guide, it is recommended to use the text implementation platform
 and the JSAPI 2.0 implementation platform with either the SAPI or the
@@ -272,33 +275,6 @@ can simply create a subfolder \lstinline{unused} in that directory and move the
 unused configuration files to this folder. The configuration files follow the
 naming convention \lstinline{<platform>-implementation.xml}. The following
 section gives a first insight into the available platforms.
-
-\subsection{JSAPI 1.0 implementation platform}
-
-The JSAPI 1.0 implementation platform targets JSAPI 1.0 compliant speech
-recognizers and synthesizers. JVoiceXML offers two speech engines for this
-platform:
-\begin{enumerate}
-  \item Talking Java
-\end{enumerate}
-
-You will need to install at least one of these engines in order to use this
-platform. Note that all options may be displayed, depending on you operating
-system.
-
-Thanks to Jontahan Kinnersley, JVoiceXML ships with the Talking Java hook from
-from \url{http://www.cloudgarden.com}. This copy is free for
-private use. You should buy a license if you use it in a commercial setting.
-
-Talking Java requires an installation of the Microsoft Speech API, which is
-already part of Windows Vista and Windows 7. In order to run it on Windows XP
-you need to install the speech SDK 5.1 for Windows in advance. It can be
-downloaded for free from
-\url{http://www.microsoft.com/downloads/en/details.aspx?FamilyID=5e86ec97-40a7-453f-b0ee-6583171b450}.
-
-Note that Talking Java is not compatible with any other JSAPI platform. This
-means, that you will have to disable other platforms that are built on top of
-JSAPI 1 or 2. Otherwise, the JVM will crash.
 
 \subsection{JSAPI 2.0 implementation platform}
 
@@ -325,18 +301,6 @@ needs some more furhter programming before it actually can be used.
 This implementation platform offers support for the OpenMary speech synthesizer. 
 It requires that you have an installed mary on your computer. OpenMary can be
 downloaded for free from \url{http://mary.dfki.de}.
-
-This platform can be used in addition to other platforms, e.g. JSAPI 2.0 to
-substitute the JSAPI speech synthesizer. Note that you will need to install an
-implementation platform featuring a speech recognizer to start JVoiceXML.
-
-
-\subsection{Marc implementation platform}
-
-This implementation platform offers support for MARC, a talking
-head developed by LIMSI. MARC can be downloaded from 
-\url{http://marc.limsi.fr}. MARC requires that you have an installed mary on
-your computer. OpenMary can be downloaded for free from \url{http://mary.dfki.de}.
 
 This platform can be used in addition to other platforms, e.g. JSAPI 2.0 to
 substitute the JSAPI speech synthesizer. Note that you will need to install an
