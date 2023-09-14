@@ -39,19 +39,19 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  */
 public final class DocumentDescriptor {
     /** Mime type of an XML document. */
-    public final static MimeType MIME_TYPE_XML;
+    public static final MimeType MIME_TYPE_XML;
 
     /** Mime type of an XML document. */
-    public final static MimeType MIME_TYPE_SRGS_XML;
+    public static final MimeType MIME_TYPE_SRGS_XML;
 
     /** MIME type of a JSON formatted document. */
-    public final static MimeType MIME_TYPE_JSON;
+    public static final MimeType MIME_TYPE_JSON;
 
     /** Mime type of a pure text document. */
-    public final static MimeType MIME_TYPE_TEXT_PLAIN;
+    public static final MimeType MIME_TYPE_TEXT_PLAIN;
     
     /** Mime type of a pure text document. */
-    public final static MimeType MIME_TYPE_TEXT_JAVASCRIPT;
+    public static final MimeType MIME_TYPE_TEXT_JAVASCRIPT;
 
     /** The URI of the document. */
     private URI uri;
@@ -202,12 +202,12 @@ public final class DocumentDescriptor {
     
     /**
      * Adds the given parameters to the list of known parameters.
-     * @param parameters the parameters to add
+     * @param params the parameters to add
      * @since 0.7.8
      */
-    public void addParameters(final Map<String, Object> parameters) {
-        for (String key : parameters.keySet()) {
-            final Object value = parameters.get(key);
+    public void addParameters(final Map<String, Object> params) {
+        for (String key : params.keySet()) {
+            final Object value = params.get(key);
             addParamater(key, value);
         }
     }

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -24,9 +19,8 @@
  *
  */
 /**
- * Datamodel for JVoiceXML
+ * Data model for JVoiceXML.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 package org.jvoicexml.interpreter.datamodel;

@@ -37,7 +37,7 @@ final class EventSubscription {
      * @param eventType the type of subscription
      * @param eventSubscriber the associated subscriber
      */
-    public EventSubscription(final String eventType,
+    EventSubscription(final String eventType,
             final EventSubscriber eventSubscriber) {
         type = eventType;
         subscriber = eventSubscriber;

@@ -91,7 +91,7 @@ public class ReadBuffer {
                     done = detector.DoIt(readBuffer, num, false);
                 }
             }
-        } while(num >= 0);
+        } while (num >= 0);
         detector.DataEnd();
         charset = observer.getCharset();
         if (charset != null) {

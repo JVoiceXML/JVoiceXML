@@ -58,7 +58,7 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
      * @param set
      *            the active grammars
      */
-    public GrammarDeactivator(final ImplementationPlatform ip,
+    GrammarDeactivator(final ImplementationPlatform ip,
             final ActiveGrammarSet set) {
         platform = ip;
         grammars = set;
@@ -80,10 +80,11 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
 
     /**
      * Deactivates the given set of grammars.
-     * @param grammars the grammars to deactivate
+     * @param grammarsToDeactivate the grammars to deactivate
      * @since 0.7.9
      */
-    private void deactivateGramars(final Collection<GrammarDocument> grammars) {
+    private void deactivateGramars(
+            final Collection<GrammarDocument> grammarsToDeactivate) {
         if (platform.isClosed()) {
             LOGGER.debug("hungup: skip deactivation of grammars");
             return;
@@ -91,9 +92,10 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
         try {
             final UserInput input = platform.getUserInput();
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("deactivating " + grammars.size() + " grammars...");
+                LOGGER.debug("deactivating " + grammarsToDeactivate.size()
+                + " grammars...");
             }
-            final int num = input.deactivateGrammars(grammars);
+            final int num = input.deactivateGrammars(grammarsToDeactivate);
             LOGGER.info(num + " grammars deactivated");
         } catch (NoresourceError e) {
             LOGGER.error(e.getMessage(), e);

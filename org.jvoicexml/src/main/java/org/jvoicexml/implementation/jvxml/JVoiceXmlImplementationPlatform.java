@@ -651,7 +651,8 @@ public final class JVoiceXmlImplementationPlatform
                         + " stopping system output if bargein is enabled...");
             } else {
                 LOGGER.debug("input started: '" + type.getMode()
-                        + "' trying to stop system output if bargein is enabled...");
+                        + "' trying to stop system output if bargein is"
+                        + " enabled...");
             }
         }
         try {
@@ -903,7 +904,7 @@ public final class JVoiceXmlImplementationPlatform
         // Stop a possibly active recognition
         if (input != null && input.isBusy()) {
             final Collection<ModeType> types =
-                    new java.util.ArrayList<ModeType>();;
+                    new java.util.ArrayList<ModeType>();
             types.add(ModeType.VOICE);
             types.add(ModeType.DTMF);
             input.stopRecognition(types);
@@ -1073,24 +1074,24 @@ public final class JVoiceXmlImplementationPlatform
             final DocumentServer server) 
             throws NoresourceError, ConnectionDisconnectHangupEvent,
                 BadFetchError {
-        final SystemOutput output = getSystemOutput();
+        final SystemOutput outputToUse = getSystemOutput();
         final SessionIdentifier sessionId = session.getSessionId();
-        output.queueSpeakable(speakable, sessionId, server);
+        outputToUse.queueSpeakable(speakable, sessionId, server);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void playPrompts(DocumentServer server,
-            CallControlProperties callProps) throws BadFetchError,
+    public void playPrompts(final DocumentServer server,
+            final CallControlProperties callProps) throws BadFetchError,
             NoresourceError, ConnectionDisconnectHangupEvent {
-        final CallControl call = getCallControl();
-        final SystemOutput output = getSystemOutput();
+        final CallControl callToUse = getCallControl();
+        final SystemOutput outputToUse = getSystemOutput();
         final SessionIdentifier sessionId = session.getSessionId();
         try {
-            call.play(output, callProps);
-            output.playPrompts(sessionId, server, callProps);
+            callToUse.play(output, callProps);
+            outputToUse.playPrompts(sessionId, server, callProps);
         } catch (IOException e) {
             throw new BadFetchError("error playing to calling device", e);
         }

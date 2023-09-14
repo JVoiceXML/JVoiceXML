@@ -65,7 +65,8 @@ final class SubdialogExecutorThread extends Thread {
     /** Parameters of the subdialog call. */
     private final Map<String, Object> parameters;
 
-    final DataModel sourceModel;
+    /** The model of the originating context. */
+    private final DataModel sourceModel;
     
     /**
      * Constructs a new object.
@@ -81,6 +82,8 @@ final class SubdialogExecutorThread extends Thread {
      * @param bus
      *            the event bus of the calling context to correctly propagate
      *            messages
+     * @param model
+     *            the data model of the originating context
      */
     SubdialogExecutorThread(final URI subdialogUri,
             final VoiceXmlInterpreterContext subdialogContext,
@@ -157,10 +160,11 @@ final class SubdialogExecutorThread extends Thread {
 
     /**
      * Unregisters a return event handler.
-     * @return the handler to unregister
+     * @param handler the handler to unregister
      * @since 0.7.9
      */
-    private void unregisterReturnEventHandler(final ReturnEventHandler handler) {
+    private void unregisterReturnEventHandler(
+            final ReturnEventHandler handler) {
         final EventBus bus = context.getEventBus();
         bus.unsubscribe(ReturnEvent.EVENT_TYPE, handler);
     }

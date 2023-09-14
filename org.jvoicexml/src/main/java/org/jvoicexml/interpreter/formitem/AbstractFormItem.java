@@ -99,7 +99,7 @@ abstract class AbstractFormItem
      * @since 0.7.6
      */
     public abstract AbstractFormItem newInstance(
-            final VoiceXmlInterpreterContext ctx, final VoiceXmlNode voiceNode);
+            VoiceXmlInterpreterContext ctx, VoiceXmlNode voiceNode);
 
     /**
      * {@inheritDoc}
@@ -181,7 +181,7 @@ abstract class AbstractFormItem
                 || (result == null)) && cond;
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("checking if '" + name +"' is selectable");
+            LOGGER.debug("checking if '" + name + "' is selectable");
             final String logResult = model.toString(result);
             LOGGER.debug("value of   '" + name + "': '" + logResult + "'");
             LOGGER.debug("cond of    '" + name + "': '" + cond + "'");
@@ -229,12 +229,14 @@ abstract class AbstractFormItem
             return null;
         }
 
-        final Collection<AbstractCatchElement> catches = new java.util.ArrayList<AbstractCatchElement>();
+        final Collection<AbstractCatchElement> catches =
+                new java.util.ArrayList<AbstractCatchElement>();
         final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             if (child instanceof AbstractCatchElement) {
-                final AbstractCatchElement catchElement = (AbstractCatchElement) child;
+                final AbstractCatchElement catchElement = 
+                        (AbstractCatchElement) child;
                 catches.add(catchElement);
             }
         }
@@ -250,7 +252,8 @@ abstract class AbstractFormItem
             return null;
         }
 
-        final Collection<VoiceXmlNode> nodes = new java.util.ArrayList<VoiceXmlNode>();
+        final Collection<VoiceXmlNode> nodes =
+                new java.util.ArrayList<VoiceXmlNode>();
         final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
