@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -44,5 +39,5 @@ public interface DialogFactory {
      * @param vxml the document.
      * @return collection of all  {@link Dialog}s.
      */
-    Collection<Dialog> getDialogs(final Vxml vxml);
+    Collection<Dialog> getDialogs(Vxml vxml);
 }

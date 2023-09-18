@@ -175,7 +175,8 @@ public final class InitialFormItem extends AbstractControlItem
      * {@inheritDoc}
      */
     @Override
-    public void init(final DataModel model) throws SemanticError, BadFetchError {
+    public void init(final DataModel model) throws SemanticError,
+        BadFetchError {
         // Create the variable
         final String name = getName();
         final Object expression = evaluateExpression(model);

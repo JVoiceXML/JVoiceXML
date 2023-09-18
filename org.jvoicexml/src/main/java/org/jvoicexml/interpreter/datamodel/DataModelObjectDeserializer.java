@@ -25,7 +25,7 @@ import javax.activation.MimeType;
 import org.jvoicexml.event.error.SemanticError;
 
 /**
- * Deserializer for objects that have been received from external systems
+ * Deserializer for objects that have been received from external systems.
  * 
  * @author Dirk Schnelle-Walka
  * @since 0.7.9

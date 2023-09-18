@@ -80,9 +80,9 @@ public interface EventHandler
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param document the document to inspect.
      */
-    void collect(final VoiceXmlInterpreterContext context,
-                 final VoiceXmlInterpreter interpreter,
-                 final VoiceXmlDocument document);
+    void collect(VoiceXmlInterpreterContext context,
+                 VoiceXmlInterpreter interpreter,
+                 VoiceXmlDocument document);
 
     /**
      * Adds all event handlers defined in the given dialog.
@@ -90,9 +90,9 @@ public interface EventHandler
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param dialog the dialog to inspect.
      */
-    void collect(final VoiceXmlInterpreterContext context,
-                 final VoiceXmlInterpreter interpreter,
-                 final Dialog dialog);
+    void collect(VoiceXmlInterpreterContext context,
+                 VoiceXmlInterpreter interpreter,
+                 Dialog dialog);
 
     /**
      * Adds all event handlers defined in the given input item.
@@ -102,17 +102,17 @@ public interface EventHandler
      * @param item the form item to inspect.
      * @return added event handlers
      */
-    Collection<EventStrategy> collect(final VoiceXmlInterpreterContext context,
-                 final VoiceXmlInterpreter interpreter,
-                 final FormInterpretationAlgorithm fia,
-                 final CatchContainer item);
+    Collection<EventStrategy> collect(VoiceXmlInterpreterContext context,
+                 VoiceXmlInterpreter interpreter,
+                 FormInterpretationAlgorithm fia,
+                 CatchContainer item);
 
     /**
      * Removes all event handlers that were collected for the given form item.
      * @param item the form item
      * @since 0.7.4
      */
-    void clean(final FormItem item);
+    void clean(FormItem item);
 
     /**
      * Waits until an event was generated in the implementation platform.
@@ -134,7 +134,7 @@ public interface EventHandler
      *            Error or event processing the event or there was no handler
      *            to process the current event
      */
-    void processEvent(final CatchContainer item, final JVoiceXMLEvent event)
+    void processEvent(CatchContainer item, JVoiceXMLEvent event)
             throws JVoiceXMLEvent;
 
     /**
@@ -150,7 +150,7 @@ public interface EventHandler
      * @param strategy the strategy to add.
      * @return <code>true</code> if the strategy was added.
      */
-    boolean addStrategy(final EventStrategy strategy);
+    boolean addStrategy(EventStrategy strategy);
 
     /**
      * Removes the given strategies.
@@ -158,5 +158,5 @@ public interface EventHandler
      * @return {@code true} if at least one strategy was removed
      * @since 0.7.2
      */
-    boolean removeStrategies(final Collection<EventStrategy> strategies);
+    boolean removeStrategies(Collection<EventStrategy> strategies);
 }

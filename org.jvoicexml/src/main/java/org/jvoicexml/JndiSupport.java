@@ -41,7 +41,7 @@ public interface JndiSupport {
      * the JNDI support is started by the core interpreter.
      * @param jvxml the interpreter.
      */
-    void setJVoiceXml(final JVoiceXml jvxml);
+    void setJVoiceXml(JVoiceXml jvxml);
 
     /**
      * Stops the service.

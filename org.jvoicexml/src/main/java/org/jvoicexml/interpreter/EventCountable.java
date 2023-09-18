@@ -74,14 +74,14 @@ public interface EventCountable {
      * given event or have a name that is a prefix of the given event.
      * @param event Event to increment.
      */
-    void incrementEventCounter(final JVoiceXMLEvent event);
+    void incrementEventCounter(JVoiceXMLEvent event);
 
     /**
      * Retrieve the counter for the given event type.
      * @param type Event type.
      * @return Count for the given event type.
      */
-     int getEventCount(final String type);
+     int getEventCount(String type);
 
     /**
      * Reset the counter for all events.

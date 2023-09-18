@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -78,6 +73,6 @@ public interface EventStrategy {
      * @exception JVoiceXMLEvent
      *            Error or event processing the current tag.
      */
-    void process(final JVoiceXMLEvent event)
+    void process(JVoiceXMLEvent event)
             throws JVoiceXMLEvent;
 }

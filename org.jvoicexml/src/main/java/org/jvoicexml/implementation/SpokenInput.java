@@ -176,16 +176,19 @@ public interface SpokenInput extends ExternalResource, InputDevice {
      * @exception NoresourceError
      *                the input resource is not available.
      * @exception IOException
-     *                error reading the grammar. Will be converted into {@link BadFetchError}
+     *                error reading the grammar. Will be converted into
+     *                {@link BadFetchError}
      * @exception UnsupportedFormatError
      *                invalid grammar format.
      * @exception SemanticError
      *                semantic error in the grammar file
      * @exception NoauthorizationError
-     *                 the grammar could not be loaded because of security constraints
+     *                 the grammar could not be loaded because of security
+     *                 constraints
      */
     GrammarImplementation<?> loadGrammar(URI uri, GrammarType type)
-            throws NoresourceError, IOException, UnsupportedFormatError, SemanticError, NoauthorizationError;
+            throws NoresourceError, IOException, UnsupportedFormatError, 
+                SemanticError, NoauthorizationError;
 
     /**
      * Retrieves the barge-in types supported by this <code>UserInput</code>.

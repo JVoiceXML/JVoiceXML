@@ -38,13 +38,13 @@ class ReturnEventHandler implements EventSubscriber {
     private static final Logger LOGGER = LogManager
             .getLogger(ReturnEventHandler.class);
 
-    /** The caught return event, */
+    /** The caught return event. */
     private ReturnEvent event;
 
     /**
      * Constructs a new object.
      */
-    public ReturnEventHandler() {
+    ReturnEventHandler() {
     }
 
     /**

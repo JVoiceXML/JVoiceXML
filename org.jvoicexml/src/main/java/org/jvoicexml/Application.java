@@ -57,7 +57,7 @@ public interface Application {
      *                error in the document.
      * @since 0.6
      */
-    void addDocument(final URI uri, final VoiceXmlDocument doc)
+    void addDocument(URI uri, VoiceXmlDocument doc)
             throws BadFetchError;
 
     /**
@@ -94,7 +94,7 @@ public interface Application {
      * @exception BadFetchError
      *                error in the document.
      */
-    void setRootDocument(final VoiceXmlDocument document) throws BadFetchError;
+    void setRootDocument(VoiceXmlDocument document) throws BadFetchError;
 
     /**
      * Checks, if the document with the given <code>uri</code> is loaded.
@@ -103,7 +103,7 @@ public interface Application {
      *            the URI to check.
      * @return <code>true</code> if the document is loaded.
      */
-    boolean isLoaded(final URI uri);
+    boolean isLoaded(URI uri);
 
     /**
      * Retrieves the base URI.
@@ -122,7 +122,7 @@ public interface Application {
      * @throws BadFetchError
      *          if the URI cannot be resolved
      */
-    URI resolve(final URI uri) throws BadFetchError;
+    URI resolve(URI uri) throws BadFetchError;
 
     /**
      * Converts the given {@link URI} into a hierarchical URI. If the given
@@ -137,5 +137,5 @@ public interface Application {
      * @throws BadFetchError
      *          if the URI cannot be resolved
      */
-    URI resolve(final URI baseUri, final URI uri) throws BadFetchError;
+    URI resolve(URI baseUri, URI uri) throws BadFetchError;
 }

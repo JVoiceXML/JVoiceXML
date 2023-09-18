@@ -228,10 +228,12 @@ final class JVoiceXmlUserInput implements UserInput, SpokenInputProvider {
      * @exception SemanticError
      *                semantic error in the grammar file
      * @exception NoauthorizationError
-     *                 the grammar could not be loaded because of security constraints
+     *                 the grammar could not be loaded because of security
+     *                 constraints
      */
     private GrammarImplementation<?> loadGrammar(final GrammarDocument document)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError, SemanticError, NoauthorizationError {
+            throws NoresourceError, BadFetchError, UnsupportedFormatError,
+                SemanticError, NoauthorizationError {
         final URI uri = document.getURI();
 
         // Check if the grammar has already been loaded

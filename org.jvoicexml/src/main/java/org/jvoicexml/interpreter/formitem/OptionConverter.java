@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -34,7 +29,6 @@ import org.jvoicexml.xml.vxml.Option;
 /**
  * Converts a set of <code>&lt;option&gt;</code> nodes into a grammar.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 public interface OptionConverter {
@@ -44,13 +38,12 @@ public interface OptionConverter {
      * @param language the language to use
      * @return created grammar, <code>null</code> if there is no voice grammar. 
      */
-    Grammar createVoiceGrammar(final Collection<Option> options,
-            final Locale language);
+    Grammar createVoiceGrammar(Collection<Option> options, Locale language);
 
     /**
      * Creates a DTMF grammar from the given options.
      * @param options the options to transfer into a DTMF grammar
      * @return created grammar, <code>null</code> if there is no DTMF grammar. 
      */
-    Grammar createDtmfGrammar(final Collection<Option> options);
+    Grammar createDtmfGrammar(Collection<Option> options);
 }

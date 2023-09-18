@@ -1,10 +1,4 @@
 /*
- * File:    $RCSfile: FormItemVisitable.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -46,6 +40,6 @@ public interface FormItemVisitable {
      * @exception JVoiceXMLEvent
      *            Error or event visiting the form item.
      */
-    void accept(final FormItemVisitor visitor)
+    void accept(FormItemVisitor visitor)
             throws JVoiceXMLEvent;
 }

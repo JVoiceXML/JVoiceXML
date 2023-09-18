@@ -141,7 +141,7 @@ public final class Connection implements EventSubscriber {
      * {@inheritDoc}
      */
     @Override
-    public void onEvent(JVoiceXMLEvent event) {
+    public void onEvent(final JVoiceXMLEvent event) {
         final String eventType = event.getEventType();
         if (!eventType.startsWith(ConnectionDisconnectEvent.EVENT_TYPE)) {
             return;

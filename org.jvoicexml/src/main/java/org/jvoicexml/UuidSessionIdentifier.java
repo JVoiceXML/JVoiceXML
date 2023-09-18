@@ -32,7 +32,7 @@ public class UuidSessionIdentifier implements SessionIdentifier {
     /** The serial version UID. */
     private static final long serialVersionUID = -7232508857573720831L;
     
-    /** The session identifier */
+    /** The session identifier. */
     private final UUID uuid;
     
     /**

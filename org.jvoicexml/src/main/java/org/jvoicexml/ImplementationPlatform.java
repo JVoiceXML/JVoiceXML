@@ -73,8 +73,9 @@ public interface ImplementationPlatform {
      *                A URI within the speakable could not be obtained or a
      *                parsing error occurred.
      */
-    void queuePrompt(final SpeakableText speakable, final DocumentServer server)
-            throws BadFetchError, NoresourceError, ConnectionDisconnectHangupEvent;
+    void queuePrompt(SpeakableText speakable, DocumentServer server)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent;
 
     
     /**
@@ -89,8 +90,7 @@ public interface ImplementationPlatform {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    void playPrompts(final DocumentServer server, 
-            final CallControlProperties callProps)
+    void playPrompts(DocumentServer server, CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent;
     

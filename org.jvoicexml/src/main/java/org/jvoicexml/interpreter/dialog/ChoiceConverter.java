@@ -49,6 +49,6 @@ public interface ChoiceConverter {
      * @return the updated converted choice
      * @since 0.7.5
      */
-    ConvertedChoiceOption convertChoice(final Choice choice,
-            final ModeType mode, final ConvertedChoiceOption converted);
+    ConvertedChoiceOption convertChoice(Choice choice,
+            ModeType mode, ConvertedChoiceOption converted);
 }

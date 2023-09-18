@@ -21,6 +21,7 @@
 package org.jvoicexml.implementation;
 
 import java.net.URI;
+import java.util.Objects;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -60,14 +61,26 @@ public final class DocumentGrammarImplementation
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        if (document == null) {
-            result = prime * result;
-        } else {
-            result = prime * result + document.hashCode();
+        return Objects.hash(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
         }
-        return result;
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        DocumentGrammarImplementation other = 
+                (DocumentGrammarImplementation) obj;
+        return Objects.equals(document, other.document);
     }
 
     /**

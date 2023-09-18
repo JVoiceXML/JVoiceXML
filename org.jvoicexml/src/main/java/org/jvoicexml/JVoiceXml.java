@@ -58,8 +58,7 @@ public interface JVoiceXml {
      * @exception ErrorEvent
      *            Error creating the session.
      */
-    Session createSession(final ConnectionInformation info,
-            final SessionIdentifier id)
+    Session createSession(ConnectionInformation info, SessionIdentifier id)
             throws ErrorEvent;
     
     /**

@@ -417,7 +417,7 @@ public class JVoiceXmlSession extends Thread
     }
 
     /**
-     * Log some info that the application hast been called
+     * Log some info that the application has been called.
      * 
      * @since 0.7.9
      */

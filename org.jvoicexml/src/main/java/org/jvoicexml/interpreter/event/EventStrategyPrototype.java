@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -51,9 +46,9 @@ interface EventStrategyPrototype extends EventStrategy {
      * @return new event strategy.
      * @since 0.7
      */
-    EventStrategy newInstance(final VoiceXmlInterpreterContext ctx,
-            final VoiceXmlInterpreter interpret,
-            final FormInterpretationAlgorithm algorithm,
-            final FormItem formItem);
+    EventStrategy newInstance(VoiceXmlInterpreterContext ctx,
+            VoiceXmlInterpreter interpret,
+            FormInterpretationAlgorithm algorithm,
+            FormItem formItem);
 
 }

@@ -53,8 +53,8 @@ public interface DocumentRepository {
      * @exception URISyntaxException
      *                error generating the URI for the document
      */
-    URI addGrammarDocument(final SessionIdentifier sessionId,
-            final GrammarDocument document) throws URISyntaxException;
+    URI addGrammarDocument(SessionIdentifier sessionId,
+            GrammarDocument document) throws URISyntaxException;
 
     /**
      * Resolves the given URI of a builtin grammar to an URI that can be
@@ -62,7 +62,7 @@ public interface DocumentRepository {
      * @param uri the builtin URI
      * @return the resolved URI
      */
-    URI resolveBuiltinUri(final URI uri);
+    URI resolveBuiltinUri(URI uri);
     
     /**
      * Notification that the given session is closed. Now the document
@@ -71,7 +71,7 @@ public interface DocumentRepository {
      * @param sessionId
      *            the Id of the current JVoiceXML session.
      */
-    void sessionClosed(final SessionIdentifier sessionId);
+    void sessionClosed(SessionIdentifier sessionId);
 
     /**
      * Stops this document repository.

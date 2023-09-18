@@ -90,5 +90,5 @@ public interface GrammarImplementation<T> {
      * @return <code>true</code> if the grammar implementations are equal.
      * @since 0.7.2
      */
-    boolean equals(final GrammarImplementation<T> other);
+    boolean equals(GrammarImplementation<T> other);
 }
