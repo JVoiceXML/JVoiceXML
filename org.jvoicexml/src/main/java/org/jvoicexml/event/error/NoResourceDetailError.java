@@ -84,7 +84,8 @@ public class NoResourceDetailError extends NoresourceError {
      * @param cause
      *        The cause.
      */
-    public NoResourceDetailError(final String det, final String message, final Throwable cause) {
+    public NoResourceDetailError(final String det, final String message,
+            final Throwable cause) {
         super(message, cause);
         detail = det;
     }

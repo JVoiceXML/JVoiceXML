@@ -35,5 +35,5 @@ public interface SessionIdentifierFactory<T> {
      * @param sessionId the Id of the current JVoiceXML session
      * @return new session identifier.
      */
-    T createSessionIdentifier(final SessionIdentifier sessionId);
+    T createSessionIdentifier(SessionIdentifier sessionId);
 }

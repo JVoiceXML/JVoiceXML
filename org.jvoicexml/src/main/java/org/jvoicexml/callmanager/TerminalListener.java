@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -29,7 +24,6 @@ package org.jvoicexml.callmanager;
 /**
  * A listener to terminal events.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 
@@ -39,14 +33,13 @@ public interface TerminalListener {
      * @param terminal the connected terminal.
      * @param parameters additional call parameters
      */
-    void terminalConnected(final Terminal terminal,
-            final CallParameters parameters);
+    void terminalConnected(Terminal terminal, CallParameters parameters);
 
     /**
      * A connection has been disconnected with the given terminal.
      * @param terminal the disconnected terminal.
      */
-    void terminalDisconnected(final Terminal terminal);
+    void terminalDisconnected(Terminal terminal);
 
     /**
      * An error has occurred while interacting with the terminal.
@@ -55,6 +48,5 @@ public interface TerminalListener {
      * @param cause the error cause.
      * @since 0.7.5
      */
-    void terminalError(final Terminal terminal, final String message,
-            final Throwable cause);
+    void terminalError(Terminal terminal, String message, Throwable cause);
 }

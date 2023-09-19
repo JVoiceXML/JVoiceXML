@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -30,7 +25,6 @@ package org.jvoicexml.interpreter.scope;
  * A listener for scope changes.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @since 0.3
  */
@@ -41,7 +35,7 @@ public interface ScopeSubscriber {
      * @param previous the old scope.
      * @param next The new scope.
      */
-    void enterScope(final Scope previous, final Scope next);
+    void enterScope(Scope previous, Scope next);
 
     /**
      * The application has left the <code>previous</code> scope and the
@@ -49,5 +43,5 @@ public interface ScopeSubscriber {
      * @param previous the old scope.
      * @param next the new scope.
      */
-    void exitScope(final Scope previous, final Scope next);
+    void exitScope(Scope previous, Scope next);
 }

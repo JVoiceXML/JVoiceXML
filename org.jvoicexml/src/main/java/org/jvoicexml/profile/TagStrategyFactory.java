@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -40,7 +35,6 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.profile.TagStrategy
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public interface TagStrategyFactory {
     /**
@@ -60,7 +54,7 @@ public interface TagStrategyFactory {
      * @return Strategy, to process the given node, <code>null</code> if there
      *         is no suitable strategy.
      */
-    TagStrategy getTagStrategy(final Node node);
+    TagStrategy getTagStrategy(Node node);
 
     /**
      * Factory method to get a strategy to process a node with the given name.
@@ -70,5 +64,5 @@ public interface TagStrategyFactory {
      * @return Strategy, to process a node with the given name,
      *         <code>null</code> if there is no suitable strategy.
      */
-    TagStrategy getTagStrategy(final String tag);
+    TagStrategy getTagStrategy(String tag);
 }

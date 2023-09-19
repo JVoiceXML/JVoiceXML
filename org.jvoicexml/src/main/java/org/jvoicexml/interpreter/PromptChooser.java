@@ -131,7 +131,8 @@ final class PromptChooser {
      * @return List of prompts.
      */
     private Collection<VoiceXmlNode> findAllPrompts() {
-        final Collection<VoiceXmlNode> prompts = new java.util.ArrayList<VoiceXmlNode>();
+        final Collection<VoiceXmlNode> prompts =
+                new java.util.ArrayList<VoiceXmlNode>();
         final VoiceXmlNode node = countable.getNode();
         final Collection<VoiceXmlNode> children = node.getChildren();
         for (VoiceXmlNode child : children) {
@@ -161,7 +162,8 @@ final class PromptChooser {
      */
     private Collection<VoiceXmlNode> filterCond(
             final Collection<VoiceXmlNode> prompts) throws SemanticError {
-        final Collection<VoiceXmlNode> filteredPrompts = new java.util.ArrayList<VoiceXmlNode>();
+        final Collection<VoiceXmlNode> filteredPrompts =
+                new java.util.ArrayList<VoiceXmlNode>();
         final DataModel model = context.getDataModel();
         for (VoiceXmlNode node : prompts) {
             if (node instanceof Prompt) {
@@ -224,7 +226,8 @@ final class PromptChooser {
      */
     private Collection<VoiceXmlNode> filterCount(
             final Collection<VoiceXmlNode> prompts, final int count) {
-        final Collection<VoiceXmlNode> filteredPrompts = new java.util.ArrayList<VoiceXmlNode>();
+        final Collection<VoiceXmlNode> filteredPrompts =
+                new java.util.ArrayList<VoiceXmlNode>();
         for (VoiceXmlNode node : prompts) {
             final int currentCount;
             if (node instanceof Prompt) {

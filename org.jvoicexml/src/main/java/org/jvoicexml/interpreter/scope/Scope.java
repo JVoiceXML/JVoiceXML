@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -30,7 +25,6 @@ package org.jvoicexml.interpreter.scope;
  * Scope.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.3
  */
 public enum Scope {
@@ -73,7 +67,7 @@ public enum Scope {
      * Do not create from outside.
      * @param scope Name of the scope.
      */
-    private Scope(final String scope) {
+    Scope(final String scope) {
         name = scope;
     }
 

@@ -175,8 +175,8 @@ public class DtmfRecognizerProperties {
     }
 
     /**
-    /* Retrieves the duration when recognition is started and there is no DTMF input
-     * detected.
+    /* Retrieves the duration when recognition is started and there is no DTMF
+     * input detected.
      * @return the no input timeout
      */
     public final long getTimeoutAsMsec() {
@@ -194,8 +194,8 @@ public class DtmfRecognizerProperties {
     }
 
     /**
-    /* Sets the the duration when recognition is started and there is no DTMF input
-     * detected.
+    /* Sets the the duration when recognition is started and there is no DTMF
+     * input detected.
      * @param value the no input timeout to set as a time designation
      */
     public final void setTimeout(final long value) {

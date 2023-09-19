@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -28,7 +23,6 @@ package org.jvoicexml;
 /**
  * A listener for the {@link Session}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public interface SessionListener {
@@ -37,11 +31,11 @@ public interface SessionListener {
      * @param session the session
      * @since 0.7.5
      */
-    void sessionStarted(final Session session);
+    void sessionStarted(Session session);
 
     /**
      * Notification that the session has ended.
      * @param session the session.
      */
-    void sessionEnded(final Session session);
+    void sessionEnded(Session session);
 }

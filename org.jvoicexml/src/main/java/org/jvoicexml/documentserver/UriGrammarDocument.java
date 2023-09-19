@@ -160,7 +160,7 @@ public class UriGrammarDocument implements GrammarDocument {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

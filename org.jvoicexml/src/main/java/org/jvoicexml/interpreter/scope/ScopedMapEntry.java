@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -31,7 +26,6 @@ import java.util.Map;
 /**
  * An entry of the scoped map.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  * @param <K> key type
  * @param <V> value type
@@ -48,7 +42,7 @@ class ScopedMapEntry<K, V> implements Map.Entry<K, V> {
      * @param k the key.
      * @param scopedMap the underlying map
      */
-    public ScopedMapEntry(final K k, final ScopedMap<K, V> scopedMap) {
+    ScopedMapEntry(final K k, final ScopedMap<K, V> scopedMap) {
         key = k;
         map = scopedMap;
     }

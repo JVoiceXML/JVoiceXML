@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -34,7 +29,6 @@ import org.jvoicexml.ConnectionInformation;
  * {@link ConnectionInformation}. This factory allows to create those custom
  * implementations for use with a {@link Terminal}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
  */
 public interface TerminalConnectionInformationFactory {
@@ -48,8 +42,8 @@ public interface TerminalConnectionInformationFactory {
      *            error creating theconnection information
      */
     ConnectionInformation createConnectionInformation(
-            final CallManager callManager,
-            final ConfiguredApplication application,
-            final CallParameters parameters)
+            CallManager callManager,
+            ConfiguredApplication application,
+            CallParameters parameters)
         throws ConnectionInformationCreationException;
 }

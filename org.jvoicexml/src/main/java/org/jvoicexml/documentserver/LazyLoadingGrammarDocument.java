@@ -239,7 +239,7 @@ public class LazyLoadingGrammarDocument implements GrammarDocument {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -254,7 +254,7 @@ public class LazyLoadingGrammarDocument implements GrammarDocument {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(GrammarDocument obj) {
+    public boolean equals(final GrammarDocument obj) {
         if (!(obj instanceof LazyLoadingGrammarDocument)) {
             return false;
         }

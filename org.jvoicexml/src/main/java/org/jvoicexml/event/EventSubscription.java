@@ -20,6 +20,8 @@
  */
 package org.jvoicexml.event;
 
+import java.util.Objects;
+
 /**
  * A subscription for a specific event type.
  * @author Dirk Schnelle-Walka
@@ -85,12 +87,7 @@ final class EventSubscription {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((subscriber == null) ? 0 : subscriber.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
+        return Objects.hash(subscriber, type);
     }
 
     /**

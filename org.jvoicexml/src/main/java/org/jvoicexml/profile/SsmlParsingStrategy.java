@@ -57,7 +57,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * <li>
  * {@link #evalAttributes(VoiceXmlInterpreterContext)}
  * <br>
- * Evaluate attributes, that need to be evaluated by the current script context</li>
+ * Evaluate attributes, that need to be evaluated by the current script context
+ * </li>
  * <li>
  * {@link #validateAttributes(DataModel)}<br>
  * Check, if all necessary information are present.</li>
@@ -100,8 +101,8 @@ public interface SsmlParsingStrategy extends Cloneable {
      * @param node
      *            The node to process.
      */
-    void getAttributes(final VoiceXmlInterpreterContext context,
-            final FormInterpretationAlgorithm fia, final VoiceXmlNode node);
+    void getAttributes(VoiceXmlInterpreterContext context,
+            FormInterpretationAlgorithm fia, VoiceXmlNode node);
 
     /**
      * Evaluates all attributes which have to be evaluated by the scripting
@@ -112,7 +113,7 @@ public interface SsmlParsingStrategy extends Cloneable {
      * @throws SemanticError
      *             Error evaluating a variable.
      */
-    void evalAttributes(final VoiceXmlInterpreterContext context)
+    void evalAttributes(VoiceXmlInterpreterContext context)
             throws SemanticError;
 
     /**
@@ -124,7 +125,7 @@ public interface SsmlParsingStrategy extends Cloneable {
      * @throws ErrorEvent
      *             Validation failed.
      */
-    void validateAttributes(final DataModel model) throws ErrorEvent;
+    void validateAttributes(DataModel model) throws ErrorEvent;
 
     /**
      * Creates a clone of this node in the given document.
@@ -145,7 +146,7 @@ public interface SsmlParsingStrategy extends Cloneable {
      * @exception SemanticError
      *                Error evaluating the node.
      */
-    SsmlNode cloneNode(final SsmlParser parser, final DataModel model,
-            final SsmlDocument document, final SsmlNode parent,
-            final VoiceXmlNode node) throws SemanticError;
+    SsmlNode cloneNode(SsmlParser parser, DataModel model,
+            SsmlDocument document, SsmlNode parent,
+            VoiceXmlNode node) throws SemanticError;
 }

@@ -62,7 +62,7 @@ final class ObjectTagEventStrategy
      * @param formItem
      *        The current form item.
      */
-    public ObjectTagEventStrategy(final VoiceXmlInterpreterContext ctx,
+    ObjectTagEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
                                     final FormItem formItem) {

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -34,7 +29,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * Result of the recognition process.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 public interface RecognitionResult {
@@ -48,7 +42,7 @@ public interface RecognitionResult {
      *                error creating the semantic interpretation
      * @since 0.7
      */
-    Object getSemanticInterpretation(final DataModel model)
+    Object getSemanticInterpretation(DataModel model)
             throws SemanticError;
 
     /**
@@ -127,7 +121,7 @@ public interface RecognitionResult {
      * @param mark
      *            Name of the mark.
      */
-    void setMark(final String mark);
+    void setMark(String mark);
 
     /**
      * Retrieves the name of the mark, that has been reached while playing back

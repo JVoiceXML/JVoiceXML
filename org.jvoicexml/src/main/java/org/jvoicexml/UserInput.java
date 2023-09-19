@@ -153,7 +153,8 @@ public interface UserInput {
      * @exception SemanticError
      *                semantic error in the grammar file
      * @exception NoauthorizationError
-     *                 the grammar could not be loaded because of security constraints
+     *                 the grammar could not be loaded because of security
+     *                 constraints
      */
     int activateGrammars(Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError,

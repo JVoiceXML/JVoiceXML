@@ -53,7 +53,8 @@ public final class RecognitionEvent
      *        Result of the recognition process.
      */
     public RecognitionEvent(final SpokenInput input,
-            final SessionIdentifier sessionId, final RecognitionResult recognitionResult) {
+            final SessionIdentifier sessionId,
+            final RecognitionResult recognitionResult) {
         super(input, DETAIL, sessionId);
 
         if (recognitionResult == null) {

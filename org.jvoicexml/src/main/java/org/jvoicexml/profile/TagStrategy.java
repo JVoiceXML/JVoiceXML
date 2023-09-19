@@ -71,7 +71,8 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * Retrieve the current attributes from the node.</li>
  * <li>
  * {@link #evalAttributes(VoiceXmlInterpreterContext)}<br>
- * Evaluate attributes, that need to be evaluated by the current script context</li>
+ * Evaluate attributes, that need to be evaluated by the current script context
+ * </li>
  * <li>
  * {@link #validateAttributes(DataModel)}<br>
  * Check, if all necessary information are present.</li>
@@ -141,8 +142,8 @@ public interface TagStrategy {
      *            The node to process.
      * @since 0.3.1
      */
-    void getAttributes(final VoiceXmlInterpreterContext context,
-            final FormInterpretationAlgorithm fia, final VoiceXmlNode node);
+    void getAttributes(VoiceXmlInterpreterContext context,
+            FormInterpretationAlgorithm fia, VoiceXmlNode node);
 
     /**
      * Evaluates all attributes which have to be evaluated by the scripting
@@ -154,7 +155,7 @@ public interface TagStrategy {
      *             Error evaluating a variable.
      * @since 0.3.1
      */
-    void evalAttributes(final VoiceXmlInterpreterContext context)
+    void evalAttributes(VoiceXmlInterpreterContext context)
             throws SemanticError;
 
     /**
@@ -167,7 +168,7 @@ public interface TagStrategy {
      *             Validation failed.
      * @since 0.3.1
      */
-    void validateAttributes(final DataModel model) throws ErrorEvent;
+    void validateAttributes(DataModel model) throws ErrorEvent;
 
     /**
      * Executes the strategy with the current parameters.
@@ -187,10 +188,10 @@ public interface TagStrategy {
      * @throws JVoiceXMLEvent
      *             Error while executing this strategy.
      */
-    void execute(final VoiceXmlInterpreterContext context,
-            final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node) throws JVoiceXMLEvent;
+    void execute(VoiceXmlInterpreterContext context,
+            VoiceXmlInterpreter interpreter,
+            FormInterpretationAlgorithm fia, FormItem item,
+            VoiceXmlNode node) throws JVoiceXMLEvent;
 
     /**
      * Executes the strategy with the current parameters local to a
@@ -211,10 +212,10 @@ public interface TagStrategy {
      * @throws JVoiceXMLEvent
      *             Error while executing this strategy.
      */
-    void executeLocal(final VoiceXmlInterpreterContext context,
-            final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node) throws JVoiceXMLEvent;
+    void executeLocal(VoiceXmlInterpreterContext context,
+            VoiceXmlInterpreter interpreter,
+            FormInterpretationAlgorithm fia, FormItem item,
+            VoiceXmlNode node) throws JVoiceXMLEvent;
 
     /**
      * Debugging facility to display the contents of all attributes in the node.
@@ -226,5 +227,5 @@ public interface TagStrategy {
      *
      * @since 0.4
      */
-    void dumpNode(final DataModel model, final VoiceXmlNode node);
+    void dumpNode(DataModel model, VoiceXmlNode node);
 }

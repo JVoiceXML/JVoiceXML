@@ -82,9 +82,9 @@ public interface SchemeStrategy {
      *
      * @since 0.3
      */
-    InputStream getInputStream(final SessionIdentifier sessionId, final URI uri,
-            final RequestMethod method, final long timeout,
-            final Collection<KeyValuePair> parameters) throws BadFetchError,
+    InputStream getInputStream(SessionIdentifier sessionId, URI uri,
+            RequestMethod method, long timeout,
+            Collection<KeyValuePair> parameters) throws BadFetchError,
             UnsupportedElementError, IOException;
 
     /**
@@ -96,5 +96,5 @@ public interface SchemeStrategy {
      *            the Id of the current JVoiceXML session.
      * @since 0.7
      */
-    void sessionClosed(final SessionIdentifier sessionId);
+    void sessionClosed(SessionIdentifier sessionId);
 }

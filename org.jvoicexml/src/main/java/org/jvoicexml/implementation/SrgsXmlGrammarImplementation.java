@@ -33,7 +33,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * Implementation of a SRGS XML grammar.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4509 $
  * @since 0.5.5
  */
 public final class SrgsXmlGrammarImplementation
@@ -114,7 +113,7 @@ public final class SrgsXmlGrammarImplementation
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

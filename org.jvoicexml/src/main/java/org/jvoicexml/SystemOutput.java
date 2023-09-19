@@ -79,9 +79,9 @@ public interface SystemOutput {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    void queueSpeakable(final SpeakableText speakable,
-            final SessionIdentifier sessionId,
-            final DocumentServer server) 
+    void queueSpeakable(SpeakableText speakable,
+            SessionIdentifier sessionId,
+            DocumentServer server) 
                     throws BadFetchError, NoresourceError, 
                         ConnectionDisconnectHangupEvent;
 
@@ -99,8 +99,8 @@ public interface SystemOutput {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    void playPrompts(final SessionIdentifier sessionId,
-            final DocumentServer server, final CallControlProperties callProps)
+    void playPrompts(SessionIdentifier sessionId,
+            DocumentServer server, CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent;
     
@@ -118,5 +118,5 @@ public interface SystemOutput {
      *
      * @since 0.5
      */
-    void cancelOutput(final BargeInType type) throws NoresourceError;
+    void cancelOutput(BargeInType type) throws NoresourceError;
 }
