@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -25,11 +20,12 @@
  */
 package org.jvoicexml.interpreter.datamodel;
 
+import java.util.Objects;
+
 /**
  * Represents a key-value pair.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 public class KeyValuePair {
@@ -75,11 +71,7 @@ public class KeyValuePair {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((key == null) ? 0 : key.hashCode());
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
-        return result;
+        return Objects.hash(key, value);
     }
 
     /**

@@ -21,6 +21,7 @@
 package org.jvoicexml.documentserver;
 
 import java.net.URI;
+import java.util.Objects;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -148,12 +149,7 @@ public class UriGrammarDocument implements GrammarDocument {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((mode == null) ? 0 : mode.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
-        return result;
+        return Objects.hash(mode, type, uri);
     }
 
     /**
