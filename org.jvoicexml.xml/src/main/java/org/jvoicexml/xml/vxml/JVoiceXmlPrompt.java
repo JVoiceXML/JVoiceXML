@@ -104,7 +104,7 @@ public class JVoiceXmlPrompt extends Prompt {
      */
     public PriorityType getPriorityAsPriorityType() {
         final String priority = getPriority();
-        return PriorityType.valueOf(priority);
+        return PriorityType.valueOfAttribute(priority);
     }
     
     /**
@@ -122,6 +122,9 @@ public class JVoiceXmlPrompt extends Prompt {
      * @since 0.7.9
      */
     public void setPriority(final PriorityType value) {
+        if (value == null) {
+            setPriority((String) null);
+        }
         final String priority = value.toString();
         setPriority(priority);
     }

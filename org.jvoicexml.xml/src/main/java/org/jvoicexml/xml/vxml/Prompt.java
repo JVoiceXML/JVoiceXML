@@ -279,10 +279,7 @@ public class Prompt
      */
     public BargeInType getBargeintype() {
         final String type = getAttribute(ATTRIBUTE_BARGEINTYPE);
-        if (type == null) {
-            return null;
-        }
-        return BargeInType.valueOf(type);
+        return BargeInType.valueOfAttribute(type);
     }
 
     /**
@@ -292,7 +289,11 @@ public class Prompt
      * @since 0.5
      */
     public void setBargeintype(final BargeInType bargeintype) {
-        setAttribute(ATTRIBUTE_BARGEINTYPE, bargeintype.getType());
+        if (bargeintype == null) {
+            setAttribute(ATTRIBUTE_BARGEINTYPE, null);
+        }
+        final String type = bargeintype.getType();
+        setAttribute(ATTRIBUTE_BARGEINTYPE, type);
     }
 
     /**

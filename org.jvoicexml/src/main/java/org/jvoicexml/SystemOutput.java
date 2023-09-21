@@ -118,5 +118,5 @@ public interface SystemOutput {
      *
      * @since 0.5
      */
-    void cancelOutput(final BargeInType type) throws NoresourceError;
+    void cancelOutput(BargeInType type) throws NoresourceError;
 }

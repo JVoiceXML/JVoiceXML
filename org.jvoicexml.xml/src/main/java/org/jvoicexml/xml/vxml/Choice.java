@@ -303,7 +303,8 @@ public final class Choice
 
     /**
      * Retrieve the accept attribute.
-     * @return Value of the accept attribute.
+     * @return Value of the accept attribute, {@link AcceptType#EXACT}
+     *  if not defined
      * @see #ATTRIBUTE_ACCEPT
      */
     public String getAccept() {
@@ -311,7 +312,7 @@ public final class Choice
         if (accept != null) {
             return accept;
         }
-        return new String("exact");
+        return AcceptType.EXACT.getType();
     }
 
     /**
@@ -320,10 +321,9 @@ public final class Choice
      * @see #ATTRIBUTE_ACCEPT
      * @since 0.7.5
      */
-    public AcceptType getAcceptObject() {
+    public AcceptType getAcceptType() {
         String accept = getAccept();
-        accept = accept.toUpperCase();
-        return AcceptType.valueOf(accept);
+        return AcceptType.valueOfAttribute(accept);
     }
 
     /**
