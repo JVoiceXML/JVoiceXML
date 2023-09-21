@@ -23,7 +23,6 @@ package org.jvoicexml.xml.vxml;
 /**
  * The type of a priority.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public enum PriorityType {
@@ -38,7 +37,7 @@ public enum PriorityType {
     PREPEND("prepend"),
     
     /**
-     * Clear all prompts in the queue and append this prompt
+     * Clear all prompts in the queue and append this prompt.
      */
     CLEAR("clear");
 
@@ -49,7 +48,7 @@ public enum PriorityType {
      * Do not create from outside.
      * @param name name of the priority.
      */
-    private PriorityType(final String name) {
+    PriorityType(final String name) {
         priority = name;
     }
 
@@ -60,4 +59,31 @@ public enum PriorityType {
     public String getPriority() {
         return priority;
     }
+
+    /**
+     * Retrieves the type from the provided attribute irrespective of
+     * upper and lower case.
+     * @param attribute
+     * @return resolved type, or {@code null} in case {@code attribute} is
+     *          {@code null}
+     * @throws IllegalArgumentException
+     *          if the provided attribute cannot be resolved to a type.
+     * @since 0.7.9
+     */
+    public static PriorityType valueOfAttribute(final String attribute) {
+        if (attribute == null) {
+            return null;
+        }
+        if (attribute.equalsIgnoreCase(APPEND.getPriority())) {
+            return PriorityType.APPEND;
+        } else if (attribute.equalsIgnoreCase(PREPEND.getPriority())) {
+            return PriorityType.PREPEND;
+        } else if (attribute.equalsIgnoreCase(CLEAR.getPriority())) {
+            return PriorityType.CLEAR;
+        } else {
+            throw new IllegalArgumentException("'" + attribute 
+                    + "' cannot be resolved to an param value type");
+        }
+    }
+
 }
