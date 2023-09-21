@@ -240,9 +240,9 @@ public final class ExecutableMenuForm
             // Do all the choice local stuff
             final AcceptType accept;
             if (choice.isAcceptSpecified()) {
-                accept = choice.getAcceptObject();
+                accept = choice.getAcceptType();
             } else {
-                accept = menu.getAcceptObject();
+                accept = menu.getAcceptType();
             }
             conv.setAccept(accept);
             final URI uri = choice.getNextUri();

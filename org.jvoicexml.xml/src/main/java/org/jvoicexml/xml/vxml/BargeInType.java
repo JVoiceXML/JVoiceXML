@@ -85,7 +85,7 @@ public enum BargeInType {
             return HOTWORD;
         } else {
             throw new IllegalArgumentException("'" + attribute 
-                    + "' cannot be resolved to a bargeintype");
+                    + "' cannot be resolved to a bargein type");
         }
     }
 }

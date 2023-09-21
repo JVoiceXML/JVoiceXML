@@ -23,7 +23,6 @@ package org.jvoicexml.xml.vxml;
 /**
  * Accept mode of a choice.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public enum AcceptType {
@@ -48,7 +47,7 @@ public enum AcceptType {
      * Do not create from outside.
      * @param name name of the barge-in type.
      */
-    private AcceptType(final String name) {
+    AcceptType(final String name) {
         type = name;
     }
 
@@ -58,5 +57,29 @@ public enum AcceptType {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Retrieves the type from the provided attribute irrespective of
+     * upper and lower case.
+     * @param attribute
+     * @return resolved type, or {@code null} in case {@code attribute} is
+     *          {@code null}
+     * @throws IllegalArgumentException
+     *          if the provided attribute cannot be resolved to a type.
+     * @since 0.7.9
+     */
+    public static AcceptType valueOfAttribute(final String attribute) {
+        if (attribute == null) {
+            return null;
+        }
+        if (attribute.equalsIgnoreCase(EXACT.getType())) {
+            return AcceptType.EXACT;
+        } else if (attribute.equalsIgnoreCase(APPROXIMATE.getType())) {
+            return AcceptType.APPROXIMATE;
+        } else {
+            throw new IllegalArgumentException("'" + attribute 
+                    + "' cannot be resolved to an accept type");
+        }
     }
 }
