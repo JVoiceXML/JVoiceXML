@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -50,7 +45,6 @@ import org.w3c.dom.Node;
  * A foreach node.
  * @author Steve Doyle
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  */
 public final class Foreach
         extends AbstractVoiceXmlNode
@@ -99,34 +93,33 @@ public final class Foreach
         CHILD_TAGS = new java.util.HashSet<String>();
 
         CHILD_TAGS.add(Audio.TAG_NAME);
+        CHILD_TAGS.add(Break.TAG_NAME);
         CHILD_TAGS.add(Enumerate.TAG_NAME);
         CHILD_TAGS.add(Value.TAG_NAME);
         CHILD_TAGS.add(Assign.TAG_NAME);
         CHILD_TAGS.add(Clear.TAG_NAME);
         CHILD_TAGS.add(Data.TAG_NAME);
         CHILD_TAGS.add(Disconnect.TAG_NAME);
+        CHILD_TAGS.add(Emphasis.TAG_NAME);
         CHILD_TAGS.add(Exit.TAG_NAME);
         CHILD_TAGS.add(Foreach.TAG_NAME);
         CHILD_TAGS.add(Goto.TAG_NAME);
         CHILD_TAGS.add(If.TAG_NAME);
         CHILD_TAGS.add(Log.TAG_NAME);
+        CHILD_TAGS.add(Mark.TAG_NAME);
+        CHILD_TAGS.add(Metadata.TAG_NAME);
+        CHILD_TAGS.add(Phoneme.TAG_NAME);
         CHILD_TAGS.add(Prompt.TAG_NAME);
+        CHILD_TAGS.add(Prosody.TAG_NAME);
         CHILD_TAGS.add(Reprompt.TAG_NAME);
         CHILD_TAGS.add(Return.TAG_NAME);
         CHILD_TAGS.add(Script.TAG_NAME);
+        CHILD_TAGS.add(Sub.TAG_NAME);
         CHILD_TAGS.add(Submit.TAG_NAME);
         CHILD_TAGS.add(Throw.TAG_NAME);
         CHILD_TAGS.add(Var.TAG_NAME);
-        CHILD_TAGS.add(Break.TAG_NAME);
-        CHILD_TAGS.add(Break.TAG_NAME);
-        CHILD_TAGS.add(Emphasis.TAG_NAME);
-        CHILD_TAGS.add(Mark.TAG_NAME);
-        CHILD_TAGS.add(Phoneme.TAG_NAME);
-        CHILD_TAGS.add(Prosody.TAG_NAME);
         CHILD_TAGS.add(SayAs.TAG_NAME);
         CHILD_TAGS.add(Voice.TAG_NAME);
-        CHILD_TAGS.add(Sub.TAG_NAME);
-        CHILD_TAGS.add(Metadata.TAG_NAME);
     }
 
     /**
