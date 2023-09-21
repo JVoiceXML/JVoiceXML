@@ -1,10 +1,4 @@
 /*
- * File:    $RCSfile: ParamValueType.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
@@ -30,15 +24,12 @@
 
 package org.jvoicexml.xml.vxml;
 
-
-
 /**
  * Valuetype attribute of the <code>&lt;param&gt;</code> tag.
  *
  * @see org.jvoicexml.xml.vxml.Param
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 public enum ParamValueType {
@@ -59,7 +50,7 @@ public enum ParamValueType {
      * Creates a new object.
      * @param valueType Name of the value type.
      */
-    private ParamValueType(final String valueType) {
+    ParamValueType(final String valueType) {
         type = valueType;
     }
 
@@ -70,4 +61,29 @@ public enum ParamValueType {
     public String getType() {
         return type;
     }
+    
+    /**
+     * Retrieves the type from the provided attribute irrespective of
+     * upper and lower case.
+     * @param attribute
+     * @return resolved type, or {@code null} in case {@code attribute} is
+     *          {@code null}
+     * @throws IllegalArgumentException
+     *          if the provided attribute cannot be resolved to a type.
+     * @since 0.7.9
+     */
+    public static ParamValueType valueOfAttribute(final String attribute) {
+        if (attribute == null) {
+            return null;
+        }
+        if (attribute.equalsIgnoreCase(DATA.getType())) {
+            return ParamValueType.DATA;
+        } else if (attribute.equalsIgnoreCase(REF.getType())) {
+            return ParamValueType.REF;
+        } else {
+            throw new IllegalArgumentException("'" + attribute 
+                    + "' cannot be resolved to an param value type");
+        }
+    }
+
 }

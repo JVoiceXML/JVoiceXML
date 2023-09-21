@@ -209,12 +209,7 @@ public final class Param
      */
     public ParamValueType getValuetype() {
         final String type = getAttribute(ATTRIBUTE_VALUETYPE);
-        if (type == null) {
-            return null;
-        }
-
-        final String str = type.toUpperCase();
-        return ParamValueType.valueOf(str);
+        return ParamValueType.valueOfAttribute(type);
     }
 
     /**
@@ -225,7 +220,9 @@ public final class Param
      */
     public String getValuetypeName() {
         final ParamValueType type = getValuetype();
-
+        if (type == null) {
+            return null;
+        }
         return type.getType();
     }
 

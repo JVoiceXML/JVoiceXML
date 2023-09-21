@@ -24,38 +24,38 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for {@link AcceptType}.
+ * Test cases for {@link ParamValueType}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-public class AcceptTypeTest {
+public class ParamValueTypeTest {
 
     /**
      * Test method for {@link org.jvoicexml.xml.vxml.AcceptType#valueOfAttribute(java.lang.String)}
-     * for type {@link AcceptType#EXACT}.
+     * for type {@link ParamValueType#DATA}.
      */
     @Test
-    public void testValueOfAttributeExact() {
-        final AcceptType type1 = AcceptType.valueOfAttribute("EXACT");
-        Assert.assertEquals(AcceptType.EXACT, type1);
-        final AcceptType type2 = AcceptType.valueOfAttribute("exact");
-        Assert.assertEquals(AcceptType.EXACT, type2);
-        final AcceptType type3 = AcceptType.valueOfAttribute("ExAcT");
-        Assert.assertEquals(AcceptType.EXACT, type3);
+    public void testValueOfAttributeData() {
+        final ParamValueType type1 = ParamValueType.valueOfAttribute("DATA");
+        Assert.assertEquals(ParamValueType.DATA, type1);
+        final ParamValueType type2 = ParamValueType.valueOfAttribute("data");
+        Assert.assertEquals(ParamValueType.DATA, type2);
+        final ParamValueType type3 = ParamValueType.valueOfAttribute("DaTa");
+        Assert.assertEquals(ParamValueType.DATA, type3);
     }
 
     /**
      * Test method for {@link org.jvoicexml.xml.vxml.AcceptType#valueOfAttribute(java.lang.String)}
-     * for type {@link AcceptType#APPROXIMATE}.
+     * for type {@link ParamValueType#REF}.
      */
     @Test
-    public void testValueOfAttributeApproximate() {
-        final AcceptType type1 = AcceptType.valueOfAttribute("APPROXIMATE");
-        Assert.assertEquals(AcceptType.APPROXIMATE, type1);
-        final AcceptType type2 = AcceptType.valueOfAttribute("approximate");
-        Assert.assertEquals(AcceptType.APPROXIMATE, type2);
-        final AcceptType type3 = AcceptType.valueOfAttribute("ApPrOxImAtE");
-        Assert.assertEquals(AcceptType.APPROXIMATE, type3);
+    public void testValueOfAttributeRef() {
+        final ParamValueType type1 = ParamValueType.valueOfAttribute("REF");
+        Assert.assertEquals(ParamValueType.REF, type1);
+        final ParamValueType type2 = ParamValueType.valueOfAttribute("ref");
+        Assert.assertEquals(ParamValueType.REF, type2);
+        final ParamValueType type3 = ParamValueType.valueOfAttribute("Ref");
+        Assert.assertEquals(ParamValueType.REF, type3);
     }
     
     /**
@@ -64,7 +64,7 @@ public class AcceptTypeTest {
      */
     @Test
     public void testValueOfAttributeNull() {
-        final AcceptType type1 = AcceptType.valueOfAttribute(null);
+        final ParamValueType type1 = ParamValueType.valueOfAttribute(null);
         Assert.assertNull(type1);
     }
 
@@ -74,6 +74,6 @@ public class AcceptTypeTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testValueOfAttributeInvalid() {
-        AcceptType.valueOfAttribute("aprox");
+        ParamValueType.valueOfAttribute("dataref");
     }
 }
