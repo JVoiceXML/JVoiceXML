@@ -37,7 +37,7 @@ public interface SpeakableText {
      * @param text Text to be appended.
      * @return This object.
      */
-    SpeakableText appendSpeakableText(final String text);
+    SpeakableText appendSpeakableText(String text);
 
     /**
      * Retrieves the text to be passed to the TTS Engine.
@@ -59,7 +59,7 @@ public interface SpeakableText {
      * @return {@code true} if barge-in is enabled.
      * @since 0.7.1
      */
-    boolean isBargeInEnabled(final BargeInType type);
+    boolean isBargeInEnabled(BargeInType type);
     
     /**
      * Retrieves the priority of this prompt.

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -32,7 +27,6 @@ package org.jvoicexml.xml.vxml;
  * input.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.5
  */
 public enum BargeInType {
@@ -59,7 +53,7 @@ public enum BargeInType {
      * Do not create from outside.
      * @param name name of the barge-in type.
      */
-    private BargeInType(final String name) {
+    BargeInType(final String name) {
         type = name;
     }
 
@@ -69,5 +63,29 @@ public enum BargeInType {
      */
     public String getType() {
         return type;
+    }
+    
+    /**
+     * Retrieves the type from the provided attribute irrespective of
+     * upper and lower case.
+     * @param attribute
+     * @return resolved type, or {@code null} in case {@code attribute} is
+     *          {@code null}
+     * @throws IllegalArgumentException
+     *          if the provided attribute cannot be resolved to a type.
+     * @since 0.7.9
+     */
+    public static BargeInType valueOfAttribute(final String attribute) {
+        if (attribute == null) {
+            return null;
+        }
+        if (attribute.equalsIgnoreCase(SPEECH.getType())) {
+            return BargeInType.SPEECH;
+        } else if (attribute.equalsIgnoreCase(HOTWORD.getType())) {
+            return HOTWORD;
+        } else {
+            throw new IllegalArgumentException("'" + attribute 
+                    + "' cannot be resolved to a bargeintype");
+        }
     }
 }

@@ -175,10 +175,6 @@ class PromptStrategy extends AbstractTagStrategy {
     private BargeInType getBargeInType() {
         final String bargeInType = (String) getAttribute(
                 Prompt.ATTRIBUTE_BARGEINTYPE);
-        if (bargeInType == null) {
-            return null;
-        }
-        final String type = bargeInType.toUpperCase();
-        return BargeInType.valueOf(type);
+        return BargeInType.valueOfAttribute(bargeInType);
     }
 }
