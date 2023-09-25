@@ -122,18 +122,27 @@ public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
         return server.isStarted();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addMMIEventListener(final MMIEventListener listener) {
         handler.addMMIEventListener(listener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void removeMMIEventListener(MMIEventListener listener) {
+    public void removeMMIEventListener(final MMIEventListener listener) {
         handler.removeMMIEventListener(listener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void sendMMIEvent(Object channel, Mmi mmi)
+    public void sendMMIEvent(final Object channel, final Mmi mmi)
             throws IOException {
         try {
             final URI source = server.getURI();
@@ -157,7 +166,8 @@ public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
             }
             final CloseableHttpClient client = builder.build(); 
             final HttpPost post = new HttpPost(uri);
-            final HttpEntity entity = new StringEntity(out.toString(), ContentType.APPLICATION_XML);
+            final HttpEntity entity = new StringEntity(out.toString(),
+                    ContentType.APPLICATION_XML);
             post.setEntity(entity);
             client.execute(post);
             LOGGER.info("sending " + mmi + " to '" + uri + "'");
@@ -168,6 +178,9 @@ public class HttpETLProtocolAdapter implements ETLProtocolAdapter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stop() {
         try {

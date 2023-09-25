@@ -38,7 +38,7 @@ public class MmiHandler extends AbstractHandler {
         }
     }
 
-    public void removeMMIEventListener(MMIEventListener listener) {
+    public void removeMMIEventListener(final MMIEventListener listener) {
         synchronized (listeners) {
             listeners.remove(listener);
         }
@@ -47,6 +47,7 @@ public class MmiHandler extends AbstractHandler {
     /**
      * Notifies all registered listeners about a received MMI Event.
      * 
+     * @param protocol the used protocol
      * @param event
      *            the event to notify
      */
@@ -62,10 +63,15 @@ public class MmiHandler extends AbstractHandler {
         }
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     */
     @Override
-    public void handle(String target, Request baseRequest,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public void handle(final String target, final Request baseRequest,
+            final HttpServletRequest request,
+            final HttpServletResponse response)
+                    throws IOException, ServletException {
         LOGGER.info("request from " + request.getRemoteAddr());
         response.setContentType("text/html;charset=utf-8");
         final Reader reader = request.getReader();
@@ -77,7 +83,8 @@ public class MmiHandler extends AbstractHandler {
                 final Mmi mmi = (Mmi) o;
                 LOGGER.info("received MMI event: " + mmi);
                 final String protocol = request.getProtocol();
-                final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
+                final DecoratedMMIEvent event =
+                        new DecoratedMMIEvent(this, mmi);
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
