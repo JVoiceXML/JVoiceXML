@@ -243,6 +243,14 @@ figure~\ref{fig:eclipse-run-gradle}.
 
 This view is part of Eclipse's Buildship integration for Gradle.
 
+In order to make use of this, make sure that Gradle runs with Java 8
+as shown in figure~\ref{fig:eclipse-gradle}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-gradle.png}
+\caption{Workspace settings for Gradle}
+\label{fig:eclipse-gradle}
+\end{figure}
+
 \subsection{Tomcat}
 \label{sec:tomcat}
 
@@ -833,6 +841,36 @@ properties
 \subsubsection{Project \texttt{org.jvoicexml.client.text}}
 
 Client configuration files used by the text implementation platform and the text call manager.
+
+The serialization objects for the text messages are generated using 
+Google protobuf, see~\url{https://github.com/protocolbuffers/protobuf}. 
+The Gradle build file will generate Java files from the protobuf files
+in folder \texttt{src/main/protbuf}.
+Some IDE's like eclipse are not able to make use of the corresponding
+part in the \texttt{build.gradle} file.
+\begin{lstlisting} 
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/protobuf'
+        }
+        java {
+            srcDir 'src/main/java'
+            srcDir '${buildDir}/generated/source/proto/main/java'
+        }
+    }
+}
+\end{lstlisting}
+
+This may lead to compilation issues and in the end debugging JVoiceXML.
+As a cosnequence this folder has to be manually added to the source folders as
+shown in figure~\ref{fig:eclipse-add-protobuf-generated}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-add-protobuf-generated.png}
+\caption{Addition of the Java files generated from protbuf}
+\label{fig:eclipse-add-protobuf-generated}
+\end{figure}
+
 
 \section{Document Server}
 
