@@ -58,13 +58,13 @@ public interface ETLProtocolAdapter {
      * Registers the given listener for MMI events.
      * @param listener the listener to add
      */
-    void addMMIEventListener(final MMIEventListener listener);
+    void addMMIEventListener(MMIEventListener listener);
 
     /**
      * Deregisters the given listener for MMI events.
      * @param listener the listener to remove
      */
-    void removeMMIEventListener(final MMIEventListener listener);
+    void removeMMIEventListener(MMIEventListener listener);
 
     /**
      * Sends the given MMI event to the event and transport layer.
@@ -78,7 +78,7 @@ public interface ETLProtocolAdapter {
      * @exception IOException
      *            error sending the event
      */
-    void sendMMIEvent(final Object channel, final Mmi event)
+    void sendMMIEvent(Object channel, Mmi event)
             throws IOException;
 
     /**

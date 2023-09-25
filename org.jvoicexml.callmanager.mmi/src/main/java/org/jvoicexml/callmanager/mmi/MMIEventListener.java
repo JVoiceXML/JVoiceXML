@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2012-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -41,5 +36,5 @@ public interface MMIEventListener {
      * @param data
      *            call meta data
      */
-    void receivedEvent(final DecoratedMMIEvent event, final CallMetadata data);
+    void receivedEvent(DecoratedMMIEvent event, CallMetadata data);
 }

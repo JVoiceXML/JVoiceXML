@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2012 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -38,7 +33,6 @@ import org.jvoicexml.mmi.events.StatusResponseType;
  * implementation simply keeps sending status messages until sending fails.
  * </p>
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 final class StatusUpdateThread extends Thread {
@@ -73,7 +67,7 @@ final class StatusUpdateThread extends Thread {
      * @param automatic <code>true</code> if periodic sending of updates is
      *          requested
      */
-    public StatusUpdateThread(final VoiceModalityComponent vmc, final Object ch,
+    StatusUpdateThread(final VoiceModalityComponent vmc, final Object ch,
             final String trgt, final URI context, final String reqId,
             final boolean automatic) {
         mc = vmc;

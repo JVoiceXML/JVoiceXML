@@ -53,7 +53,7 @@ public interface ExtensionNotificationDataConverter {
      * @throws ConversionException
      *             error converting the result
      */
-    Object convertApplicationLastResult(final List<LastResult> lastresult)
+    Object convertApplicationLastResult(List<LastResult> lastresult)
             throws ConversionException;
 
     /**
@@ -66,7 +66,7 @@ public interface ExtensionNotificationDataConverter {
      * @throws ConversionException
      *             error converting the result
      */
-    Object convertSynthesizedOutputEvent(final SynthesizedOutputEvent event)
+    Object convertSynthesizedOutputEvent(SynthesizedOutputEvent event)
             throws ConversionException;
 
     /**
@@ -81,8 +81,8 @@ public interface ExtensionNotificationDataConverter {
      * @throws ConversionException
      *             error converting the result
      */
-    Object convertRecognitionEvent(final DataModel model,
-            final RecognitionEvent event) throws ConversionException;
+    Object convertRecognitionEvent(DataModel model,
+            RecognitionEvent event) throws ConversionException;
 
     /**
      * Converts the given spoken input event into the data field of an
@@ -94,6 +94,6 @@ public interface ExtensionNotificationDataConverter {
      * @throws ConversionException
      *             error converting the result
      */
-    Object convertSpokenInputEvent(final SpokenInputEvent input)
+    Object convertSpokenInputEvent(SpokenInputEvent input)
             throws ConversionException;
 }

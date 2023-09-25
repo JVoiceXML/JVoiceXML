@@ -55,7 +55,8 @@ import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
  * The following events will be mapped to extension notifications:
  * <dl>
  * <dt>{@link OutputStartedEvent}</dt>
- * <dd>{@code vxml.output.start} The data tag will contain the SSML to speak.</dd>
+ * <dd>{@code vxml.output.start} The data tag will contain the SSML to
+ *      speak.</dd>
  * <dt>{@link OutputEndedEvent}</dt>
  * <dd>{@code vxml.output.end} The data tag will contain the spoken SSML.</dd>
  * <dt>{@link QueueEmptyEvent}</dt>
@@ -67,7 +68,8 @@ import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
  * <dt>{@link RecognitionStoppedEvent}</dt>
  * <dd>{@code vxml.input}</dd>
  * <dt>{@link RecognitionEvent}</dt>
- * <dd>{@code vxml.input.end} The data tag will contain the recognition result.</dd>
+ * <dd>{@code vxml.input.end} The data tag will contain the recognition
+ *      result.</dd>
  * <dt>{@link NomatchEvent}</dt>
  * <dd>{@code vxml.input.nomatch}</dd>
  * <dt>{@link NoinputEvent}</dt>
@@ -80,11 +82,11 @@ import org.jvoicexml.profile.mmi.OutgoingExtensionNotificationJVoiceXmlEvent;
  * <dd>{@code vxml.record.end} The data tag will contain the URI of the recorded
  * audio file</dd>
  * <dt>{@link ErrorEvent}</dt>
- * <dd>{@code "vxml" + error.getEventType()} The data tag will detail the error</dd>
+ * <dd>{@code "vxml" + error.getEventType()} The data tag will detail the
+ *      error</dd>
  * </dl>
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public final class MmiDetailedSessionListener

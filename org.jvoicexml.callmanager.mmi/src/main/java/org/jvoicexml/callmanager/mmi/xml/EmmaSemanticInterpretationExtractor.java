@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -41,23 +36,33 @@ import org.xml.sax.SAXException;
  * Content handler to parse any EMMA formatted semantic interpretation. 
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public class EmmaSemanticInterpretationExtractor implements ContentHandler {
     /** The EMMA namespace. */
-    private static final String EMMA_NAMESPACE = "http://www.w3.org/2003/04/emma";
+    private static final String EMMA_NAMESPACE =
+            "http://www.w3.org/2003/04/emma";
 
+    /** {@code true} if the parser reached the amma tag. */
     private boolean inEmma;
 
+    /** Parsed confidence. */
     private float confidence;
+    /** Parsed utterance. */
     private String utterance;
+    /** Parsed interpretation. */
     private Object interpretation;
+    /** Found interpretations. */
     private final Map<String, Object> interpretations;
+    /** Found interpretation tag names. */
     private final Stack<String> interpretationTagNames;
+    /** Partly parsed interpretation. */
     private StringBuilder text;
+    /** Found interpretation assignments. */
     private Map<String, Object> currentAssignments;
+    /** Context to create the interpretation object. */
     private final Context context;
+    /** Created interpretation object. */
     private final ScriptableObject scope;
 
     /**
@@ -84,7 +89,7 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
      * {@inheritDoc}
      */
     @Override
-    public void setDocumentLocator(Locator locator) {
+    public void setDocumentLocator(final Locator locator) {
     }
 
     /**
@@ -105,7 +110,7 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
      * {@inheritDoc}
      */
     @Override
-    public void startPrefixMapping(String prefix, String uri)
+    public void startPrefixMapping(final String prefix, final String uri)
             throws SAXException {
     }
 
@@ -113,15 +118,15 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
      * {@inheritDoc}
      */
     @Override
-    public void endPrefixMapping(String prefix) throws SAXException {
+    public void endPrefixMapping(final String prefix) throws SAXException {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
+    public void startElement(final String uri, final String localName, 
+            final String qName, final Attributes atts) throws SAXException {
         if (localName.equals("emma")) {
             inEmma = true;
         } else if (inEmma) {
@@ -144,8 +149,8 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
      * {@inheritDoc}
      */
     @Override
-    public void endElement(String uri, String localName, String qName)
-            throws SAXException {
+    public void endElement(final String uri, final String localName,
+            final String qName) throws SAXException {
         if (localName.equals("emma")) {
             inEmma = false;
             if (interpretation == null) {
@@ -164,7 +169,9 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
     }
 
     /**
-     * {@inheritDoc}
+     * Adds the provided key and value to the current assignments.
+     * @param key the key to add
+     * @param value the value t add
      */
     private void addAssignment(final String key, final String value) {
         if (currentAssignments == null) {
@@ -201,7 +208,8 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
     }
 
     /**
-     * {@inheritDoc}
+     * Evaluates the interpretations from the known assignments.
+     * @return evaluated interpretation
      */
     private Object evaluateInterpretations() {
         if (currentAssignments == null) {
@@ -274,7 +282,7 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
      * {@inheritDoc}
      */
     @Override
-    public void characters(char[] ch, int start, int length)
+    public void characters(final char[] ch, final int start, final int length)
             throws SAXException {
         if (text != null) {
             text.append(ch, start, length);
@@ -285,7 +293,15 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
      * {@inheritDoc}
      */
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int length)
+    public void ignorableWhitespace(final char[] ch, final int start,
+            final int length) throws SAXException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void processingInstruction(final String target, final String data)
             throws SAXException {
     }
 
@@ -293,15 +309,7 @@ public class EmmaSemanticInterpretationExtractor implements ContentHandler {
      * {@inheritDoc}
      */
     @Override
-    public void processingInstruction(String target, String data)
-            throws SAXException {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void skippedEntity(String name) throws SAXException {
+    public void skippedEntity(final String name) throws SAXException {
     }
 
 }
