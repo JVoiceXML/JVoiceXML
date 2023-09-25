@@ -41,7 +41,6 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * Stub for the <code>Session</code>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @since 0.4
  * @see org.jvoicexml.Session
@@ -49,7 +48,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 public final class SessionStub
         extends AbstractStub<RemoteSession>
         implements Session, Serializable {
-    /** The serial version UID  */
+    /** The serial version UID. */
     private static final long serialVersionUID = -3205385620722771514L;
     /** The session ID. */
     private SessionIdentifier sessionIdentifier;
@@ -107,7 +106,8 @@ public final class SessionStub
     public Application call(final URI uri)
             throws ErrorEvent {
         try {
-            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            final RemoteSession session =
+                    getSkeleton(sessionIdentifier.getId());
             return session.call(uri);
         } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
@@ -128,7 +128,8 @@ public final class SessionStub
     @Override
     public void hangup() {
         try {
-            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            final RemoteSession session =
+                    getSkeleton(sessionIdentifier.getId());
             if (session == null) {
                 return;
             }
@@ -145,7 +146,8 @@ public final class SessionStub
     @Override
     public Application getApplication() {
         try {
-            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            final String id = sessionIdentifier.getId();
+            final RemoteSession session = getSkeleton(id);
             return session.getApplication();
         } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
@@ -160,7 +162,8 @@ public final class SessionStub
     public DtmfInput getDtmfInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
         try {
-            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            final String id = sessionIdentifier.getId();
+            final RemoteSession session = getSkeleton(id);
             return session.getDtmfInput();
         } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
@@ -183,7 +186,8 @@ public final class SessionStub
     public void waitSessionEnd()
             throws ErrorEvent {
         try {
-            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            final String id = sessionIdentifier.getId();
+            final RemoteSession session = getSkeleton(id);
             session.waitSessionEnd();
         } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
@@ -203,7 +207,8 @@ public final class SessionStub
     @Override
     public boolean hasEnded() {
         try {
-            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            final String id = sessionIdentifier.getId();
+            final RemoteSession session = getSkeleton(id);
             return session.hasEnded();
         } catch (java.rmi.RemoteException | NamingException re) {
             clearSkeleton();
@@ -227,7 +232,8 @@ public final class SessionStub
     @Override
     public ErrorEvent getLastError() {
         try {
-            final RemoteSession session = getSkeleton(sessionIdentifier.getId());
+            final String id = sessionIdentifier.getId();
+            final RemoteSession session = getSkeleton(id);
             return session.getLastError();
         } catch (RemoteException | NamingException e) {
             e.printStackTrace();

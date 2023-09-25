@@ -195,7 +195,8 @@ public final class SipCallManager
                     createConnectionInformation(pbxSession, mrcpSession);
             final ImplementationPlatform platform =
                     platformFactory.getImplementationPlatform(info);
-            final JVoiceXmlCallControl call = (JVoiceXmlCallControl) platform.getCallControl();
+            final JVoiceXmlCallControl call =
+                    (JVoiceXmlCallControl) platform.getCallControl();
             final Telephony telephony = call.getTelephony();
             final SipCallManagerSession session = new SipCallManagerSession(id,
                             pbxSession, mrcpSession, speechClient, null,
@@ -215,7 +216,8 @@ public final class SipCallManager
             // Get the random code
             final String randomCode = getRandomCode(pbxSession);
             // Append the sessionId to the application uri
-            final String applicationUri = applications.get(info.getCalledDevice().toString())
+            final String applicationUri =
+                    applications.get(info.getCalledDevice().toString())
                     + "?sessionId=" + jsession.getSessionId() + "&randomCode="
                     + randomCode;
 
@@ -275,7 +277,7 @@ public final class SipCallManager
     }
 
     /**
-     * Extracts the called number from the local party address
+     * Extracts the called number from the local party address.
      * 
      * @param localParty
      *            the local party address
@@ -283,7 +285,8 @@ public final class SipCallManager
      * @throws URISyntaxException error converting the address into a URI
      * @since 0.7.8
      */
-    private URI getCalledNumber(final Address localParty) throws URISyntaxException {
+    private URI getCalledNumber(final Address localParty)
+            throws URISyntaxException {
         final String displayName = localParty.getDisplayName();
         if ((displayName == null) || displayName.startsWith("sip:")) {
             final String uri = localParty.getURI().toString();
@@ -298,25 +301,27 @@ public final class SipCallManager
     }
 
     /**
-     * Tries to obtain a random code from the calling number
+     * Tries to obtain a random code from the calling number.
      * 
-     * @param callingNumber
-     *            the calling number
+     * @param pbxSession
+     *            the PBX session
      * @return random code, empty string if there is none.
      * @since 0.7.8
      */
     private String getRandomCode(final SipSession pbxSession) {
-        final String callingNumber = pbxSession.getSipDialog().getRemoteParty().getURI().toString();
-	if (callingNumber.startsWith("sip:")) {
-	    String[] parts = callingNumber.split(":");
-	    String[] parts2 = parts[1].split("@");
-	    String number = parts2[0];
-	    if (number.length() > 8) {
-		return number.substring(8);
-	    }
-    	}
-	LOGGER.warn("No randomCode used.");
-	return "";
+        final String callingNumber =
+                pbxSession.getSipDialog().getRemoteParty().getURI().toString();
+        final int maxCodeLength = 8;
+        if (callingNumber.startsWith("sip:")) {
+            String[] parts = callingNumber.split(":");
+            String[] parts2 = parts[1].split("@");
+            String number = parts2[0];
+            if (number.length() > maxCodeLength) {
+                return number.substring(maxCodeLength);
+            }
+        }
+        LOGGER.warn("No randomCode used.");
+        return "";
     }
 
     /**
@@ -370,7 +375,8 @@ public final class SipCallManager
     @Override
     public void start() throws NoresourceError, IOException {
         LOGGER.info("startup MRCPv2 SIP CallManager");
-        sessions = new java.util.HashMap<SessionIdentifier, SipCallManagerSession>();
+        sessions =
+              new java.util.HashMap<SessionIdentifier, SipCallManagerSession>();
         sipServer.startup();
         started = true;
     }
@@ -406,7 +412,7 @@ public final class SipCallManager
     @Override
     public void sessionStarted(final Session session) {
         final SessionIdentifier id = session.getSessionId();
-        LOGGER.info("session "+ id + " started");
+        LOGGER.info("session " + id + " started");
     }
 
     /**

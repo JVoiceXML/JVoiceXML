@@ -57,7 +57,7 @@ final class TextConnection extends Thread {
      * @param applicationUri URI that has to be called
      * @param jvoicexml reference to JVoiceXML
      */
-    public TextConnection(final Socket client, final URI applicationUri,
+    TextConnection(final Socket client, final URI applicationUri,
             final JVoiceXml jvoicexml) {
         socket = client;
         uri = applicationUri;

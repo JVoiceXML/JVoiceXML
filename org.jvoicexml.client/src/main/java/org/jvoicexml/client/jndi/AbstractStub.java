@@ -131,7 +131,7 @@ abstract class AbstractStub<T extends Remote>
      * @throws NamingException 
      *          skeleton could not be found
      */
-    protected final T getSkeleton(final String ...suffix)
+    protected final T getSkeleton(final String... suffix)
             throws NamingException {
         if (skeleton != null) {
             return skeleton;

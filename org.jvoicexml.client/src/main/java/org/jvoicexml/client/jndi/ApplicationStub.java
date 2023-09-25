@@ -77,7 +77,8 @@ public class ApplicationStub extends AbstractStub<RemoteApplication>
      */
     @Override
     public String getStubName() {
-        return Application.class.getSimpleName() + "." + sessionIdentifier.getId();
+        return Application.class.getSimpleName() + "."
+                + sessionIdentifier.getId();
     }
 
     /**
