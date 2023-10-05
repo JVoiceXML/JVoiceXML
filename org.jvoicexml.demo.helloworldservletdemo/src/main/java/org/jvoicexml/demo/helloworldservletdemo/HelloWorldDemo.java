@@ -33,7 +33,6 @@ import javax.naming.InitialContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionIdentifier;
 import org.jvoicexml.UuidSessionIdentifier;
@@ -58,7 +57,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  */
 public final class HelloWorldDemo {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(HelloWorldDemo.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(HelloWorldDemo.class);
 
     /** The JNDI context. */
     private Context context;
@@ -86,7 +86,8 @@ public final class HelloWorldDemo {
         throws JVoiceXMLEvent {
         RemoteJVoiceXml jvxml;
         try {
-            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
+            final String jndi = RemoteJVoiceXml.class.getSimpleName();
+            jvxml = (RemoteJVoiceXml) context.lookup(jndi);
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 

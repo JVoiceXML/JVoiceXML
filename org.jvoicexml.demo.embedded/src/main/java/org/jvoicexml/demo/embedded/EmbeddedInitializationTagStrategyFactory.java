@@ -58,24 +58,18 @@ public class EmbeddedInitializationTagStrategyFactory
             ClassNotFoundException, SecurityException, NoSuchMethodException,
             IllegalArgumentException, InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies
-                .put("grammar",
-                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy"));
-        strategies
-                .put("meta",
-                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.MetaStrategy"));
-        strategies
-                .put("property",
-                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.PropertyStrategy"));
-        strategies
-                .put("script",
-                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy"));
-        strategies
-                .put("#text",
-                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy"));
-        strategies
-                .put("var",
-                        loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy"));
+        strategies.put("grammar", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy"));
+        strategies.put("meta", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.MetaStrategy"));
+        strategies.put("property", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.PropertyStrategy"));
+        strategies.put("script", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy"));
+        strategies.put("#text", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy"));
+        strategies.put("var", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy"));
     }
 
     /**

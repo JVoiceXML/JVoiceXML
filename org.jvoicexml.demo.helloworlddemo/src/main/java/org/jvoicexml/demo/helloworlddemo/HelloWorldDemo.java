@@ -57,6 +57,12 @@ public final class HelloWorldDemo {
             .getLogger(HelloWorldDemo.class);
 
     /**
+     * Do not create from outside.
+     */
+    private HelloWorldDemo() {
+    }
+
+    /**
      * The main method.
      * 
      * @param args

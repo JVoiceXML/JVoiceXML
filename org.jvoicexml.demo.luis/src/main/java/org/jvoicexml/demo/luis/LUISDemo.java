@@ -62,12 +62,16 @@ public final class LUISDemo implements TextListener {
     private static final Logger LOGGER =
         LogManager.getLogger(LUISDemo.class);
 
+    /** The default tport of the text server. */
+    private static final int DEFAULT_TEXTSERVER_PORT = 4242;
+
     /** The JNDI context. */
     private Context context;
 
     /** The text server. */
     private TextServer server;
 
+    /** Message synchronization. */
     private final Object lock;
     
     /**
@@ -89,7 +93,7 @@ public final class LUISDemo implements TextListener {
      *         error waiting for the text server to start
      */
     private void startTextServer() throws InterruptedException {
-        server = new TextServer(4242);
+        server = new TextServer(DEFAULT_TEXTSERVER_PORT);
         server.addTextListener(this);
         server.start();
         server.waitStarted();
@@ -105,10 +109,12 @@ public final class LUISDemo implements TextListener {
      * @throws InterruptedException 
      * @throws IOException 
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, InterruptedException, IOException {
+    private void interpretDocument(final URI uri)
+            throws JVoiceXMLEvent, InterruptedException, IOException {
         final RemoteJVoiceXml jvxml;
         try {
-            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
+            final String jndi = RemoteJVoiceXml.class.getSimpleName();
+            jvxml = (RemoteJVoiceXml) context.lookup(jndi);
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
             return;
@@ -144,7 +150,7 @@ public final class LUISDemo implements TextListener {
     }
 
     @Override
-    public void connected(InetSocketAddress remote) {
+    public void connected(final InetSocketAddress remote) {
         LOGGER.info("disconnected");
     }
 
@@ -156,7 +162,7 @@ public final class LUISDemo implements TextListener {
     }
 
     @Override
-    public void expectingInput(TextMessageEvent event) {
+    public void expectingInput(final TextMessageEvent event) {
         LOGGER.info("Received expecting input");
         synchronized (lock) {
             lock.notifyAll();
@@ -164,11 +170,11 @@ public final class LUISDemo implements TextListener {
     }
 
     @Override
-    public void inputClosed(TextMessageEvent event) {
+    public void inputClosed(final TextMessageEvent event) {
     }
 
     @Override
-    public void disconnected(TextMessageEvent event) {
+    public void disconnected(final TextMessageEvent event) {
         LOGGER.info("disconnected");
     }
 

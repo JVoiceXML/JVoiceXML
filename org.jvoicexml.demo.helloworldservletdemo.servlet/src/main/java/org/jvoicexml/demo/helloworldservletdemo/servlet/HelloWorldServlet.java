@@ -48,8 +48,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  * @see org.jvoicexml.demo.helloworldservletdemo.servlet.GoodbyeServlet
  */
-@WebServlet(displayName="HelloWorld", description="VoiceXML Hello World Demo",
-        urlPatterns="/HelloWorld")
+@WebServlet(displayName = "HelloWorld", 
+    description = "VoiceXML Hello World Demo", urlPatterns = "/HelloWorld")
 public final class HelloWorldServlet
         extends HttpServlet {
     /** The serial version UID. */

@@ -23,6 +23,7 @@ package org.jvoicexml.demo.embedded;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.BasicConfigurator;
@@ -108,7 +109,8 @@ public final class EmbeddedJVoiceXML implements JVoiceXmlMainListener {
         final EmbeddedJVoiceXML demo = new EmbeddedJVoiceXML();
 
         try {
-            final URI uri = EmbeddedJVoiceXML.class.getResource("/hello.vxml").toURI();
+            final URL url = EmbeddedJVoiceXML.class.getResource("/hello.vxml");
+            final URI uri = url.toURI();
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent | InterruptedException
                 | UnknownHostException | URISyntaxException e) {

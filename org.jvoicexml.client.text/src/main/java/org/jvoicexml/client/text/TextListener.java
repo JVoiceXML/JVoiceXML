@@ -43,14 +43,14 @@ public interface TextListener {
      * @param remote address of the server.
      * @since 0.7
      */
-    void connected(final InetSocketAddress remote);
+    void connected(InetSocketAddress remote);
 
     /**
      * Notification that an SSML document has arrived.
      * @param event additional event data
      * @param document the received SSML document.
      */
-    void outputSsml(final TextMessageEvent event, final SsmlDocument document);
+    void outputSsml(TextMessageEvent event, SsmlDocument document);
 
     /**
      * Notification that the voice browser is ready to receive input.
@@ -58,7 +58,7 @@ public interface TextListener {
      * 
      * @since 0.7.6
      */
-    void expectingInput(final TextMessageEvent event);
+    void expectingInput(TextMessageEvent event);
 
     /**
      * Notification that the voice browser stopped listening for input.
@@ -66,12 +66,12 @@ public interface TextListener {
      * 
      * @since 0.7.6
      */
-    void inputClosed(final TextMessageEvent event);
+    void inputClosed(TextMessageEvent event);
 
     /**
      * Notification about a disconnect from the server.
      * @param event additional event data
      * @since 0.7
      */
-    void disconnected(final TextMessageEvent event);
+    void disconnected(TextMessageEvent event);
 }

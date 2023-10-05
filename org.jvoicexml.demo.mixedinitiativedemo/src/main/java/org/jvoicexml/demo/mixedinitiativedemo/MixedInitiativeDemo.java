@@ -22,6 +22,7 @@
 package org.jvoicexml.demo.mixedinitiativedemo;
 
 import java.net.URI;
+import java.net.URL;
 import java.rmi.RemoteException;
 
 import javax.naming.Context;
@@ -77,7 +78,8 @@ public final class MixedInitiativeDemo {
      * @exception JVoiceXMLEvent
      *                Error processing the call.
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, RemoteException {
+    private void interpretDocument(final URI uri)
+            throws JVoiceXMLEvent, RemoteException {
         final RemoteJVoiceXml jvxml;
         try {
             jvxml = (RemoteJVoiceXml) context.lookup("RemoteJVoiceXml");
@@ -110,11 +112,13 @@ public final class MixedInitiativeDemo {
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final MixedInitiativeDemo demo = new MixedInitiativeDemo();
-            final URI uri = MixedInitiativeDemo.class.getResource("/pizza-srgs.vxml").toURI();
+            final URL url =
+                    MixedInitiativeDemo.class.getResource("/pizza-srgs.vxml");
+            final URI uri = url.toURI();
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-        	LOGGER.error("error processing the document", e);
+            LOGGER.error("error processing the document", e);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
