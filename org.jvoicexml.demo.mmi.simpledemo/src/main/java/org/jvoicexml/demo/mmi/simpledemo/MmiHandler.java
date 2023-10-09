@@ -36,10 +36,12 @@ import org.w3c.dom.Element;
  */
 public class MmiHandler extends AbstractHandler {
     /** The EMMA namespace. */
-    private static final String EMMA_NAMESPACE = "http://www.w3.org/2003/04/emma";
+    private static final String EMMA_NAMESPACE =
+            "http://www.w3.org/2003/04/emma";
 
     /** The JVoiceXML extension notification data namespace. */
-    public static final String JVXML_MMI_NAMESPACE = "http://www.nowhere.org/jvxmlmmi";
+    public static final String JVXML_MMI_NAMESPACE =
+            "http://www.nowhere.org/jvxmlmmi";
 
     /** Logger instance. */
     private static final Logger LOGGER = LogManager.getLogger(MmiHandler.class);
@@ -49,14 +51,19 @@ public class MmiHandler extends AbstractHandler {
 
     /**
      * Constructs a new object.
+     * @param simpleMmiDemo reference to the demo
      */
     public MmiHandler(final SimpleMmiDemo simpleMmiDemo) {
         demo = simpleMmiDemo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void handle(String target, Request baseRequest,
-            HttpServletRequest request, HttpServletResponse response)
+    public void handle(final String target, final Request baseRequest,
+            final HttpServletRequest request,
+            final  HttpServletResponse response)
             throws IOException, ServletException {
         LOGGER.info("request from " + request.getRemoteAddr());
         response.setContentType("text/html;charset=utf-8");
@@ -77,11 +84,11 @@ public class MmiHandler extends AbstractHandler {
                             final String contextId = ext.getContext();
                             final String source = ext.getSource();
                             final String target = ext.getTarget();
-//                            try {
-//                                sendYes(contextId, target, source);
-//                            } catch (Exception e) {
-//                                LOGGER.warn(e.getMessage(), e);
-//                            }
+                            try {
+                                sendYes(contextId, target, source);
+                            } catch (Exception e) {
+                                LOGGER.warn(e.getMessage(), e);
+                            }
                         } else if (sessionTerminated(mmi)) {
                             demo.notifySessionEnd();
                         }
@@ -168,7 +175,7 @@ public class MmiHandler extends AbstractHandler {
                 .setAttributeNS(EMMA_NAMESPACE, "emma:medium", "acoustic");
         any.addContent(emma);
         interpretation.setAttributeNS(EMMA_NAMESPACE, "emma:mode", "mmi");
-        float confidence = 0.9f;
+        final float confidence = 0.9f;
         interpretation.setAttributeNS(EMMA_NAMESPACE, "emma:confidence",
                 Float.toString(confidence));
         final String tokens = "yes";

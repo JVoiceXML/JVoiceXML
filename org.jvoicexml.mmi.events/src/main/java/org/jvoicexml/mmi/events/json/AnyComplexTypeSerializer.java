@@ -41,8 +41,8 @@ final class AnyComplexTypeSerializer implements JsonSerializer<AnyComplexType> {
      * {@inheritDoc}
      */
     @Override
-    public JsonElement serialize(AnyComplexType src, Type typeOfSrc,
-            JsonSerializationContext context) {
+    public JsonElement serialize(final AnyComplexType src, final Type typeOfSrc,
+            final JsonSerializationContext context) {
         final  List<Object> content = src.getContent();
         return context.serialize(content);
     }

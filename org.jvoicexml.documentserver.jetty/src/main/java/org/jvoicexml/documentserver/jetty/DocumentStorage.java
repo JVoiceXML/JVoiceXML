@@ -47,7 +47,8 @@ public class DocumentStorage implements ContextHandlerProvider {
             .getLogger(DocumentStorage.class);
 
     /** Generated documents per session. */
-    private final Map<SessionIdentifier, Collection<GrammarDocument>> sessionDocuments;
+    private final Map<SessionIdentifier, Collection<GrammarDocument>>
+        sessionDocuments;
 
     /** Stored documents. */
     private final Map<URI, GrammarDocument> documents;
@@ -66,7 +67,8 @@ public class DocumentStorage implements ContextHandlerProvider {
      */
     public DocumentStorage() {
         sessionDocuments = 
-                new java.util.HashMap<SessionIdentifier, Collection<GrammarDocument>>();
+                new java.util.HashMap<SessionIdentifier, 
+                    Collection<GrammarDocument>>();
         documents = new java.util.HashMap<URI, GrammarDocument>();
         internalGrammarHandler = new InternalGrammarDocumentHandler(this);
         builtinGrammarHandler = new BuiltinGrammarHandler();
@@ -170,7 +172,8 @@ public class DocumentStorage implements ContextHandlerProvider {
      * @return the document
      * @throws URISyntaxException if the URI does not feature a valid path
      */
-    public GrammarDocument getDocument(final URI uri) throws URISyntaxException {
+    public GrammarDocument getDocument(final URI uri)
+            throws URISyntaxException {
         final String path = uri.getPath();
         final URI pathUri = new URI(path);
         return documents.get(pathUri);
@@ -183,7 +186,8 @@ public class DocumentStorage implements ContextHandlerProvider {
      *            the id of the session
      * @throws URISyntaxException if the URI does not feature a valid path
      */
-    public void clear(final SessionIdentifier sessionId) throws URISyntaxException {
+    public void clear(final SessionIdentifier sessionId)
+            throws URISyntaxException {
         final Collection<GrammarDocument> currentDocuments = sessionDocuments
                 .get(sessionId);
         if (currentDocuments == null) {

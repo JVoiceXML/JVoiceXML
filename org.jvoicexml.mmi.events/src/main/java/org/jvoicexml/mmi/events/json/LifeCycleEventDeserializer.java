@@ -68,7 +68,8 @@ abstract class LifeCycleEventDeserializer<T extends LifeCycleEvent>
      * @param memberName the property to retreive
      * @return value of the property as a string
      */
-    protected String getAsString(final JsonObject object, final String memberName) {
+    protected String getAsString(final JsonObject object,
+            final String memberName) {
         final JsonElement element = object.get(memberName);
         if (element == null) {
             return null;
@@ -77,7 +78,7 @@ abstract class LifeCycleEventDeserializer<T extends LifeCycleEvent>
     }
     
     /**
-     * Creates the life cycle event to deserialize
+     * Creates the life cycle event to deserialize.
      * @return lif cycle event to deserialize
      */
     abstract T createLifeCycleEvent();
@@ -97,28 +98,29 @@ abstract class LifeCycleEventDeserializer<T extends LifeCycleEvent>
      * {@inheritDoc}
      */
     @Override
-    public T deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
-        final T event = getLifeCycleEvent();
+    public T deserialize(final JsonElement json, final Type typeOfT,
+            final JsonDeserializationContext context)
+                    throws JsonParseException {
+        final T lifeCycleEvent = getLifeCycleEvent();
         final JsonObject object = json.getAsJsonObject();
         final String requestId = getAsString(object, "requestID");
-        event.setRequestId(requestId);
+        lifeCycleEvent.setRequestId(requestId);
         final String source = getAsString(object, "source");
-        event.setSource(source);
+        lifeCycleEvent.setSource(source);
         final String target = getAsString(object, "target");
-        event.setTarget(target);
+        lifeCycleEvent.setTarget(target);
         if (object.has("data")) {
             final AnyComplexType any = new AnyComplexType();
             final JsonElement dataElement = object.get("data");
             final JsonArray data = dataElement.getAsJsonArray();
-            for (int i=0; i< data.size(); i++) {
+            for (int i = 0; i < data.size(); i++) {
                 final JsonElement current = data.get(i);
                 final Object o = context.deserialize(current, dataType);
                 any.addContent(o);
             }
-            event.setData(any);
+            lifeCycleEvent.setData(any);
         }
-        return event;
+        return lifeCycleEvent;
     }
 
 }

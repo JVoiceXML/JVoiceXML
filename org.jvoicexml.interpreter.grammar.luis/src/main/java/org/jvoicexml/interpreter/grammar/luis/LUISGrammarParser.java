@@ -49,7 +49,7 @@ public class LUISGrammarParser implements GrammarParser<GrammarDocument> {
     }
 
     /**
-     * Sets the subscription key
+     * Sets the subscription key.
      * 
      * @param subscription
      *            the subscription key

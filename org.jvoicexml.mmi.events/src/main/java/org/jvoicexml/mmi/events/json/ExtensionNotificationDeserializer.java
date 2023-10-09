@@ -34,12 +34,13 @@ import com.google.gson.JsonParseException;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class ExtensionNotificationDeserializer extends LifeCycleRequestDeserializer<ExtensionNotification> {
+final class ExtensionNotificationDeserializer
+    extends LifeCycleRequestDeserializer<ExtensionNotification> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public ExtensionNotificationDeserializer() {
+    ExtensionNotificationDeserializer() {
     }
     
     /**
@@ -47,7 +48,7 @@ final class ExtensionNotificationDeserializer extends LifeCycleRequestDeserializ
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public ExtensionNotificationDeserializer(final Type type) {
+    ExtensionNotificationDeserializer(final Type type) {
         super(type);
     }
     

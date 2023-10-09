@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.ClearContextRequest;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class ClearContextRequestDeserializer extends LifeCycleRequestDeserializer<ClearContextRequest> {
+final class ClearContextRequestDeserializer
+    extends LifeCycleRequestDeserializer<ClearContextRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public ClearContextRequestDeserializer() {
+    ClearContextRequestDeserializer() {
     }
     
     /**
@@ -42,7 +43,7 @@ final class ClearContextRequestDeserializer extends LifeCycleRequestDeserializer
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public ClearContextRequestDeserializer(final Type type) {
+    ClearContextRequestDeserializer(final Type type) {
         super(type);
     }
     

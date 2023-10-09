@@ -48,7 +48,7 @@ public class ClassloaderServer extends ClassServer {
      *                  if the server could not be started
      * 
      */
-    public ClassloaderServer(int port) throws IOException {
+    public ClassloaderServer(final int port) throws IOException {
         super(port);
         loader = getClass().getClassLoader();
         LOGGER.info("using JNDI class loader '" + loader + "'");
@@ -96,7 +96,7 @@ public class ClassloaderServer extends ClassServer {
      * {@inheritDoc}
      */
     @Override
-    public byte[] getBytes(String path)
+    public byte[] getBytes(final String path)
             throws IOException, ClassNotFoundException {
         final InputStream in = getInputStream(path);
         if (in == null) {
@@ -104,10 +104,10 @@ public class ClassloaderServer extends ClassServer {
             throw new IOException("unable to load '" + path + "'");
         }
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final byte[] bytes = new byte[1024];
-        int read = 0;;
-        do
-        {
+        final int bufferSize = 1024;
+        final byte[] bytes = new byte[bufferSize];
+        int read = 0;
+        do {
             read = in.read(bytes);
             if (read > 0) {
                 out.write(bytes, 0, read);

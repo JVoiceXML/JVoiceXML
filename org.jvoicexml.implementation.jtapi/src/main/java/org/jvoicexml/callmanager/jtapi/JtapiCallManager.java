@@ -205,7 +205,7 @@ public final class JtapiCallManager extends BaseCallManager
      */
     @Override
     protected Collection<org.jvoicexml.callmanager.Terminal> createTerminals()
-        throws NoresourceError{
+        throws NoresourceError {
         final Provider prov = getProvider();
         final Address[] addresses;
         try {

@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.ClearContextResponse;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class ClearContextResponseDeserializer extends LifeCycleResponseDeserializer<ClearContextResponse> {
+final class ClearContextResponseDeserializer
+    extends LifeCycleResponseDeserializer<ClearContextResponse> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public ClearContextResponseDeserializer() {
+    ClearContextResponseDeserializer() {
     }
     
     /**
@@ -43,7 +44,7 @@ final class ClearContextResponseDeserializer extends LifeCycleResponseDeserializ
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public ClearContextResponseDeserializer(final Type data, final Type statusInfo) {
+    ClearContextResponseDeserializer(final Type data, final Type statusInfo) {
         super(data, statusInfo);
     }
     

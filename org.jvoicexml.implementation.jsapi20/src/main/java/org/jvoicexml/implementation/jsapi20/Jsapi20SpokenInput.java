@@ -250,7 +250,8 @@ public final class Jsapi20SpokenInput
     @Override
     public GrammarImplementation<RuleGrammar> loadGrammar(final URI uri,
             final GrammarType grammarType) throws NoresourceError,
-            UnsupportedFormatError, SemanticError, NoauthorizationError, IOException {
+                UnsupportedFormatError, SemanticError, NoauthorizationError,
+                    IOException {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }

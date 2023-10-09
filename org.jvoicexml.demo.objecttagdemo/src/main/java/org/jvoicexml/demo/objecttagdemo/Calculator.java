@@ -45,7 +45,7 @@ public final class Calculator {
     }
 
     /**
-     * Retrieves the overall sum
+     * Retrieves the overall sum.
      * @return <code>the overall sum</code>
      */
     public int getOverallSum() {

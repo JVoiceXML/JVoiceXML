@@ -22,6 +22,7 @@
 package org.jvoicexml.interpreter.grammar.regex;
 
 import java.net.URI;
+import java.util.Objects;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.implementation.GrammarImplementation;
@@ -60,14 +61,25 @@ public final class RegexGrammarImplementation
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        if (document == null) {
-            result = prime * result;
-        } else {
-            result = prime * result + document.hashCode();
+        return Objects.hash(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
         }
-        return result;
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        RegexGrammarImplementation other = (RegexGrammarImplementation) obj;
+        return Objects.equals(document, other.document);
     }
 
     /**

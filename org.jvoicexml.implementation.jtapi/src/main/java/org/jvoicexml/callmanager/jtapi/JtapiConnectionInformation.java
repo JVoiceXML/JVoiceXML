@@ -201,7 +201,7 @@ public final class JtapiConnectionInformation implements ConnectionInformation {
     }
 
     @Override
-    public void setSessionIdentifier(SessionIdentifier id) {
+    public void setSessionIdentifier(final SessionIdentifier id) {
         // TODO Auto-generated method stub
         
     }

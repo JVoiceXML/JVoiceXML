@@ -34,10 +34,10 @@ import javax.telephony.media.NotBoundException;
 import javax.telephony.media.RTC;
 import javax.telephony.media.RecorderConstants;
 
-import net.sourceforge.gjtapi.media.GenericMediaService;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.implementation.TelephonyEvent;
+
+import net.sourceforge.gjtapi.media.GenericMediaService;
 
 /**
  * Thread to record a stream from a given URI.
@@ -59,7 +59,7 @@ class TerminalRecorder extends TerminalMedia {
      * @param term the terminal to notify about events.
      * @param service media service to play the audio.
      */
-    public TerminalRecorder(final JVoiceXmlTerminal term,
+    TerminalRecorder(final JVoiceXmlTerminal term,
             final GenericMediaService service) {
         super(service);
         terminal = term;

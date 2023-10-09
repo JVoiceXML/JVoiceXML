@@ -50,7 +50,7 @@ public class BuiltinGrammarHandler extends AbstractHandler {
             .getLogger(BuiltinGrammarHandler.class);
 
     /** The context path of this handler. */
-    public static String CONTEXT_PATH = "/builtin";
+    public static final String CONTEXT_PATH = "/builtin";
 
     /** Known grammar creators. */
     private final Map<String, GrammarCreator> creators;
@@ -93,12 +93,14 @@ public class BuiltinGrammarHandler extends AbstractHandler {
      */
     @Override
     public void handle(final String target, final Request baseRequest,
-            final HttpServletRequest request, final HttpServletResponse response)
+            final HttpServletRequest request,
+            final HttpServletResponse response)
             throws IOException, ServletException {
         LOGGER.info("request from " + request.getRemoteAddr()
                 + " to builtin grammar handler");
         final String requestUri = request.getRequestURI();
-        final String builtintUri = requestUri.substring(CONTEXT_PATH.length() + 1);
+        final String builtintUri = requestUri.substring(
+                CONTEXT_PATH.length() + 1);
         final String type = extractBuiltinType(builtintUri);
         final GrammarCreator creator = creators.get(type);
         if (creator == null) {
@@ -123,7 +125,7 @@ public class BuiltinGrammarHandler extends AbstractHandler {
     /**
      * Extracts the builtin type from the URI.
      * 
-     * @param uri
+     * @param requestUri
      *            the given URI.
      * @return extracted builtin type
      */

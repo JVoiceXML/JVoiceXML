@@ -108,7 +108,7 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * Although this terminal is the source where to stream the audio this
      * implementation makes no assumptions about the URI. In most cases this
      * will be related to the {@link SpokenInput} implementation. In the
-     * simplest case this implementation <emph>invents</emph> a unique URI.
+     * simplest case this implementation <i>invents</i> a unique URI.
      * </p>
      */
     public void play(final SynthesizedOutput output,
@@ -120,7 +120,7 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
         final URI uri;
 //        try {
             // TODO add a more generic interface here
-            uri = null;//output.getUriForNextSynthesisizedOutput();
+            uri = null; //output.getUriForNextSynthesisizedOutput();
 //        } catch (URISyntaxException e) {
 //            throw new IOException(e.getMessage(), e);
 //        }
@@ -147,7 +147,7 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
         final URI uri;
 //        try {
             // TODO add a more generic interface here
-            uri =null;// input.getUriForNextSpokenInput();
+            uri = null; // input.getUriForNextSpokenInput();
 //        } catch (URISyntaxException e) {
 //            throw new IOException(e.getMessage(), e);
 //        }
@@ -190,8 +190,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * Inform the {@link TelephonyListener} about an answered event.
      */
     protected void fireAnswerEvent() {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
                 TelephonyEvent.ANSWERED);
         for (TelephonyListener listener : tmp) {
@@ -206,8 +207,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      *            destination URI of the trasfer.
      */
     protected void fireTransferEvent(final String uri) {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
                 TelephonyEvent.TRANSFERRED, uri);
         for (TelephonyListener listener : tmp) {
@@ -219,8 +221,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * Inform the {@link TelephonyListener} about a play started event.
      */
     protected void firePlayEvent() {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
                 TelephonyEvent.PLAY_STARTED);
         for (TelephonyListener listener : tmp) {
@@ -232,8 +235,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * Inform the {@link TelephonyListener} about a play stopped event.
      */
     protected void firePlayStoppedEvent() {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
                 TelephonyEvent.PLAY_STOPPED);
         for (TelephonyListener listener : tmp) {
@@ -245,8 +249,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * Inform the {@link TelephonyListener} about a record started event.
      */
     protected void fireRecordStartedEvent() {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
                 TelephonyEvent.RECORD_STARTED);
         for (TelephonyListener listener : tmp) {
@@ -258,8 +263,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * Inform the {@link TelephonyListener} about a record stopped event.
      */
     protected void fireRecordStoppedEvent() {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
                 TelephonyEvent.RECORD_STOPPED);
         for (TelephonyListener listener : tmp) {
@@ -271,8 +277,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * Inform the {@link TelephonyListener} about a hangup event.
      */
     protected void fireHangedUpEvent() {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
                 TelephonyEvent.HUNGUP);
         for (TelephonyListener listener : tmp) {
@@ -316,7 +323,8 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation info) throws IOException {
-        final JtapiConnectionInformation jtapiInfo = (JtapiConnectionInformation) info;
+        final JtapiConnectionInformation jtapiInfo =
+                (JtapiConnectionInformation) info;
         terminal = jtapiInfo.getTerminal();
         terminal.addListener(this);
     }
@@ -325,7 +333,8 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * {@inheritDoc}
      */
     public void disconnect(final ConnectionInformation info) {
-        final JtapiConnectionInformation jtapiInfo = (JtapiConnectionInformation) info;
+        final JtapiConnectionInformation jtapiInfo =
+                (JtapiConnectionInformation) info;
         terminal = jtapiInfo.getTerminal();
         terminal.hangup();
         terminal.removeListener(this);
@@ -382,8 +391,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      */
     @Override
     public void telephonyCallAnswered(final TelephonyEvent event) {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         for (TelephonyListener listener : tmp) {
             listener.telephonyCallAnswered(event);
         }
@@ -393,7 +403,7 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * {@inheritDoc}
      */
     @Override
-    public void dtmfInput(char dtmf) {
+    public void dtmfInput(final char dtmf) {
         // TODO Auto-generated method stub
         
     }
@@ -403,8 +413,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      */
     @Override
     public void telephonyCallHungup(final TelephonyEvent event) {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         for (TelephonyListener listener : tmp) {
             listener.telephonyCallHungup(event);
         }
@@ -414,8 +425,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      * {@inheritDoc}
      */
     public void telephonyMediaEvent(final TelephonyEvent event) {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         for (TelephonyListener listener : tmp) {
             listener.telephonyCallAnswered(event);
         }
@@ -432,8 +444,9 @@ public final class JtapiTelephony implements Telephony, TelephonyListener {
      */
     @Override
     public void telephonyError(final ErrorEvent error) {
-        final Collection<TelephonyListener> tmp = new java.util.ArrayList<TelephonyListener>(
-                callControlListeners);
+        final Collection<TelephonyListener> tmp =
+                new java.util.ArrayList<TelephonyListener>(
+                        callControlListeners);
         for (TelephonyListener listener : tmp) {
             listener.telephonyError(error);
         }

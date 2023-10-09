@@ -46,7 +46,7 @@ public class LUISGrammarIdentifier implements GrammarIdentifier {
             return null;
         }
         if (host.toLowerCase().contains("api.cognitive.microsoft.com")) {
-        	return LUISGrammarType.LUIS;
+            return LUISGrammarType.LUIS;
         }
         return null;
     }

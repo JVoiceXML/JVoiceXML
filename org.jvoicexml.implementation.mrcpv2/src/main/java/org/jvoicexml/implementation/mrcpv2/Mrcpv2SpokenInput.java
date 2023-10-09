@@ -397,7 +397,8 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        Collection<GrammarType> supportedTypes = new java.util.HashSet<GrammarType>();
+        Collection<GrammarType> supportedTypes =
+                new java.util.HashSet<GrammarType>();
         for (GrammarParser<?> parser : parsers.values()) {
             supportedTypes.add(parser.getType());
         }
@@ -454,8 +455,6 @@ public final class Mrcpv2SpokenInput
     /**
      * Notifies all registered listeners about the given event.
      * 
-     * @param event
-     *            the event.
      * @since 0.6
      */
     void fireTimeoutEvent() {

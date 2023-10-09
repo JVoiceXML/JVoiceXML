@@ -57,6 +57,12 @@ public final class SubdialogDemo {
             .getLogger(SubdialogDemo.class);
 
     /**
+     * Do not create from outside.
+     */
+    private SubdialogDemo() {
+    }
+
+    /**
      * The main method.
      * 
      * @param args

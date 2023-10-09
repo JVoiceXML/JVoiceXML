@@ -55,7 +55,8 @@ public final class JtapiConnectionInformationFactory
     /**
      * {@inheritDoc}
      */
-    public ConnectionInformation createConnectionInformation(final CallManager callManager,
+    public ConnectionInformation createConnectionInformation(
+            final CallManager callManager,
             final ConfiguredApplication application,
             final CallParameters parameters)
         throws ConnectionInformationCreationException {

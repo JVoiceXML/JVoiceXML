@@ -48,7 +48,7 @@ class InternalGrammarDocumentHandler extends AbstractHandler  {
             .getLogger(InternalGrammarDocumentHandler.class);
 
     /** The context path of this handler. */
-    public static String CONTEXT_PATH = "/grammars";
+    public static final String CONTEXT_PATH = "/grammars";
     
     /** Reference to the document storage. */
     private final DocumentStorage storage;
@@ -59,7 +59,8 @@ class InternalGrammarDocumentHandler extends AbstractHandler  {
      * @param documentStorage
      *            the document storage
      */
-    public InternalGrammarDocumentHandler(final DocumentStorage documentStorage) {
+    InternalGrammarDocumentHandler(
+            final DocumentStorage documentStorage) {
         storage = documentStorage;
     }
 
@@ -68,7 +69,8 @@ class InternalGrammarDocumentHandler extends AbstractHandler  {
      */
     @Override
     public void handle(final String target, final Request baseRequest,
-            final HttpServletRequest request, final HttpServletResponse response)
+            final HttpServletRequest request,
+            final HttpServletResponse response)
             throws IOException, ServletException {
         LOGGER.info("request from " + request.getRemoteAddr()
                 + " to internal grammar handler");

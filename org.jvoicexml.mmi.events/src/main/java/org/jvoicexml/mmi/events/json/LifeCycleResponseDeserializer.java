@@ -87,7 +87,7 @@ abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse> extend
             final AnyComplexType any = new AnyComplexType();
             final JsonElement dataElement = object.get("statusInfo");
             final JsonArray statusInfo = dataElement.getAsJsonArray();
-            for (int i=0; i< statusInfo.size(); i++) {
+            for (int i = 0; i < statusInfo.size(); i++) {
                 final JsonElement current = statusInfo.get(i);
                 final Object o = context.deserialize(current, statusInfoType);
                 any.addContent(o);

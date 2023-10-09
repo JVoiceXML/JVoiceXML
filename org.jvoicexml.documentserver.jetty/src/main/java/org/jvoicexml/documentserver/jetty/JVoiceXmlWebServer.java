@@ -46,19 +46,23 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
     private static final Logger LOGGER = LogManager
             .getLogger(JVoiceXmlWebServer.class);
 
+    /** Default storage port. */
+    private static final int DEFAULT_STORAGE_PORT = 9595;
+
     /** The integrated web server. */
     private Server server;
 
     /** Port of the document storage. */
     private int storagePort;
     
+    /** Known context providers. */
     private final Collection<ContextHandlerProvider> providers;
     
     /**
      * Constructs a new web server with the default port {@code 9595}.
      */
     public JVoiceXmlWebServer() {
-        storagePort = 9595;
+        storagePort = DEFAULT_STORAGE_PORT;
         providers = new java.util.ArrayList<ContextHandlerProvider>();
     }
     
@@ -78,7 +82,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
      * @param contextHandlerProviders
      */
     public void setContextHandlerProviders(
-            List<ContextHandlerProvider> contextHandlerProviders) {
+            final List<ContextHandlerProvider> contextHandlerProviders) {
         providers.addAll(contextHandlerProviders);
     }
 
@@ -110,7 +114,8 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
                 addContextHandlers();
         ContextHandler[] handlers = new ContextHandler[contextHandlers.size()];
         handlers = contextHandlers.toArray(handlers);
-        final ContextHandlerCollection contexts = new ContextHandlerCollection();
+        final ContextHandlerCollection contexts =
+                new ContextHandlerCollection();
         contexts.setHandlers(handlers);
         server.setHandler(contexts);
         try {
@@ -126,7 +131,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
     }
 
     /**
-     * Register the context handlers from the providers
+     * Register the context handlers from the providers.
      * @return created context handlers.
      */
     private Collection<ContextHandler> addContextHandlers() {
@@ -185,7 +190,7 @@ public final class JVoiceXmlWebServer implements DocumentRepository {
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(SessionIdentifier sessionId) {
+    public void sessionClosed(final SessionIdentifier sessionId) {
         final DocumentStorage storage = getDocumentStorage();
         if (storage == null) {
             return;

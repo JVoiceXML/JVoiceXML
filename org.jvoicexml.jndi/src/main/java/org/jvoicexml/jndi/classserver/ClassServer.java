@@ -73,7 +73,7 @@ public abstract class ClassServer implements Runnable {
      * @exception IOException
      *                if the ClassServer could not listen on <b>port</b>.
      */
-    protected ClassServer(int port) throws IOException {
+    protected ClassServer(final int port) throws IOException {
         server = new ServerSocket(port);
         newListener();
         LOGGER.info("class server started on port " + port);
@@ -91,7 +91,7 @@ public abstract class ClassServer implements Runnable {
      * @exception IOException
      *                if error occurs reading the class
      */
-    public abstract byte[] getBytes(final String path)
+    public abstract byte[] getBytes(String path)
             throws IOException, ClassNotFoundException;
 
     /**
@@ -166,6 +166,8 @@ public abstract class ClassServer implements Runnable {
 
     /**
      * Returns the path to the class file obtained from parsing the HTML header.
+     * @param in the input stream to read from
+     * @return class file
      */
     private static String getPath(final DataInputStream in) throws IOException {
         final Scanner scanner = new Scanner(in);
@@ -177,8 +179,9 @@ public abstract class ClassServer implements Runnable {
         String path = "";
 
         // extract class from GET line
-        if (line.startsWith("GET /")) {
-            line = line.substring(5, line.length() - 1).trim();
+        final String getPrefix = "GET /";
+        if (line.startsWith(getPrefix)) {
+            line = line.substring(getPrefix.length(), line.length() - 1).trim();
 
             int index = line.indexOf(".class ");
             if (index != -1) {

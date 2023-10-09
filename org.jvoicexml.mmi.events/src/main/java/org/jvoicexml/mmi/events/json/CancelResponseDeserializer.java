@@ -30,12 +30,13 @@ import org.jvoicexml.mmi.events.CancelResponse;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class CancelResponseDeserializer extends LifeCycleResponseDeserializer<CancelResponse> {
+final class CancelResponseDeserializer
+    extends LifeCycleResponseDeserializer<CancelResponse> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public CancelResponseDeserializer() {
+    CancelResponseDeserializer() {
     }
     
     /**
@@ -44,7 +45,7 @@ final class CancelResponseDeserializer extends LifeCycleResponseDeserializer<Can
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public CancelResponseDeserializer(final Type data, final Type statusInfo) {
+    CancelResponseDeserializer(final Type data, final Type statusInfo) {
         super(data, statusInfo);
     }
     
