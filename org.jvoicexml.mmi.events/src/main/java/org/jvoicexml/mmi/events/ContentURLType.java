@@ -74,7 +74,8 @@ public final class ContentURLType implements Serializable {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "href", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "href",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     @XmlSchemaType(name = "anyURI")
     public String getHref() {
         return href;
@@ -97,7 +98,8 @@ public final class ContentURLType implements Serializable {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "max-age", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "max-age",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getMaxAge() {
         return maxAge;
     }
@@ -119,7 +121,8 @@ public final class ContentURLType implements Serializable {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "fetchtimeout", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "fetchtimeout",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getFetchtimeout() {
         return fetchtimeout;
     }
@@ -147,7 +150,7 @@ public final class ContentURLType implements Serializable {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

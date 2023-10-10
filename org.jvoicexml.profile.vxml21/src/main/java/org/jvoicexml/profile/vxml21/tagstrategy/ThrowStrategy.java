@@ -85,7 +85,8 @@ final class ThrowStrategy
     @Override
     public void validateAttributes(final DataModel model)
             throws ErrorEvent {
-        event = (String) getAttributeWithAlternativeExpr(model, Throw.ATTRIBUTE_EVENT, Throw.ATTRIBUTE_EVENTEXPR);
+        event = (String) getAttributeWithAlternativeExpr(model,
+                Throw.ATTRIBUTE_EVENT, Throw.ATTRIBUTE_EVENTEXPR);
         message = (String) getOptionalAttributeWithAlternativeExpr(model,
                 Throw.ATTRIBUTE_MESSAGE, Throw.ATTRIBUTE_MESSAGEEXPR); 
     }

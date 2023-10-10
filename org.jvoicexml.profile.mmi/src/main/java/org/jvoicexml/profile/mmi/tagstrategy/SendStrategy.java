@@ -51,7 +51,8 @@ import org.jvoicexml.xml.VoiceXmlNode;
  */
 final class SendStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(SendStrategy.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(SendStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -93,7 +94,8 @@ final class SendStrategy extends AbstractTagStrategy {
     @Override
     public void validateAttributes(final DataModel model) throws ErrorEvent {
         body = getAttributeWithAlternativeExpr(model, "body", "bodyexpr");
-        event = (String) getAttributeWithAlternativeExpr(model, "event", "eventexpr");
+        event = (String) getAttributeWithAlternativeExpr(model, "event",
+                "eventexpr");
         target = (String) getAttributeWithAlternativeExpr(model, "target",
                 "targetexpr");
     }
@@ -120,7 +122,8 @@ final class SendStrategy extends AbstractTagStrategy {
         LOGGER.info("sending " + mmi);
 
         // Deliver it over the event bus
-        final OutgoingExtensionNotificationJVoiceXmlEvent jvxmlevent = new OutgoingExtensionNotificationJVoiceXmlEvent(
+        final OutgoingExtensionNotificationJVoiceXmlEvent jvxmlevent =
+                new OutgoingExtensionNotificationJVoiceXmlEvent(
                 mmi);
         final EventBus bus = context.getEventBus();
         bus.publish(jvxmlevent);

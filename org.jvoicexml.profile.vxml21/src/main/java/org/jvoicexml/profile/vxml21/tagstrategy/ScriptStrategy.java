@@ -57,7 +57,8 @@ import org.jvoicexml.xml.vxml.Script;
  */
 class ScriptStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(ScriptStrategy.class);
+    private static final Logger LOGGER = 
+            LogManager.getLogger(ScriptStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -90,7 +91,8 @@ class ScriptStrategy extends AbstractTagStrategy {
     @Override
     public void validateAttributes(final DataModel model) throws ErrorEvent {
         final String srcAttribute = (String) getAttribute(Script.ATTRIBUTE_SRC);
-        final String srcExprAttribute = (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
+        final String srcExprAttribute = 
+                (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
         if ((srcAttribute != null) && (srcExprAttribute != null)) {
             throw new BadFetchError(
                     "only one of src and srcexpr may be specified");
@@ -201,11 +203,13 @@ class ScriptStrategy extends AbstractTagStrategy {
      */
     private FetchAttributes getFetchAttributes() {
         final FetchAttributes attributes = new FetchAttributes();
-        final String fetchHint = (String) getAttribute(Script.ATTRIBUTE_FETCHHINT);
+        final String fetchHint = 
+                (String) getAttribute(Script.ATTRIBUTE_FETCHHINT);
         if (fetchHint != null) {
             attributes.setFetchHint(fetchHint);
         }
-        final String fetchTimeout = (String) getAttribute(Script.ATTRIBUTE_FETCHTIMEOUT);
+        final String fetchTimeout = 
+                (String) getAttribute(Script.ATTRIBUTE_FETCHTIMEOUT);
         if (fetchTimeout != null) {
             final TimeParser parser = new TimeParser(fetchTimeout);
             final long seconds = parser.parse();
@@ -217,7 +221,8 @@ class ScriptStrategy extends AbstractTagStrategy {
             final long seconds = parser.parse();
             attributes.setMaxage(seconds);
         }
-        final String maxstale = (String) getAttribute(Script.ATTRIBUTE_MAXSTALE);
+        final String maxstale = 
+                (String) getAttribute(Script.ATTRIBUTE_MAXSTALE);
         if (maxstale != null) {
             final TimeParser parser = new TimeParser(maxstale);
             final long seconds = parser.parse();

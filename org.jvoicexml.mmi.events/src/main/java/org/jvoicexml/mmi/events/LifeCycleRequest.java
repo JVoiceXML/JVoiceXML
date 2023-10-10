@@ -75,7 +75,8 @@ public class LifeCycleRequest extends LifeCycleEvent {
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "Context",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public final String getContext() {
         return context;
     }
@@ -106,7 +107,7 @@ public class LifeCycleRequest extends LifeCycleEvent {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

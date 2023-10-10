@@ -41,12 +41,11 @@ import org.jvoicexml.profile.vxml21.tagstrategy.JvoiceXmlSsmlParsingStrategyFact
  * and adds some specific extensions for MMI.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4184 $
  * @since 0.7.7
  */
 public class MmiProfile implements Profile {
     /** Name of the profile. */
-    public final static String NAME = "MMI";
+    public static final String NAME = "MMI";
 
     /** The initialization tag strategy factory. */
     private TagStrategyFactory initializationTagStrategyFactory;
@@ -65,7 +64,8 @@ public class MmiProfile implements Profile {
      */
     public MmiProfile() {
         ssmlParsingStrategyFactory = new JvoiceXmlSsmlParsingStrategyFactory();
-        queues = new java.util.HashMap<VoiceXmlInterpreterContext, ReceiveEventQueue>();
+        queues = new java.util.HashMap<VoiceXmlInterpreterContext,
+                    ReceiveEventQueue>();
     }
 
     /**
@@ -93,7 +93,7 @@ public class MmiProfile implements Profile {
      * {@inheritDoc}
      */
     @Override
-    public void terminate(VoiceXmlInterpreterContext context) {
+    public void terminate(final VoiceXmlInterpreterContext context) {
         synchronized (queues) {
             queues.remove(context);
         }
@@ -141,7 +141,8 @@ public class MmiProfile implements Profile {
     public void setTagStrategyFactory(final TagStrategyFactory factory) {
         tagStrategyFactory = factory;
         if (tagStrategyFactory instanceof MmiTagStrategyFactory) {
-            MmiTagStrategyFactory mmiTagStrategyFactory = (MmiTagStrategyFactory) tagStrategyFactory;
+            MmiTagStrategyFactory mmiTagStrategyFactory =
+                    (MmiTagStrategyFactory) tagStrategyFactory;
             mmiTagStrategyFactory.setProfle(this);
         }
     }

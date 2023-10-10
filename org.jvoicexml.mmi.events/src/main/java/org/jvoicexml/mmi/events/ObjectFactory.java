@@ -43,167 +43,168 @@ import javax.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public final class ObjectFactory {
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.jvoicexml.mmi.events.xml
+     * Create a new ObjectFactory that can be used to create new instances of
+     * schema derived classes for package: org.jvoicexml.mmi.events.xml.
      * 
      */
     public ObjectFactory() {
     }
 
     /**
-     * Create an instance of {@link NewContextRequest }
-     * 
+     * Create an instance of {@link NewContextRequest}.
+     * @return created request
      */
     public NewContextRequest createNewContextRequest() {
         return new NewContextRequest();
     }
 
     /**
-     * Create an instance of {@link ClearContextResponse }
-     * 
+     * Create an instance of {@link ClearContextResponse}.
+     * @return created response
      */
     public ClearContextResponse createClearContextResponse() {
         return new ClearContextResponse();
     }
 
     /**
-     * Create an instance of {@link CancelRequest }
-     * 
+     * Create an instance of {@link CancelRequest}.
+     * @return created request
      */
     public CancelRequest createCancelRequest() {
         return new CancelRequest();
     }
 
     /**
-     * Create an instance of {@link PauseRequest }
-     * 
+     * Create an instance of {@link PauseRequest}.
+     * @return created request
      */
     public PauseRequest createPauseRequest() {
         return new PauseRequest();
     }
 
     /**
-     * Create an instance of {@link NewContextResponse }
-     * 
+     * Create an instance of {@link NewContextResponse}.
+     * @return created response
      */
     public NewContextResponse createNewContextResponse() {
         return new NewContextResponse();
     }
 
     /**
-     * Create an instance of {@link PrepareResponse }
-     * 
+     * Create an instance of {@link PrepareResponse}.
+     * @return created response
      */
     public PrepareResponse createPrepareResponse() {
         return new PrepareResponse();
     }
 
     /**
-     * Create an instance of {@link ExtensionNotification }
-     * 
+     * Create an instance of {@link ExtensionNotification}.
+     * @return created notification
      */
     public ExtensionNotification createExtensionNotification() {
         return new ExtensionNotification();
     }
 
     /**
-     * Create an instance of {@link PrepareRequest }
-     * 
+     * Create an instance of {@link PrepareRequest}.
+     * @return created request
      */
     public PrepareRequest createPrepareRequest() {
         return new PrepareRequest();
     }
 
     /**
-     * Create an instance of {@link ContentURLType }
-     * 
+     * Create an instance of {@link ContentURLType}.
+     * @return created content URL type
      */
     public ContentURLType createContentURLType() {
         return new ContentURLType();
     }
 
     /**
-     * Create an instance of {@link Mmi }
-     * 
+     * Create an instance of {@link Mmi}.
+     * @return created MMI.
      */
     public Mmi createMmi() {
         return new Mmi();
     }
 
     /**
-     * Create an instance of {@link ClearContextRequest }
-     * 
+     * Create an instance of {@link ClearContextRequest}.
+     * @return created request
      */
     public ClearContextRequest createClearContextRequest() {
         return new ClearContextRequest();
     }
 
     /**
-     * Create an instance of {@link CancelResponse }
-     * 
+     * Create an instance of {@link CancelResponse}.
+     * @return created response
      */
     public CancelResponse createCancelResponse() {
         return new CancelResponse();
     }
 
     /**
-     * Create an instance of {@link DoneNotification }
-     * 
+     * Create an instance of {@link DoneNotification}.
+     * @return created notification
      */
     public DoneNotification createDoneNotification() {
         return new DoneNotification();
     }
 
     /**
-     * Create an instance of {@link PauseResponse }
-     * 
+     * Create an instance of {@link PauseResponse}.
+     * @return created response
      */
     public PauseResponse createPauseResponse() {
         return new PauseResponse();
     }
 
     /**
-     * Create an instance of {@link ResumeRequest }
-     * 
+     * Create an instance of {@link ResumeRequest}.
+     * @return created request
      */
     public ResumeRequest createResumeRequest() {
         return new ResumeRequest();
     }
 
     /**
-     * Create an instance of {@link ResumeResponse }
-     * 
+     * Create an instance of {@link ResumeResponse}.
+     * @return created response
      */
     public ResumeResponse createResumeResponse() {
         return new ResumeResponse();
     }
 
     /**
-     * Create an instance of {@link StartRequest }
-     * 
+     * Create an instance of {@link StartRequest}.
+     * @return created request
      */
     public StartRequest createStartRequest() {
         return new StartRequest();
     }
 
     /**
-     * Create an instance of {@link StartResponse }
-     * 
+     * Create an instance of {@link StartResponse}.
+     * @return created response
      */
     public StartResponse createStartResponse() {
         return new StartResponse();
     }
 
     /**
-     * Create an instance of {@link StatusRequest }
-     * 
+     * Create an instance of {@link StatusRequest}.
+     * @return created request
      */
     public StatusRequest createStatusRequest() {
         return new StatusRequest();
     }
 
     /**
-     * Create an instance of {@link StatusResponse }
-     * 
+     * Create an instance of {@link StatusResponse}.
+     * @return created response
      */
     public StatusResponse createStatusResponse() {
         return new StatusResponse();

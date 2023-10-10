@@ -45,7 +45,11 @@ public enum StatusResponseType {
     /** Concrete value. */
     private final String value;
 
-    StatusResponseType(String v) {
+    /**
+     * Create a new object.
+     * @param v the status
+     */
+    StatusResponseType(final String v) {
         value = v;
     }
 
@@ -53,7 +57,7 @@ public enum StatusResponseType {
         return value;
     }
 
-    public static StatusResponseType fromValue(String v) {
+    public static StatusResponseType fromValue(final String v) {
         for (StatusResponseType c: StatusResponseType.values()) {
             if (c.value.equals(v)) {
                 return c;

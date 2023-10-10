@@ -57,7 +57,8 @@ import org.jvoicexml.xml.vxml.Prompt;
  */
 class PromptStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(ValueStrategy.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ValueStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -89,7 +90,8 @@ class PromptStrategy extends AbstractTagStrategy {
      */
     @Override
     public void validateAttributes(final DataModel model) throws ErrorEvent {
-        final String enableBargein = (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
+        final String enableBargein =
+                (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
         // Default to bargein as true if not specified
         if (enableBargein == null) {
             bargein = true;
@@ -144,7 +146,8 @@ class PromptStrategy extends AbstractTagStrategy {
     }
 
     /**
-     * Queues the speakable to be played back in the {@link ImplementationPlatform}
+     * Queues the speakable to be played back in the
+     * {@link ImplementationPlatform}.
      * @param context the current context
      * @param fia the current FIA
      * @param speakable the speakable to be queued

@@ -36,6 +36,7 @@ import com.google.gson.JsonParseException;
  * A deserializer for {@link LifeCycleEvent}.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
+ * @param <T> type of lifecycle event
  */
 abstract class LifeCycleEventDeserializer<T extends LifeCycleEvent>
     implements JsonDeserializer<T> {
@@ -43,13 +44,13 @@ abstract class LifeCycleEventDeserializer<T extends LifeCycleEvent>
     private final Type dataType;
     
     /** The deserialized event. */
-    protected T event;
+    private T event;
     
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public LifeCycleEventDeserializer() {
+    LifeCycleEventDeserializer() {
         this(Object.class);
     }
 
@@ -58,7 +59,7 @@ abstract class LifeCycleEventDeserializer<T extends LifeCycleEvent>
      * type {@code type}.
      * @param data type of the object in the data field
      */
-    public LifeCycleEventDeserializer(final Type data) {
+    LifeCycleEventDeserializer(final Type data) {
         dataType = data;
     }
     

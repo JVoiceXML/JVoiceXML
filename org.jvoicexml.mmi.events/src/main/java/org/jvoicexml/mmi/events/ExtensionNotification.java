@@ -64,7 +64,8 @@ public final class ExtensionNotification extends LifeCycleRequest
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Name", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "Name",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public String getName() {
         return name;
     }
@@ -95,7 +96,7 @@ public final class ExtensionNotification extends LifeCycleRequest
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

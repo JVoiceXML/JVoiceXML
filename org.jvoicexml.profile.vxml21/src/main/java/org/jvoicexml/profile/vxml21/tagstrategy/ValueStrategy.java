@@ -61,7 +61,8 @@ import org.jvoicexml.xml.vxml.Value;
 public final class ValueStrategy extends AbstractTagStrategy
         implements SsmlParsingStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(ValueStrategy.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ValueStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -102,7 +103,8 @@ public final class ValueStrategy extends AbstractTagStrategy
         }
 
         final Profile profile = context.getProfile();
-        final VoiceXml21SsmlParser parser = new VoiceXml21SsmlParser(profile, node, context);
+        final VoiceXml21SsmlParser parser =
+                new VoiceXml21SsmlParser(profile, node, context);
         final SsmlDocument document;
 
         try {
@@ -118,7 +120,8 @@ public final class ValueStrategy extends AbstractTagStrategy
     }
 
     /**
-     * Queues the speakable to be played back in the {@link ImplementationPlatform}
+     * Queues the speakable to be played back in the
+     * {@link ImplementationPlatform}.
      * @param context the current context
      * @param fia the current FIA
      * @param speakable the speakable to be queued

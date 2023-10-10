@@ -34,12 +34,13 @@ import com.google.gson.JsonParseException;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class StatusRequestDeserializer extends LifeCycleEventDeserializer<StatusRequest> {
+final class StatusRequestDeserializer
+    extends LifeCycleEventDeserializer<StatusRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public StatusRequestDeserializer() {
+    StatusRequestDeserializer() {
     }
     
     /**
@@ -47,7 +48,7 @@ final class StatusRequestDeserializer extends LifeCycleEventDeserializer<StatusR
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public StatusRequestDeserializer(final Type type) {
+    StatusRequestDeserializer(final Type type) {
         super(type);
     }
     
@@ -63,8 +64,9 @@ final class StatusRequestDeserializer extends LifeCycleEventDeserializer<StatusR
      * {@inheritDoc}
      */
     @Override
-    public StatusRequest deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public StatusRequest deserialize(final JsonElement json,
+            final Type typeOfT, final JsonDeserializationContext context)
+                    throws JsonParseException {
         final StatusRequest request =
                 super.deserialize(json, typeOfT, context);
         final JsonObject object = json.getAsJsonObject();
@@ -73,8 +75,10 @@ final class StatusRequestDeserializer extends LifeCycleEventDeserializer<StatusR
             request.setContext(ctx);
         }
         if (object.has("requestAutomaticUpdate")) {
-            final JsonElement automaticUpdateElement = object.get("requestAutomaticUpdate");
-            final boolean automaticUpdate = automaticUpdateElement.getAsBoolean();
+            final JsonElement automaticUpdateElement =
+                    object.get("requestAutomaticUpdate");
+            final boolean automaticUpdate = 
+                    automaticUpdateElement.getAsBoolean();
             request.setRequestAutomaticUpdate(automaticUpdate);
         }
         return request;

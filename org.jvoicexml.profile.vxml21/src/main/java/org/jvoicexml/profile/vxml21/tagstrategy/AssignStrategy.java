@@ -46,7 +46,8 @@ import org.jvoicexml.xml.vxml.Assign;
  */
 final class AssignStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(AssignStrategy.class);
+    private static final Logger LOGGER = 
+            LogManager.getLogger(AssignStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;

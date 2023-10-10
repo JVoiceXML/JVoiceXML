@@ -94,7 +94,7 @@ public class JsonMmi {
     }
 
     /**
-     * Converts this event to JSON
+     * Converts this event to JSON.
      * 
      * @return JSON representation of this object.
      */
@@ -164,6 +164,10 @@ public class JsonMmi {
      *            the JSON to parse
      * @param data
      *            type of the object in the data section
+     * @param statusInfo
+     *            the status information
+     * @param deserializers
+     *            deserializers to use
      * @return parsed object
      */
     public static JsonMmi fromJson(final String json, final Type data,
@@ -228,7 +232,7 @@ public class JsonMmi {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

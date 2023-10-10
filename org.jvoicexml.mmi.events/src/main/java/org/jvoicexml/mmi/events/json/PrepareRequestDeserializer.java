@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.PrepareRequest;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class PrepareRequestDeserializer extends LifeCycleRequestDeserializer<PrepareRequest> {
+final class PrepareRequestDeserializer
+    extends LifeCycleRequestDeserializer<PrepareRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public PrepareRequestDeserializer() {
+    PrepareRequestDeserializer() {
     }
     
     /**
@@ -42,7 +43,7 @@ final class PrepareRequestDeserializer extends LifeCycleRequestDeserializer<Prep
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public PrepareRequestDeserializer(final Type type) {
+    PrepareRequestDeserializer(final Type type) {
         super(type);
     }
     

@@ -48,7 +48,8 @@ import org.w3c.dom.NodeList;
  */
 final class LogStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(LogStrategy.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(LogStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;

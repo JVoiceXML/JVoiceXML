@@ -37,7 +37,8 @@ import com.google.gson.JsonParseException;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class StatusResponseDeserializer extends LifeCycleEventDeserializer<StatusResponse> {
+final class StatusResponseDeserializer
+    extends LifeCycleEventDeserializer<StatusResponse> {
     /** Type of the statusInfo field. */
     private final Type statusInfoType;
 
@@ -45,17 +46,17 @@ final class StatusResponseDeserializer extends LifeCycleEventDeserializer<Status
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public StatusResponseDeserializer() {
+    StatusResponseDeserializer() {
         this(Object.class, Object.class);
     }
     
     /**
      * Constructs a new object assuming the data field containing an object of
      * type {@code type}.
-     * @param type type of the object in the data field
+     * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public StatusResponseDeserializer(final Type data, final Type statusInfo) {
+    StatusResponseDeserializer(final Type data, final Type statusInfo) {
         super(data);
         statusInfoType = statusInfo;
     }
@@ -72,8 +73,9 @@ final class StatusResponseDeserializer extends LifeCycleEventDeserializer<Status
      * {@inheritDoc}
      */
     @Override
-    public StatusResponse deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public StatusResponse deserialize(final JsonElement json,
+            final Type typeOfT, final JsonDeserializationContext context)
+                    throws JsonParseException {
         final StatusResponse response =
                 super.deserialize(json, typeOfT, context);
         final JsonObject object = json.getAsJsonObject();
@@ -82,13 +84,14 @@ final class StatusResponseDeserializer extends LifeCycleEventDeserializer<Status
             response.setContext(ctx);
         }
         final String statusString = getAsString(object, "status");
-        final StatusResponseType status = StatusResponseType.valueOf(statusString);
+        final StatusResponseType status =
+                StatusResponseType.valueOf(statusString);
         response.setStatus(status);
         if (object.has("statusInfo")) {
             final AnyComplexType any = new AnyComplexType();
             final JsonElement dataElement = object.get("statusInfo");
             final JsonArray statusInfo = dataElement.getAsJsonArray();
-            for (int i=0; i< statusInfo.size(); i++) {
+            for (int i = 0; i < statusInfo.size(); i++) {
                 final JsonElement current = statusInfo.get(i);
                 final Object o = context.deserialize(current, statusInfoType);
                 any.addContent(o);

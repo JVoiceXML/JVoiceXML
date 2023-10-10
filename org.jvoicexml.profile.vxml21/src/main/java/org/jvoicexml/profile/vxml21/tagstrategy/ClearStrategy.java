@@ -49,7 +49,8 @@ import org.jvoicexml.xml.vxml.Clear;
  */
 final class ClearStrategy extends AbstractTagStrategy {
     /** Logger instance. */
-    private static final Logger LOGGER = LogManager.getLogger(ClearStrategy.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ClearStrategy.class);
 
     /** Names to clear. */
     private TokenList namelist;

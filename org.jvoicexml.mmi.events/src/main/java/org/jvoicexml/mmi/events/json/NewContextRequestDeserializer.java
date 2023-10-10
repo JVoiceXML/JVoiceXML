@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.NewContextRequest;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class NewContextRequestDeserializer extends LifeCycleRequestDeserializer<NewContextRequest> {
+final class NewContextRequestDeserializer
+    extends LifeCycleRequestDeserializer<NewContextRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public NewContextRequestDeserializer() {
+    NewContextRequestDeserializer() {
     }
     
     /**
@@ -42,7 +43,7 @@ final class NewContextRequestDeserializer extends LifeCycleRequestDeserializer<N
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public NewContextRequestDeserializer(final Type type) {
+    NewContextRequestDeserializer(final Type type) {
         super(type);
     }
     

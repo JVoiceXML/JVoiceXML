@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * Status information to be included in {@link LifeCycleResponse}s.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.6
  */
 @XmlType(name = "statusType")
@@ -37,13 +36,20 @@ import javax.xml.bind.annotation.XmlType;
 public enum StatusType {
     /** Request was successful. */
     @XmlEnumValue("success")
-    /** Request failed. */
     SUCCESS("success"),
+
+    /** Request failed. */
     @XmlEnumValue("failure")
     FAILURE("failure");
+
+    /** The status type. */
     private final String value;
 
-    StatusType(String v) {
+    /**
+     * Creates a new object.
+     * @param v the status type
+     */
+    StatusType(final String v) {
         value = v;
     }
 
@@ -51,7 +57,7 @@ public enum StatusType {
         return value;
     }
 
-    public static StatusType fromValue(String v) {
+    public static StatusType fromValue(final String v) {
         for (StatusType c: StatusType.values()) {
             if (c.value.equals(v)) {
                 return c;

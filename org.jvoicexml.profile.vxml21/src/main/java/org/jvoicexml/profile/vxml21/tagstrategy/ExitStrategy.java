@@ -50,7 +50,8 @@ import org.jvoicexml.xml.vxml.Exit;
  */
 final class ExitStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(ExitStrategy.class);
+    private static final Logger LOGGER = 
+            LogManager.getLogger(ExitStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -132,7 +133,8 @@ final class ExitStrategy extends AbstractTagStrategy {
      */
     private Map<String, Object> evaluateNames(
             final VoiceXmlInterpreterContext context) throws SemanticError {
-        final Map<String, Object> mappings = new java.util.HashMap<String, Object>();
+        final Map<String, Object> mappings = 
+                new java.util.HashMap<String, Object>();
         final DataModel model = context.getDataModel();
         for (String name : namelist) {
             final Object value = model.readVariable(name, Object.class);

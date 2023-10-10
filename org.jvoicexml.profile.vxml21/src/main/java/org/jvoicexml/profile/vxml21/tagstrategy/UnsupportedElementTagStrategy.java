@@ -46,7 +46,7 @@ final class UnsupportedElementTagStrategy
      * Constructs a new object.
      * @param name the name of the unsupported tag.
      */
-    public UnsupportedElementTagStrategy(final String name) {
+    UnsupportedElementTagStrategy(final String name) {
         tag = name;
     }
 

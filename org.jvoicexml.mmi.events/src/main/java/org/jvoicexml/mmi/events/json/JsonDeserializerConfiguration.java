@@ -40,13 +40,14 @@ public final class JsonDeserializerConfiguration {
      * @param t the type to deserialize
      * @param d the actual deserializer
      */
-    public JsonDeserializerConfiguration(final Type t, final JsonDeserializer<?> d) {
+    public JsonDeserializerConfiguration(final Type t,
+            final JsonDeserializer<?> d) {
         type = t;
         deserializer = d;
     }
     
     /**
-     * Retrieves the type to deserialize
+     * Retrieves the type to deserialize.
      * @return the type
      */
     public Type getType() {

@@ -33,13 +33,15 @@ import com.google.gson.JsonParseException;
  * A deserializer for {@link LifeCycleRequest}s.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
+ * @param <T> type of the life cycle event
  */
-abstract class LifeCycleRequestDeserializer<T extends LifeCycleRequest> extends LifeCycleEventDeserializer<T> {
+abstract class LifeCycleRequestDeserializer<T extends LifeCycleRequest>
+    extends LifeCycleEventDeserializer<T> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public LifeCycleRequestDeserializer() {
+    LifeCycleRequestDeserializer() {
     }
     
     /**
@@ -47,7 +49,7 @@ abstract class LifeCycleRequestDeserializer<T extends LifeCycleRequest> extends 
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public LifeCycleRequestDeserializer(final Type type) {
+    LifeCycleRequestDeserializer(final Type type) {
         super(type);
     }
     
@@ -55,8 +57,9 @@ abstract class LifeCycleRequestDeserializer<T extends LifeCycleRequest> extends 
      * {@inheritDoc}
      */
     @Override
-    public T deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public T deserialize(final JsonElement json, final Type typeOfT,
+            final JsonDeserializationContext context)
+                    throws JsonParseException {
         final T request = super.deserialize(json, typeOfT, context);
         final JsonObject object = json.getAsJsonObject();
         final String ctx = getAsString(object, "context");

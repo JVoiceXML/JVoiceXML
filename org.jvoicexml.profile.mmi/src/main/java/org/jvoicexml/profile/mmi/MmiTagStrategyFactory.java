@@ -131,7 +131,8 @@ public final class MmiTagStrategyFactory implements TagStrategyFactory {
 
         final TagStrategy tagstrategy = strategy.newInstance();
         if (tagstrategy instanceof ProfileAwareTagStrategy) {
-            final ProfileAwareTagStrategy profileAwareTagStrategy = (ProfileAwareTagStrategy) tagstrategy;
+            final ProfileAwareTagStrategy profileAwareTagStrategy =
+                    (ProfileAwareTagStrategy) tagstrategy;
             profileAwareTagStrategy.setProfile(profile);
         }
         return tagstrategy;

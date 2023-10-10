@@ -56,7 +56,8 @@ public class LastMessage extends JVoiceXMLEvent {
      * @param value
      *            The content of the message
      */
-    public LastMessage(final String type, final String name, final Object value) {
+    public LastMessage(final String type, final String name,
+            final Object value) {
         contentType = type;
         event = name;
         content = value;

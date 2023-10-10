@@ -42,8 +42,8 @@ final class JsonMmiSerializer implements JsonSerializer<JsonMmi> {
      * {@inheritDoc}
      */
     @Override
-    public JsonElement serialize(JsonMmi src, Type typeOfSrc,
-            JsonSerializationContext context) {
+    public JsonElement serialize(final JsonMmi src, final Type typeOfSrc,
+            final JsonSerializationContext context) {
         final LifeCycleEvent event = src.getLifeCycleEvent();
         final JsonElement element = context.serialize(event);
         final JsonObject object = element.getAsJsonObject();

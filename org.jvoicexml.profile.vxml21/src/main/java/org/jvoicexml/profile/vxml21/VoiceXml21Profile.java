@@ -70,7 +70,7 @@ public class VoiceXml21Profile implements Profile {
      * {@inheritDoc}
      */
     @Override
-    public void terminate(VoiceXmlInterpreterContext context) {
+    public void terminate(final VoiceXmlInterpreterContext context) {
     }
 
     /**

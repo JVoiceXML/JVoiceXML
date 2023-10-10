@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.PrepareResponse;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class PrepareResponseDeserializer extends LifeCycleResponseDeserializer<PrepareResponse> {
+final class PrepareResponseDeserializer
+    extends LifeCycleResponseDeserializer<PrepareResponse> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public PrepareResponseDeserializer() {
+    PrepareResponseDeserializer() {
     }
     
     /**
@@ -43,7 +44,7 @@ final class PrepareResponseDeserializer extends LifeCycleResponseDeserializer<Pr
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public PrepareResponseDeserializer(final Type data, final Type statusInfo) {
+    PrepareResponseDeserializer(final Type data, final Type statusInfo) {
         super(data, statusInfo);
     }
     

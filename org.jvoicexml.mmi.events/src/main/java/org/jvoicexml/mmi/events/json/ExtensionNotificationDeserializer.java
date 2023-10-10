@@ -56,8 +56,9 @@ final class ExtensionNotificationDeserializer
      * {@inheritDoc}
      */
     @Override
-    public ExtensionNotification deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public ExtensionNotification deserialize(final JsonElement json,
+            final Type typeOfT, final JsonDeserializationContext context)
+                    throws JsonParseException {
         final ExtensionNotification notification =
                 super.deserialize(json, typeOfT, context);
         final JsonObject object = json.getAsJsonObject();

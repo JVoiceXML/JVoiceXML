@@ -55,7 +55,8 @@ import org.jvoicexml.xml.vxml.Submit;
  */
 final class SubmitStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(SubmitStrategy.class);
+    private static final Logger LOGGER = 
+            LogManager.getLogger(SubmitStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -96,7 +97,8 @@ final class SubmitStrategy extends AbstractTagStrategy {
         final String names = (String) getAttribute(Submit.ATTRIBUTE_NAMELIST);
         namelist = new TokenList(names);
 
-        final String requestMethod = (String) getAttribute(Submit.ATTRIBUTE_METHOD);
+        final String requestMethod = 
+                (String) getAttribute(Submit.ATTRIBUTE_METHOD);
         if (requestMethod == null) {
             method = RequestMethod.GET;
         } else if (RequestMethod.POST.getMethod().equalsIgnoreCase(

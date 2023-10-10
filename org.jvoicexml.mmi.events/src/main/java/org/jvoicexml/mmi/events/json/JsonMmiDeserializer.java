@@ -56,7 +56,8 @@ import com.google.gson.JsonParseException;
  * @since 0.7.9
  */
 final class JsonMmiDeserializer implements JsonDeserializer<JsonMmi> {
-    final static Map<String, Type> MMI_TYPES;
+    /** Known mime types. */
+    static final Map<String, Type> MMI_TYPES;
 
     static {
         MMI_TYPES = new java.util.HashMap<String, Type>();
@@ -95,8 +96,9 @@ final class JsonMmiDeserializer implements JsonDeserializer<JsonMmi> {
      * {@inheritDoc}
      */
     @Override
-    public JsonMmi deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public JsonMmi deserialize(final JsonElement json, final Type typeOfT,
+            final JsonDeserializationContext context)
+                       throws JsonParseException {
         final JsonObject object = json.getAsJsonObject();
         final JsonElement mmiTypeElement = object.get("mmi");
         final String typeName = mmiTypeElement.getAsString();
