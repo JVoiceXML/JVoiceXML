@@ -38,7 +38,7 @@ public enum PriorityType {
     PREPEND("prepend"),
     
     /**
-     * Clear all prompts in the queue and append this prompt
+     * Clear all prompts in the queue and append this prompt.
      */
     CLEAR("clear");
 
@@ -49,7 +49,7 @@ public enum PriorityType {
      * Do not create from outside.
      * @param name name of the priority.
      */
-    private PriorityType(final String name) {
+    PriorityType(final String name) {
         priority = name;
     }
 

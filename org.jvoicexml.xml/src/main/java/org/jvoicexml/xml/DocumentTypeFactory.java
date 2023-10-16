@@ -48,5 +48,5 @@ public interface DocumentTypeFactory {
      * @param document the document.
      * @return created document type.
      */
-    DocumentType createDocumentType(final Document document);
+    DocumentType createDocumentType(Document document);
 }

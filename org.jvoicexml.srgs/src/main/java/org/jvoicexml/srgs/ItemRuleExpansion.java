@@ -35,7 +35,8 @@ public class ItemRuleExpansion implements RuleExpansion {
 
     private int minRepeat = 1;
     private int maxRepeat = 1;
-    private List<RuleExpansion> subRules = new java.util.ArrayList<RuleExpansion>();
+    private List<RuleExpansion> subRules =
+            new java.util.ArrayList<RuleExpansion>();
     private SemanticInterpretationBlock initialSemanticInterpretation;
     private ExecutableSemanticInterpretation executableSemanticInterpretation;
 
@@ -58,18 +59,19 @@ public class ItemRuleExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSemanticInterpretation(final ExecutableSemanticInterpretation si) {
+    public void setExecutionSemanticInterpretation(
+            final ExecutableSemanticInterpretation si) {
         executableSemanticInterpretation = si;
     }
 
-    public void appendInitialSI(String si) {
+    public void appendInitialSI(final String si) {
         if (initialSemanticInterpretation == null) {
             initialSemanticInterpretation = new SemanticInterpretationBlock();
         }
         initialSemanticInterpretation.append(si);
     }
 
-    public void addSubRule(RuleExpansion rule) {
+    public void addSubRule(final RuleExpansion rule) {
         subRules.add(rule);
     }
 
@@ -100,7 +102,8 @@ public class ItemRuleExpansion implements RuleExpansion {
 
         MatchConsumption summationResult = new MatchConsumption();
         if (initialSemanticInterpretation != null) {
-            summationResult.addExecutableSemanticInterpretation(initialSemanticInterpretation);
+            summationResult.addExecutableSemanticInterpretation(
+                    initialSemanticInterpretation);
         }
         int matchCount = 0;
         int tokensConsumed = 0;
@@ -133,7 +136,8 @@ public class ItemRuleExpansion implements RuleExpansion {
         }
 
         if (matchCount >= minRepeat) {
-            summationResult.addExecutableSemanticInterpretation(executableSemanticInterpretation);
+            summationResult.addExecutableSemanticInterpretation(
+                    executableSemanticInterpretation);
             return summationResult;
         }
         return null;

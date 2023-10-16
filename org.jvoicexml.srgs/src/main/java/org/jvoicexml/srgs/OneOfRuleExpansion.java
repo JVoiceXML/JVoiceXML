@@ -41,15 +41,16 @@ public class OneOfRuleExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
+    public void setExecutionSemanticInterpretation(
+            final ExecutableSemanticInterpretation si) {
         executableSI = si;
     }
 
-    public void addSubRule(RuleExpansion rule) {
+    public void addSubRule(final RuleExpansion rule) {
         subRules.add(rule);
     }
 
-    public void addInitialSI(String si) {
+    public void addInitialSI(final String si) {
         if (initialSI == null) {
             initialSI = new SemanticInterpretationBlock();
         }
@@ -57,7 +58,7 @@ public class OneOfRuleExpansion implements RuleExpansion {
     }
 
     @Override
-    public MatchConsumption match(List<String> tokens, int offset) {
+    public MatchConsumption match(final List<String> tokens, final int offset) {
      // Not allowed per DTD, but not validating
         if (subRules.isEmpty()) {
             return new MatchConsumption(executableSI);
@@ -67,10 +68,13 @@ public class OneOfRuleExpansion implements RuleExpansion {
         for (RuleExpansion rule : subRules) {
             MatchConsumption individualResult = rule.match(tokens, offset);
             if (individualResult != null) {
-                if (initialSI != null)
-                    individualResult.addExecutableSemanticInterpretation(initialSI);
+                if (initialSI != null) {
+                    individualResult.addExecutableSemanticInterpretation(
+                            initialSI);
+                }
 
-                individualResult.addExecutableSemanticInterpretation(executableSI);
+                individualResult.addExecutableSemanticInterpretation(
+                        executableSI);
                 return individualResult;
             }
         }
@@ -78,14 +82,15 @@ public class OneOfRuleExpansion implements RuleExpansion {
         return null;
     }
 
-    public void dump(String pad) {
+    public void dump(final String pad) {
         LOGGER.debug(pad + "one-of");
 
         for (RuleExpansion rule : subRules) {
             rule.dump(pad + " ");
         }
-        if (executableSI != null)
+        if (executableSI != null) {
             executableSI.dump(pad);
+        }
     }
 
     @Override

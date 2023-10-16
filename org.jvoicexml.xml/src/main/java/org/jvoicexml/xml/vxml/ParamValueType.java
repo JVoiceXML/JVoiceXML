@@ -59,7 +59,7 @@ public enum ParamValueType {
      * Creates a new object.
      * @param valueType Name of the value type.
      */
-    private ParamValueType(final String valueType) {
+    ParamValueType(final String valueType) {
         type = valueType;
     }
 

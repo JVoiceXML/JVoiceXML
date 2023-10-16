@@ -101,7 +101,8 @@ public final class TestHangupDemo {
      */
     @Test(timeout = TIMEOUT)
     public void testHangupScript() throws Exception {
-        final URI uri = TestHangupDemo.class.getResource("/scripthangup.vxml").toURI();
+        final URI uri = TestHangupDemo.class.getResource(
+                "/scripthangup.vxml").toURI();
         call.call(uri);
         Thread.sleep(2000);
         call.hangup();
@@ -116,7 +117,8 @@ public final class TestHangupDemo {
      */
     @Test(timeout = TIMEOUT)
     public void testHangupBecauseOfThrow() throws Exception {
-        final URI uri = TestHangupDemo.class.getResource("/throwdemo.vxml").toURI();
+        final URI uri = TestHangupDemo.class.getResource(
+                "/throwdemo.vxml").toURI();
         call.call(uri);
         call.waitForInterpreterLog("Caught custom event");
     }

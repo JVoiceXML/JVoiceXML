@@ -73,10 +73,10 @@ public class Log4jListAppender extends AbstractAppender {
      */
     @PluginFactory
     public static Log4jListAppender createAppender(
-      @PluginAttribute("name") String name, 
-      @PluginAttribute("buffer") String buffer,
-      @PluginElement("Layout") Layout<String> layout,
-      @PluginElement("Filter") Filter filter) {
+      @PluginAttribute("name") final String name, 
+      @PluginAttribute("buffer") final String buffer,
+      @PluginElement("Layout") final Layout<String> layout,
+      @PluginElement("Filter") final Filter filter) {
         final LogBufferProvider provider = LogBufferProvider.getInstance();
         final LogBuffer logBuffer;
         if (buffer.equals(LogBufferProvider.INTERPRETER)) {

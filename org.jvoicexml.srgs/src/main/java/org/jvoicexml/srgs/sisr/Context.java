@@ -29,11 +29,13 @@ import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 
 public class Context implements ExecutableSemanticInterpretation {
+    /** Logger instance. */
     private static final Logger LOGGER = Logger.getLogger(Context.class);
-    private List<ExecutableSemanticInterpretation> executationCollection = new java.util.ArrayList<ExecutableSemanticInterpretation>();
+    private List<ExecutableSemanticInterpretation> executationCollection =
+            new java.util.ArrayList<ExecutableSemanticInterpretation>();
     private String ruleName;
 
-    public Context(String contextName) {
+    public Context(final String contextName) {
         this.ruleName = contextName;
     }
 
@@ -41,27 +43,31 @@ public class Context implements ExecutableSemanticInterpretation {
         return executationCollection;
     }
 
-    public void addExecutableContent(List<ExecutableSemanticInterpretation> si) {
+    public void addExecutableContent(
+            final List<ExecutableSemanticInterpretation> si) {
         executationCollection.addAll(si);
     }
 
-    public void addExecutableContent(ExecutableSemanticInterpretation si) {
+    public void addExecutableContent(
+            final ExecutableSemanticInterpretation si) {
         executationCollection.add(si);
     }
 
-    public void setExecutableContent(List<ExecutableSemanticInterpretation> si) {
+    public void setExecutableContent(
+            final List<ExecutableSemanticInterpretation> si) {
         executationCollection = si;
     }
 
-    public void dump(String pad) {
+    public void dump(final String pad) {
         LOGGER.debug(pad + "Context(" + ruleName + ")");
-        for (ExecutableSemanticInterpretation si : executationCollection)
+        for (ExecutableSemanticInterpretation si : executationCollection) {
             si.dump(pad + " ");
+        }
     }
 
     @Override
-    public void execute(org.mozilla.javascript.Context context,
-            Scriptable parentScope) {
+    public void execute(final org.mozilla.javascript.Context context,
+            final Scriptable parentScope) {
         LOGGER.debug("===================================================================================");
         LOGGER.debug("Starting context " + ruleName);
 
@@ -69,7 +75,8 @@ public class Context implements ExecutableSemanticInterpretation {
         Scriptable ruleScope = context.newObject(parentScope);
 
         // Initialize out, rules and meta
-        context.evaluateString(ruleScope, contextInitSemanticInterpretation(ruleName),
+        context.evaluateString(ruleScope, 
+                contextInitSemanticInterpretation(ruleName),
                 "Context:init", 0, null);
 
         // Perform SI execution
@@ -86,8 +93,9 @@ public class Context implements ExecutableSemanticInterpretation {
                 ruleRefProcessed);
 
         LOGGER.debug("out=" + out);
-        if (out instanceof Scriptable)
+        if (out instanceof Scriptable) {
             dumpScope((Scriptable) out, " ");
+        }
 
         // Apply to parentScope
         updateParentScope(context, parentScope, ruleScope, out);
@@ -99,8 +107,8 @@ public class Context implements ExecutableSemanticInterpretation {
     }
 
     static Object getOutApplyDefaultAssignmentIfNeeded(
-            org.mozilla.javascript.Context context, Scriptable ruleScope,
-            boolean ruleRefProcessed) {
+            final org.mozilla.javascript.Context context, 
+            final Scriptable ruleScope, final boolean ruleRefProcessed) {
 
         Object out = context.evaluateString(ruleScope, "out;", "Context:out",
                 0, null);
@@ -130,15 +138,16 @@ public class Context implements ExecutableSemanticInterpretation {
      * <li>rules.latest()</li>
      * <li>meta.rulename</li>
      * <li>meta.current()</li>
-     * </ul>
+     * </ul>.
      * 
      * @param context
      * @param parentScope
      * @param ruleScope
      * @param out
      */
-    private void updateParentScope(org.mozilla.javascript.Context context,
-            Scriptable parentScope, Scriptable ruleScope, Object out) {
+    private void updateParentScope(final org.mozilla.javascript.Context context,
+            final Scriptable parentScope, final Scriptable ruleScope, 
+            final Object out) {
         // Setup rules
         Scriptable ruleObject = (Scriptable) parentScope.get("rules",
                 parentScope);
@@ -180,22 +189,23 @@ public class Context implements ExecutableSemanticInterpretation {
         }
     }
 
-    private String getRulesLastestScript(String contextName) {
+    private String getRulesLastestScript(final String contextName) {
         return "rules.latest = function() {return this." + contextName + ";};";
         // We are within the rules context, so the rule id should be valid
     }
 
-    private String contextInitSemanticInterpretation(String contextName) {
+    private String contextInitSemanticInterpretation(final String contextName) {
         return "var out=new Object();\n"
                 + "var rules=new Object();\n"
-                + "var meta={current: function() {return {text:'', score:1.0};}};\n";
+                + "var meta={current: function() {"
+                + "return {text:'', score:1.0};}};\n";
     }
 
     public void dumpScope(final Scriptable scope) {
         dumpScope(scope, " ");
     }
 
-    public void dumpScope(final Scriptable scope, String pad) {
+    public void dumpScope(final Scriptable scope, final String pad) {
         java.lang.Object[] ids = scope.getIds();
         for (Object id : ids) {
             Object o = null;
@@ -209,9 +219,9 @@ public class Context implements ExecutableSemanticInterpretation {
                         + o.getClass().getCanonicalName() + ")");
             }
 
-            if (o instanceof Scriptable)
+            if (o instanceof Scriptable) {
                 dumpScope((Scriptable) o, pad + " ");
-            else if (o instanceof NativeObject) {
+            } else if (o instanceof NativeObject) {
                 for (Map.Entry<Object, Object> item : ((NativeObject) o)
                         .entrySet()) {
                     LOGGER.debug(pad + " " + item.getKey() + "="

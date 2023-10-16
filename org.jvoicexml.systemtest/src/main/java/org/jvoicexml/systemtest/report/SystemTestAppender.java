@@ -43,7 +43,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * @version $Revision$
  * @since 0.7.6
  */
-public final class SystemTestAppender {//extends AppenderSkeleton {
+public final class SystemTestAppender { //extends AppenderSkeleton {
     /** Collected messages. */
     private final List<LoggingEvent> events =
         new java.util.ArrayList<LoggingEvent>();

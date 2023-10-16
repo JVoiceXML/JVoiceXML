@@ -66,7 +66,8 @@ public class DataType {
      *            the primary type, typically {@code application}
      * @param sub
      *            the grammar sub type
-     * @exception IllegalArgumentException if the type does not denote a mime type
+     * @exception IllegalArgumentException if the type does not denote a mime
+     *                   type
      */
     protected DataType(final String primary, final String sub) {
         try {

@@ -176,7 +176,7 @@ public interface Call {
      *            the timeout to wait at max in msec, waits forever, if timeout
      *            is zero
      */
-    void waitUntilExpectingInput(final long timeout);
+    void waitUntilExpectingInput(long timeout);
 
     /**
      * Waits until the provided log message is seen in the interpreter log.
@@ -184,7 +184,7 @@ public interface Call {
      * @throws InterruptedException error waiting for the next log
      * @since 0.7.9
      */
-    void waitForInterpreterLog(final String message)
+    void waitForInterpreterLog(String message)
             throws InterruptedException;
 
     /**
@@ -197,7 +197,7 @@ public interface Call {
      *             waiting time exceeded
      * @since 0.7.9
      */
-    void waitForInterpreterLog(final String message, final long timeout)
+    void waitForInterpreterLog(String message, long timeout)
             throws InterruptedException, TimeoutException;
     
     /**

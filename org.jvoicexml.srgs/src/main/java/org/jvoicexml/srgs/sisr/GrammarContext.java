@@ -33,25 +33,26 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
     private ExecutableSemanticInterpretation executableSI;
     private String ruleName;
 
-    public GrammarContext(SrgsSisrGrammar grammar, String ruleName,
-            ExecutableSemanticInterpretation executableSI) {
+    public GrammarContext(final SrgsSisrGrammar grammar, final String ruleName,
+            final ExecutableSemanticInterpretation executableSI) {
         this.grammar = grammar;
         this.ruleName = ruleName;
         this.executableSI = executableSI;
     }
 
     @Override
-    public void dump(String pad) {
+    public void dump(final String pad) {
         LOGGER.debug(pad + "GrammarContext(" + grammar.getURI() + ")");
         executableSI.dump(pad + " ");
     }
 
     @Override
-    public void execute(org.mozilla.javascript.Context parentContext,
-            Scriptable parentScope) {
+    public void execute(final org.mozilla.javascript.Context parentContext,
+            final Scriptable parentScope) {
         org.mozilla.javascript.Context context = org.mozilla.javascript.Context
                 .enter();
-        context.setLanguageVersion(org.mozilla.javascript.Context.VERSION_DEFAULT);
+        context.setLanguageVersion(
+                org.mozilla.javascript.Context.VERSION_DEFAULT);
         Scriptable globalScope = context.initStandardObjects();
 
         if (grammar.getGlobalTags() != null) {
@@ -84,7 +85,7 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
      * <li>rules.latest()</li>
      * <li>meta.rulename</li>
      * <li>meta.current()</li>
-     * </ul>
+     * </ul>.
      * 
      * @param context
      * @param parentScope
@@ -92,10 +93,10 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
      * @param out
      */
     private void updateParentScope(
-            org.mozilla.javascript.Context parentContext,
-            Scriptable parentScope,
-            org.mozilla.javascript.Context grammarContext,
-            Scriptable grammarScope, Object out) {
+            final org.mozilla.javascript.Context parentContext,
+            final Scriptable parentScope,
+            final org.mozilla.javascript.Context grammarContext,
+            final Scriptable grammarScope, final Object out) {
 
         // Setup rules
         Scriptable ruleObject = (Scriptable) parentScope.get("rules",
@@ -138,7 +139,7 @@ public class GrammarContext implements ExecutableSemanticInterpretation {
         }
     }
 
-    private String getRulesLastestScript(String contextName) {
+    private String getRulesLastestScript(final String contextName) {
         return "rules.latest = function() {return this." + contextName + ";};"; // We
                                                                                // are
                                                                                // within

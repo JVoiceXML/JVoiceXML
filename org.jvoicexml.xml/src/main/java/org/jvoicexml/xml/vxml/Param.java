@@ -291,7 +291,7 @@ public final class Param
      */
     public void setType(final MimeType type) {
         if (type == null) {
-            setType((String)null);
+            setType((String) null);
         } else {
             final String str = type.toString();
             setType(str);

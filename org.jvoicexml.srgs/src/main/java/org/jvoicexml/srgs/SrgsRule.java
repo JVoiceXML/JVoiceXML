@@ -30,6 +30,7 @@ import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Rule;
 
 public class SrgsRule implements RuleExpansion {
+    /** Logger instance. */
     private static final Logger LOGGER = Logger.getLogger(SrgsRule.class);
 
     /** Id of this rule. */
@@ -75,7 +76,7 @@ public class SrgsRule implements RuleExpansion {
         return isPublic;
     }
 
-    public void setRule(RuleExpansion rule) {
+    public void setRule(final RuleExpansion rule) {
         innerRule = rule;
     }
 
@@ -83,7 +84,8 @@ public class SrgsRule implements RuleExpansion {
         return innerRule;
     }
 
-    public void addInitialSemanticInterpretation(String interpretation) {
+    public void addInitialSemanticInterpretation(
+            final String interpretation) {
         if (semanticInterpretation == null) {
             semanticInterpretation = new SemanticInterpretationBlock();
         }
@@ -95,7 +97,8 @@ public class SrgsRule implements RuleExpansion {
     }
 
     @Override
-    public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
+    public void setExecutionSemanticInterpretation(
+            final ExecutableSemanticInterpretation si) {
         LOGGER.error("setExecutionSI should never be called on a rule");
     }
 
@@ -103,7 +106,7 @@ public class SrgsRule implements RuleExpansion {
      * {@inheritDoc}
      */
     @Override
-    public MatchConsumption match(List<String> tokens, int index) {
+    public MatchConsumption match(final List<String> tokens, final int index) {
         final RuleExpansion rule = getInnerRule();
         if (rule == null) {
             return null;
@@ -126,7 +129,7 @@ public class SrgsRule implements RuleExpansion {
     }
 
     @Override
-    public void dump(String pad) {
+    public void dump(final String pad) {
         LOGGER.debug(pad + toString());
         innerRule.dump(pad + " ");
     }

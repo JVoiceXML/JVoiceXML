@@ -34,7 +34,8 @@ import org.w3c.dom.Node;
  * other information directly to another CCXML Interpreter other external
  * systems using an Event I/O Processor.
  *
- * The event target of {@code <send/>} is specified using the target and targettype
+ * The event target of {@code <send/>} is specified using the target and
+ * targettype
  * attributes. These attributes control how the platform should dispatch the
  * event to its final destination.
  *

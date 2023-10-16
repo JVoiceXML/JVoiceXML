@@ -28,7 +28,7 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.message.Message;
 
 /**
- * A buffer of log events per call
+ * A buffer of log events per call.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
@@ -58,8 +58,8 @@ public class LogBuffer {
     private boolean configured;
     
     /**
-     * Constructs a new object
-     * @param logicalName logicagl name of this buffer
+     * Constructs a new object.
+     * @param logicalName logical name of this buffer
      */
     LogBuffer(final String logicalName) {
         events = new java.util.ArrayList<LogEvent>();
@@ -76,10 +76,10 @@ public class LogBuffer {
     }
 
     /**
-     * Marks this log buffer as configured
+     * Marks this log buffer as configured.
      * @param isConfigured {@code true} if this buffer is configured
      */
-    public void setConfigured(boolean isConfigured) {
+    public void setConfigured(final boolean isConfigured) {
         configured = isConfigured;
     }
 
@@ -111,7 +111,7 @@ public class LogBuffer {
             final LogEvent current;
             synchronized (events) {
                 current = events.get(position);
-                position ++;
+                position++;
             }
             final Message currentMesage = current.getMessage();
             final String formattedMessage = currentMesage.getFormattedMessage();
@@ -143,12 +143,14 @@ public class LogBuffer {
                 final LogEvent current;
                 synchronized (events) {
                     current = events.get(position);
-                    position ++;
+                    position++;
                 }
                 final Message currentMesage = current.getMessage();
-                final String formattedMessage = currentMesage.getFormattedMessage();
+                final String formattedMessage =
+                        currentMesage.getFormattedMessage();
                 if (message.equals(formattedMessage)) {
-                    LOGGER.info("'" + name + "' saw log message '" + message + "'");
+                    LOGGER.info("'" + name + "' saw log message '" 
+                            + message + "'");
                     return;
                 }
             }

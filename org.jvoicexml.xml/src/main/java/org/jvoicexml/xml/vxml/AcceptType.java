@@ -48,7 +48,7 @@ public enum AcceptType {
      * Do not create from outside.
      * @param name name of the barge-in type.
      */
-    private AcceptType(final String name) {
+    AcceptType(final String name) {
         type = name;
     }
 

@@ -166,7 +166,7 @@ public class SrgsSisrXmlGrammarParser
         return currentGrammar;
     }
 
-    private void parseRule(SrgsRule grammarRule, Rule node)
+    private void parseRule(final SrgsRule grammarRule, final Rule node)
             throws SrgsSisrParsingException {
         RuleExpansion lastExpansion = null;
 
@@ -187,9 +187,10 @@ public class SrgsSisrXmlGrammarParser
                 grammarRule.setRule(lastExpansion);
             } else if (child instanceof Tag) {
                 String textContent = child.getTextContent();
-                if (currentGrammar.isLiteral())
+                if (currentGrammar.isLiteral()) {
                     textContent = "out='" + escapeSingleQuotes(textContent)
                             + "';";
+                }
                 if (lastExpansion == null) {
                     grammarRule.addInitialSemanticInterpretation(textContent);
                 } else {
@@ -207,11 +208,11 @@ public class SrgsSisrXmlGrammarParser
         }
     }
 
-    private String escapeSingleQuotes(String textContent) {
+    private String escapeSingleQuotes(final String textContent) {
         return textContent.replace("'", "\\'");
     }
 
-    private ItemRuleExpansion parseItem(Item itemNode)
+    private ItemRuleExpansion parseItem(final Item itemNode)
             throws SrgsSisrParsingException {
         ItemRuleExpansion item = new ItemRuleExpansion();
 
@@ -248,21 +249,24 @@ public class SrgsSisrXmlGrammarParser
                 item.addSubRule(lastExpansion);
             } else if (childNode instanceof Tag) {
                 String textContent = childNode.getTextContent();
-                if (currentGrammar.isLiteral())
+                if (currentGrammar.isLiteral()) {
                     textContent = "out='" + escapeSingleQuotes(textContent)
                             + "';";
+                }
 
-                if (lastExpansion == null)
+                if (lastExpansion == null) {
                     item.appendInitialSI(textContent);
-                else
-                    lastExpansion
-                            .setExecutionSemanticInterpretation(new SemanticInterpretationBlock(
+                } else {
+                    lastExpansion.setExecutionSemanticInterpretation(
+                            new SemanticInterpretationBlock(
                                     textContent));
+                }
             } else if (childNode instanceof Token
                     || childNode instanceof org.jvoicexml.xml.Text) {
                 String text = childNode.getTextContent().trim();
-                if (text.length() == 0)
+                if (text.length() == 0) {
                     continue;
+                }
                 lastExpansion = generateTextItem(text);
                 item.addSubRule(lastExpansion);
             } else {
@@ -274,14 +278,14 @@ public class SrgsSisrXmlGrammarParser
         return item;
     }
 
-    private RuleExpansion generateTextItem(String textContent) {
+    private RuleExpansion generateTextItem(final String textContent) {
         TokenRuleExpansion token = new TokenRuleExpansion(
                 textContent.split(" "));
 
         return token;
     }
 
-    private int safeIntParse(String s, int i) {
+    private int safeIntParse(final String s, final int i) {
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
@@ -292,7 +296,7 @@ public class SrgsSisrXmlGrammarParser
     }
 
     // Parse a one-of rule; recursing as needed
-    private OneOfRuleExpansion parseOneOf(OneOf oneOfNode)
+    private OneOfRuleExpansion parseOneOf(final OneOf oneOfNode)
             throws SrgsSisrParsingException {
         OneOfRuleExpansion rule = new OneOfRuleExpansion();
 
@@ -312,20 +316,22 @@ public class SrgsSisrXmlGrammarParser
                 rule.addSubRule(lastExpansion);
             } else if (childNode instanceof Tag) {
                 String textContent = childNode.getTextContent();
-                if (currentGrammar.isLiteral())
+                if (currentGrammar.isLiteral()) {
                     textContent = "out='" + escapeSingleQuotes(textContent)
                             + "';";
-
-                if (lastExpansion == null)
+                }
+                if (lastExpansion == null) {
                     rule.addInitialSI(textContent);
-                else
-                    lastExpansion
-                            .setExecutionSemanticInterpretation(new SemanticInterpretationBlock(
+                } else {
+                    lastExpansion.setExecutionSemanticInterpretation(
+                            new SemanticInterpretationBlock(
                                     textContent));
+                }
             } else if (childNode instanceof Token) {
                 String text = childNode.getTextContent().trim();
-                if (text.length() == 0)
+                if (text.length() == 0) {
                     continue;
+                }
                 lastExpansion = generateTextItem(text);
                 rule.addSubRule(lastExpansion);
             } else if (childNode instanceof org.jvoicexml.xml.Text) {
@@ -340,7 +346,7 @@ public class SrgsSisrXmlGrammarParser
         return rule;
     }
 
-    private RuleRefExpansion parseRuleref(Ruleref ruleNode)
+    private RuleRefExpansion parseRuleref(final Ruleref ruleNode)
             throws SrgsSisrParsingException {
         final String special = ruleNode.getSpecial();
         if (special != null) {
@@ -353,9 +359,10 @@ public class SrgsSisrXmlGrammarParser
             return new RuleRefExpansion(rule);
         }
         final String uri = ruleNode.getUri();
-        if (uri == null || uri.length() == 0)
+        if (uri == null || uri.length() == 0) {
             throw new SrgsSisrParsingException(
                     "Ruleref is missing or has empty URI");
+        }
         int poundIdx = uri.indexOf('#');
 
         // Fragment references a public rule
@@ -379,8 +386,8 @@ public class SrgsSisrXmlGrammarParser
         return new RuleRefExpansion(rule);
     }
 
-    private RuleRefExpansion getExternalRuleRef(String uriText, String ruleName)
-            throws SrgsSisrParsingException {
+    private RuleRefExpansion getExternalRuleRef(final String uriText, 
+            final String ruleName) throws SrgsSisrParsingException {
         // Resolve to an absolute path
         URI uri = null;
         try {
@@ -406,7 +413,7 @@ public class SrgsSisrXmlGrammarParser
         return new RuleRefExpansion(externalGrammar, rule);
     }
 
-    private SrgsSisrGrammar fetchAndParseExternalGrammar(URI uri)
+    private SrgsSisrGrammar fetchAndParseExternalGrammar(final URI uri)
             throws SrgsSisrParsingException {
         final SrgsXmlDocument doc;
         try {
@@ -438,7 +445,8 @@ public class SrgsSisrXmlGrammarParser
         return parser.parse(doc, uri, pool);
     }
 
-    public static String joinTokens(List<String> list, int start, int count) {
+    public static String joinTokens(final List<String> list, final int start, 
+            final int count) {
         if (count == 0) {
             return "";
         }

@@ -59,7 +59,7 @@ public enum BargeInType {
      * Do not create from outside.
      * @param name name of the barge-in type.
      */
-    private BargeInType(final String name) {
+    BargeInType(final String name) {
         type = name;
     }
 

@@ -38,23 +38,24 @@ public class TokenRuleExpansion implements RuleExpansion {
     public TokenRuleExpansion() {
     }
 
-    public TokenRuleExpansion(String token) {
+    public TokenRuleExpansion(final String token) {
         addToken(token);
     }
 
-    public TokenRuleExpansion(String[] split) {
+    public TokenRuleExpansion(final String[] split) {
         addTokens(split);
     }
 
-    public void addToken(String token) {
+    public void addToken(final String token) {
         tokens.add(token);
     }
 
-    public void addTokens(String[] tokens) {
+    public void addTokens(final String[] tokens) {
         for (String token : tokens) {
             String trimmed = token.trim();
-            if (trimmed.length() == 0)
+            if (trimmed.length() == 0) {
                 continue;
+            }
             this.tokens.add(trimmed);
         }
     }
@@ -65,7 +66,8 @@ public class TokenRuleExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
+    public void setExecutionSemanticInterpretation(
+            final ExecutableSemanticInterpretation si) {
         executableSI = si;
     }
 
@@ -73,7 +75,8 @@ public class TokenRuleExpansion implements RuleExpansion {
      * {@inheritDoc}
      */
     @Override
-    public MatchConsumption match(List<String> tokensToMatch, int offset) {
+    public MatchConsumption match(final List<String> tokensToMatch, 
+            final int offset) {
         int tokenCount = tokens.size();
 
         if (tokenCount == 0) {
@@ -98,7 +101,8 @@ public class TokenRuleExpansion implements RuleExpansion {
         String matchedText = SrgsSisrXmlGrammarParser.joinTokens(tokensToMatch,
                 offset, result.getTokensConsumed());
         if (matchedText.length() > 0) {
-            result.addExecutableSemanticInterpretation(new AddToMatchedText(matchedText));
+            result.addExecutableSemanticInterpretation(
+                    new AddToMatchedText(matchedText));
         }
 
         // Maintain null if present
@@ -107,7 +111,7 @@ public class TokenRuleExpansion implements RuleExpansion {
     }
 
     @Override
-    public void dump(String pad) {
+    public void dump(final String pad) {
         final String str = toString();
         LOGGER.debug(pad + "token(" + str + ") ");
         if (executableSI != null) {

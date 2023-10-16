@@ -41,8 +41,13 @@ import org.apache.logging.log4j.message.Message;
         category = Core.CATEGORY_NAME, 
         elementType = Appender.ELEMENT_TYPE)
 public class Log4jExclusionFilter extends AbstractFilter {
+    /** The name to exclude. */
     private final String name;
     
+    /**
+     * Constructs a new object. 
+     * @param exclusionName the name to exclude
+     */
     protected Log4jExclusionFilter(final String exclusionName) {
         super(null, null);
         name = exclusionName;
@@ -77,8 +82,8 @@ public class Log4jExclusionFilter extends AbstractFilter {
      * @return The Result of filtering.
      */
     @Override
-    public Result filter(final Logger logger, final Level level, final Marker marker, final Message msg,
-                         final Throwable t) {
+    public Result filter(final Logger logger, final Level level, 
+            final Marker marker, final Message msg, final Throwable t) {
         final String loggerName = logger.getName();
         if (loggerName == null) {
             return Result.NEUTRAL;
@@ -101,8 +106,8 @@ public class Log4jExclusionFilter extends AbstractFilter {
      * @return The Result of filtering.
      */
     @Override
-    public Result filter(final Logger logger, final Level level, final Marker marker, final Object msg,
-                         final Throwable t) {
+    public Result filter(final Logger logger, final Level level,
+            final Marker marker, final Object msg, final Throwable t) {
         final String loggerName = logger.getName();
         if (loggerName == null) {
             return Result.NEUTRAL;
@@ -124,8 +129,8 @@ public class Log4jExclusionFilter extends AbstractFilter {
      * @return The Result of filtering.
      */
     @Override
-    public Result filter(final Logger logger, final Level level, final Marker marker, final String msg,
-                         final Object... params) {
+    public Result filter(final Logger logger, final Level level,
+            final Marker marker, final String msg, final Object... params) {
         final String loggerName = logger.getName();
         if (loggerName == null) {
             return Result.NEUTRAL;

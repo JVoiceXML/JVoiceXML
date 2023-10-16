@@ -26,20 +26,20 @@ import java.util.List;
 import org.jvoicexml.xml.srgs.Ruleref;
 
 /**
- * Speial rule VOID as defined in https://www.w3.org/TR/speech-grammar/#S2.2.3
+ * Speial rule VOID as defined in https://www.w3.org/TR/speech-grammar/#S2.2.3.
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  *
  */
 class VoidRule extends SrgsRule {
-    public VoidRule() {
+    VoidRule() {
         super(Ruleref.SPECIAL_VALUE_VOID);
     }
     /**
      * @see SrgsRule#match(List, int)
      */
     @Override
-    public MatchConsumption match(List<String> tokens, int index) {
+    public MatchConsumption match(final List<String> tokens, final int index) {
         // Never match
         return null;
     }

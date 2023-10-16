@@ -93,7 +93,7 @@ final class CcxmlNodeFactory
     /**
      * Constructs a new object.
      */
-    public CcxmlNodeFactory() {
+    CcxmlNodeFactory() {
         // general tags
         NODES.put(Text.TAG_NAME, new Text(null, this));
     }

@@ -21,6 +21,7 @@
 
 package org.jvoicexml.xml.srgs;
 
+import java.util.Objects;
 import java.util.ServiceLoader;
 
 import javax.activation.MimeType;
@@ -89,7 +90,8 @@ public class GrammarType {
      *            the grammar sub type
      * @param isXml
      *            <code>true</code> if the grammar is XML formatted
-     * @exception IllegalArgumentException if the type does not denote a mime type
+     * @exception IllegalArgumentException if the type does not denote a mime
+     *           type
      */
     protected GrammarType(final String primary, final String sub,
             final boolean isXml) {
@@ -166,7 +168,8 @@ public class GrammarType {
         }
 
         // If there is none, try it with internal grammars
-        final JVoiceXmlGrammarTypeFactory factory = new JVoiceXmlGrammarTypeFactory();
+        final JVoiceXmlGrammarTypeFactory factory =
+                new JVoiceXmlGrammarTypeFactory();
         final GrammarType type = factory.getGrammarType(attribute);
         if (type != null) {
             return type;
@@ -180,18 +183,14 @@ public class GrammarType {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (isXmlFormat ? 1231 : 1237);
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
+        return Objects.hash(isXmlFormat, type);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

@@ -33,5 +33,5 @@ public interface GrammarTypeFactory {
      * @return corresponding grammar type or <code>null</code> if the
      *         attribute can not be converted to a grammar type.
      */
-    GrammarType getGrammarType(final String attribute);
+    GrammarType getGrammarType(String attribute);
 }

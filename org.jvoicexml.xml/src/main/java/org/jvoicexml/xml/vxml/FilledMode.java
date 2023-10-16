@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -28,12 +23,9 @@
  */
 package org.jvoicexml.xml.vxml;
 
-
-
 /**
  * Filled mode of the <code>&lt;filled&gt;</code> tag.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public enum FilledMode {
@@ -56,7 +48,7 @@ public enum FilledMode {
      * Do not create from outside.
      * @param name name of the barge-in type.
      */
-    private FilledMode(final String name) {
+    FilledMode(final String name) {
         mode = name;
     }
 

@@ -40,6 +40,7 @@ import org.mozilla.javascript.ScriptableObject;
  * @since 0.7.8
  */
 public class MatchConsumption {
+    /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(MatchConsumption.class);
     private int tokensConsumed;
@@ -62,22 +63,24 @@ public class MatchConsumption {
     public MatchConsumption() {
     }
 
-    public MatchConsumption(int tokensConsumed) {
+    public MatchConsumption(final int tokensConsumed) {
         this.tokensConsumed = tokensConsumed;
     }
 
-    public MatchConsumption(int tokensConsumed,
-            List<ExecutableSemanticInterpretation> executationCollection) {
+    public MatchConsumption(final int tokensConsumed,
+           final List<ExecutableSemanticInterpretation> executationCollection) {
         this.tokensConsumed = tokensConsumed;
         this.executationCollection = executationCollection;
     }
 
-    public MatchConsumption(int tokensConsumed, ExecutableSemanticInterpretation si) {
+    public MatchConsumption(final int tokensConsumed,
+            final ExecutableSemanticInterpretation si) {
         this.tokensConsumed = tokensConsumed;
         this.executationCollection.add(si);
     }
 
-    public MatchConsumption(ExecutableSemanticInterpretation executableSI) {
+    public MatchConsumption(
+            final ExecutableSemanticInterpretation executableSI) {
         executationCollection.add(executableSI);
     }
 
@@ -85,7 +88,7 @@ public class MatchConsumption {
         return tokensConsumed;
     }
 
-    public void setTokensConsumed(int tokensConsumed) {
+    public void setTokensConsumed(final int tokensConsumed) {
         this.tokensConsumed = tokensConsumed;
     }
 
@@ -93,17 +96,20 @@ public class MatchConsumption {
         return executationCollection;
     }
 
-    public void setExecutationCollection(List<ExecutableSemanticInterpretation> newValue) {
+    public void setExecutationCollection(
+            final List<ExecutableSemanticInterpretation> newValue) {
         executationCollection = newValue;
     }
 
-    public void addExecutableSemanticInterpretation(ExecutableSemanticInterpretation si) {
+    public void addExecutableSemanticInterpretation(
+            final ExecutableSemanticInterpretation si) {
         if (si != null) {
             executationCollection.add(si);
         }
     }
 
-    public void setGlobalExecutableSemanticInterpretation(ExecutableSemanticInterpretation si) {
+    public void setGlobalExecutableSemanticInterpretation(
+            final ExecutableSemanticInterpretation si) {
         globalExecutation = si;
     }
 
@@ -111,23 +117,24 @@ public class MatchConsumption {
         return tokens;
     }
 
-    public void addTokens(List<String> tokens) {
+    public void addTokens(final List<String> tokens) {
         this.tokens.addAll(tokens);
     }
 
-    public void addToken(String token) {
+    public void addToken(final String token) {
         this.tokens.add(token);
     }
 
     // Used to add a match result to an existing collection
-    public void add(MatchConsumption additionalResult) {
+    public void add(final MatchConsumption additionalResult) {
         tokensConsumed += additionalResult.getTokensConsumed();
         tokens.addAll(additionalResult.getTokens());
         executationCollection.addAll(additionalResult
                 .getExecutationCollection());
     }
 
-    public void addExecutableSI(List<ExecutableSemanticInterpretation> si) {
+    public void addExecutableSI(
+            final List<ExecutableSemanticInterpretation> si) {
         executationCollection.addAll(si);
     }
 
@@ -135,14 +142,15 @@ public class MatchConsumption {
         dump(true);
     }
 
-    public void dump(boolean dumpSI) {
+    public void dump(final boolean dumpSI) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (String s : tokens) {
-            if (first)
+            if (first) {
                 first = false;
-            else
+            } else {
                 sb.append(' ');
+            }
             sb.append(s);
         }
 
@@ -172,7 +180,8 @@ public class MatchConsumption {
         context.evaluateString(
                 workingScope,
                 "var out=new Object();\nvar rules=new Object();\n"
-                        + "var meta={current: function() {return {text:'', score:1.0};}};\n",
+                        + "var meta={current: function() {"
+                        + "return {text:'', score:1.0};}};\n",
                 "SISR init from MatchConsumer", 0, null);
 
         if (executationCollection.size() != 1) {

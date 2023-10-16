@@ -27,13 +27,13 @@ import org.apache.log4j.Logger;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-public class LogBufferProvider {
+public final class LogBufferProvider {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(LogBufferProvider.class);
 
     /** The singleton. */
-    private static LogBufferProvider INSTANCE;
+    private static LogBufferProvider instance;
 
     /** The interpreter buffer. */
     private final LogBuffer interpreterBuffer;
@@ -48,7 +48,7 @@ public class LogBufferProvider {
     public static final String CLIENT = "client";
     
     /**
-     * Prevent creation from outside
+     * Prevent creation from outside.
      */
     private LogBufferProvider() {
         interpreterBuffer = new LogBuffer(LogBufferProvider.INTERPRETER);
@@ -56,10 +56,10 @@ public class LogBufferProvider {
     }
     
     public static LogBufferProvider getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new LogBufferProvider();
+        if (instance == null) {
+            instance = new LogBufferProvider();
         }
-        return INSTANCE;
+        return instance;
     }
 
     /**
