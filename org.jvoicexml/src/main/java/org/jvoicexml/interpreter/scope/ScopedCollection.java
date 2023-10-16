@@ -95,7 +95,8 @@ public final class ScopedCollection<E>
      * @param listener the listener to add
      * @since 0.7.9
      */
-    public void addScopedCollectionListener(ScopedCollectionListener<E> listener) {
+    public void addScopedCollectionListener(
+            final ScopedCollectionListener<E> listener) {
         listeners.add(listener);
     }
 
@@ -105,7 +106,8 @@ public final class ScopedCollection<E>
      * @param listener the listener to add
      * @since 0.7.9
      */
-    public void removeScopedCollectionListener(ScopedCollectionListener<E> listener) {
+    public void removeScopedCollectionListener(
+            final ScopedCollectionListener<E> listener) {
         listeners.add(listener);
     }
 

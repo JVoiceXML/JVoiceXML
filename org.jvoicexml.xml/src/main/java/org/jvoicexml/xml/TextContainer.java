@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -28,7 +23,6 @@ package org.jvoicexml.xml;
 /**
  * A node that can contain {@link Text} child nodes.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  */
 public interface TextContainer extends XmlNode {
@@ -38,7 +32,7 @@ public interface TextContainer extends XmlNode {
      * @param text The text to be added.
      * @return The new created text.
      */
-    Text addText(final String text);
+    Text addText(String text);
 
     /**
      * Retrieves the factory to create node lists.

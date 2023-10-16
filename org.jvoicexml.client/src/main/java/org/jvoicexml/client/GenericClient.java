@@ -150,7 +150,8 @@ public final class GenericClient {
 
         // Create a new connection info
         infoController = createConnectionInformation(input, output, call);
-        final ConnectionInformation info = infoController.getConnectionInformation();
+        final ConnectionInformation info =
+                infoController.getConnectionInformation();
         return call(uri, info);
     }
 

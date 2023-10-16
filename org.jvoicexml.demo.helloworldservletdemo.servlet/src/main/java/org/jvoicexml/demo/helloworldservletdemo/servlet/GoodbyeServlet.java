@@ -43,8 +43,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  * @author Dirk Schnelle-Walka
  */
-@WebServlet(displayName="Goodbye", description="VoiceXML Goodbye Demo",
-    urlPatterns="/Goodbye")
+@WebServlet(displayName = "Goodbye", description = "VoiceXML Goodbye Demo",
+    urlPatterns = "/Goodbye")
 public final class GoodbyeServlet
         extends HttpServlet {
     /** The serial version UID. */
@@ -114,7 +114,12 @@ public final class GoodbyeServlet
             LOGGER.debug("creating goodbye VoiceXML document...");
         }
 
-        final String message = request.getParameter("message") == null ? "Goodbye!" : request.getParameter("message");
+        final String message;
+        if (request.getParameter("message") == null) {
+            message =  "Goodbye!";
+        } else {
+            message = request.getParameter("message");
+        }
 
         final VoiceXmlDocument document = createResponse(message);
         final String xml = document.toXml();

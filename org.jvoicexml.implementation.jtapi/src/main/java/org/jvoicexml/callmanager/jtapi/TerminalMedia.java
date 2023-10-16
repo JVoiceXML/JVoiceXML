@@ -35,9 +35,9 @@ import java.util.Map;
 import javax.telephony.media.MediaResourceException;
 import javax.telephony.media.RTC;
 
-import net.sourceforge.gjtapi.media.GenericMediaService;
-
 import org.apache.log4j.Logger;
+
+import net.sourceforge.gjtapi.media.GenericMediaService;
 
 /**
  * Thread to process a media stream from a given URI.
@@ -180,8 +180,7 @@ public abstract class TerminalMedia implements Runnable {
     * @throws MediaResourceException
     *         error processing the URI
     */
-   public abstract void process(final URI uri, final RTC[] rtc,
-           final Dictionary<?, ?> optargs)
+   public abstract void process(URI uri, RTC[] rtc, Dictionary<?, ?> optargs)
        throws MediaResourceException;
 
    /**

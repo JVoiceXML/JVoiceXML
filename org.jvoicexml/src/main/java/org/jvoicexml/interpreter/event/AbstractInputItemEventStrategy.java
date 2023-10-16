@@ -284,6 +284,6 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * @exception JVoiceXMLEvent
      *                error processing the event.
      */
-    protected abstract boolean handleEvent(final T item,
-            final JVoiceXMLEvent event) throws JVoiceXMLEvent;
+    protected abstract boolean handleEvent(T item, JVoiceXMLEvent event)
+            throws JVoiceXMLEvent;
 }

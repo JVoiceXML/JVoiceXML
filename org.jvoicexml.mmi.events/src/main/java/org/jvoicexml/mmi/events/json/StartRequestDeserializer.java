@@ -34,12 +34,13 @@ import com.google.gson.JsonParseException;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class StartRequestDeserializer extends LifeCycleEventDeserializer<StatusRequest> {
+final class StartRequestDeserializer
+    extends LifeCycleEventDeserializer<StatusRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public StartRequestDeserializer() {
+    StartRequestDeserializer() {
     }
     
     /**
@@ -47,7 +48,7 @@ final class StartRequestDeserializer extends LifeCycleEventDeserializer<StatusRe
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public StartRequestDeserializer(final Type type) {
+    StartRequestDeserializer(final Type type) {
         super(type);
     }
     
@@ -55,8 +56,9 @@ final class StartRequestDeserializer extends LifeCycleEventDeserializer<StatusRe
      * {@inheritDoc}
      */
     @Override
-    public StatusRequest deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public StatusRequest deserialize(final JsonElement json,
+            final Type typeOfT, final JsonDeserializationContext context)
+                    throws JsonParseException {
         final StatusRequest request =
                 super.deserialize(json, typeOfT, context);
         final JsonObject object = json.getAsJsonObject();

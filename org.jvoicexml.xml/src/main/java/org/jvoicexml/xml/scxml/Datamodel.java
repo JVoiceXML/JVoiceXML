@@ -31,7 +31,8 @@ import org.w3c.dom.Node;
 
 /**
  * <code>&lt;datamodel&gt;</code> is a wrapper element which encapsulates any
- * number of {@code <data>} elements, each of which defines a single data object.
+ * number of {@code <data>} elements, each of which defines a single data
+ * object.
  * The exact nature of the data object depends on the data model language used.
  *
  * @author Dirk Schnelle-Walka

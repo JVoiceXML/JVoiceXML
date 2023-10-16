@@ -1,10 +1,4 @@
 /*
- * File:    $RCSfile: TagStrategyFactory.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -35,7 +29,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.profile.SsmlParsingStrategy
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 public interface SsmlParsingStrategyFactory {
@@ -47,5 +40,5 @@ public interface SsmlParsingStrategyFactory {
      * @return Strategy, to clone the given node, <code>null</code> if there
      *         is no suitable strategy.
      */
-    SsmlParsingStrategy getParsingStrategy(final VoiceXmlNode node);
+    SsmlParsingStrategy getParsingStrategy(VoiceXmlNode node);
 }

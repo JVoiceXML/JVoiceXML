@@ -36,8 +36,10 @@ import com.google.gson.JsonParseException;
  * A deserializer for {@link LifeCycleResponse}s.
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
+ * @param <T> type of life cycle event
  */
-abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse> extends LifeCycleEventDeserializer<T> {
+abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse>
+    extends LifeCycleEventDeserializer<T> {
     /** Type of the statusInfo field. */
     private final Type statusInfoType;
 
@@ -45,7 +47,7 @@ abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse> extend
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public LifeCycleResponseDeserializer() {
+    LifeCycleResponseDeserializer() {
         this(Object.class);
     }
     
@@ -54,7 +56,7 @@ abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse> extend
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public LifeCycleResponseDeserializer(final Type type) {
+    LifeCycleResponseDeserializer(final Type type) {
         this(type, Object.class);
     }
     
@@ -64,7 +66,7 @@ abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse> extend
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public LifeCycleResponseDeserializer(final Type data, final Type statusInfo) {
+    LifeCycleResponseDeserializer(final Type data, final Type statusInfo) {
         super(data);
         statusInfoType = statusInfo;
     }
@@ -74,8 +76,9 @@ abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse> extend
      * {@inheritDoc}
      */
     @Override
-    public T deserialize(JsonElement json, Type typeOfT,
-            JsonDeserializationContext context) throws JsonParseException {
+    public T deserialize(final JsonElement json, final Type typeOfT,
+            final JsonDeserializationContext context)
+                    throws JsonParseException {
         final T response = super.deserialize(json, typeOfT, context);
         final JsonObject object = json.getAsJsonObject();
         final String ctx = getAsString(object, "context");
@@ -87,11 +90,12 @@ abstract class LifeCycleResponseDeserializer<T extends LifeCycleResponse> extend
             final AnyComplexType any = new AnyComplexType();
             final JsonElement dataElement = object.get("statusInfo");
             final JsonArray statusInfo = dataElement.getAsJsonArray();
-            for (int i=0; i< statusInfo.size(); i++) {
+            for (int i = 0; i < statusInfo.size(); i++) {
                 final JsonElement current = statusInfo.get(i);
                 final Object o = context.deserialize(current, statusInfoType);
                 any.addContent(o);
             }
+            T event = getLifeCycleEvent();
             event.setStatusInfo(any);
         }
         return response;

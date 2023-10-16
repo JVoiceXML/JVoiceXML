@@ -98,7 +98,7 @@ public class EcmaScriptDataModel implements DataModel {
     }
 
     /**
-     * Sets the maximum script log length
+     * Sets the maximum script log length.
      * @param length length to use, {@code -1} if no truncation is requested
      * @since 0.7.9
      */
@@ -344,8 +344,8 @@ public class EcmaScriptDataModel implements DataModel {
      * {@inheritDoc}
      */
     @Override
-    public int createVariableFor(Object variable, final String variableName,
-            final Object value) {
+    public int createVariableFor(final Object variable,
+            final String variableName, final Object value) {
         if (!(variable instanceof Scriptable)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
@@ -412,7 +412,7 @@ public class EcmaScriptDataModel implements DataModel {
      * {@inheritDoc}
      */
     @Override
-    public int createArray(String arrayName, int dimension) {
+    public int createArray(final String arrayName, final int dimension) {
         return createArray(arrayName, dimension, null, topmostScope);
     }
 
@@ -563,7 +563,7 @@ public class EcmaScriptDataModel implements DataModel {
      * @return determined scope.
      * @since 0.7.9
      */
-    private Scope getScope(Scriptable scriptable) {
+    private Scope getScope(final Scriptable scriptable) {
         final Scope scope = scopes.get(scriptable);
         if (scope != null) {
             return scope;
@@ -867,14 +867,15 @@ public class EcmaScriptDataModel implements DataModel {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Object> T readVariable(String variableName, Scope scope,
-            final Class<T> type) throws SemanticError {
+    public <T extends Object> T readVariable(final String variableName,
+            final Scope scope, final Class<T> type) throws SemanticError {
         final Scriptable start = getScriptable(scope);
         return readVariable(variableName, scope, start, type);
     }
 
-    private <T extends Object> T readVariable(String variableName, Scope scope,
-            final Scriptable start, final Class<T> type) throws SemanticError {
+    private <T extends Object> T readVariable(final String variableName,
+            final Scope scope, final Scriptable start, final Class<T> type)
+                    throws SemanticError {
         if (start == null) {
             throw new SemanticError("no scope '" + scope + "' present to read '"
                     + variableName + "'");
@@ -1029,7 +1030,7 @@ public class EcmaScriptDataModel implements DataModel {
     }
 
     /**
-     * Truncates the given script in case it exceeds the maximum log length
+     * Truncates the given script in case it exceeds the maximum log length.
      * @param script the script to check
      * @return script with a length not exceeding the max length
      * @since 0.7.9
@@ -1038,11 +1039,13 @@ public class EcmaScriptDataModel implements DataModel {
         if (script == null) {
             return null;
         }
-        if ((maxScriptLogLength < 3) ||
-                (script.length() <= maxScriptLogLength)) {
+        final String dots = "...";
+        final int dotLength = dots.length();
+        if ((maxScriptLogLength < dotLength)
+                || (script.length() <= maxScriptLogLength)) {
             return script;
         }
-        return script.substring(0, maxScriptLogLength - 3) + "...";
+        return script.substring(0, maxScriptLogLength - dotLength) + dots;
     }
     
     /**
@@ -1150,8 +1153,8 @@ public class EcmaScriptDataModel implements DataModel {
         final Context context = getContext();
         final Callable reviver = new Callable() {
             @Override
-            public Object call(Context cx, Scriptable scope, Scriptable thisObj,
-                    Object[] args) {
+            public Object call(final Context cx, final Scriptable scope, 
+                    final Scriptable thisObj, final Object[] args) {
                 return args[1];
             }
         };
@@ -1188,8 +1191,9 @@ public class EcmaScriptDataModel implements DataModel {
         for (DataModelObjectDeserializer deserializer : values) {
             final MimeType type = deserializer.getMimeType();
             deserializers.add(deserializer);
-            LOGGER.info("added deserializer '" + deserializer.getClass().getCanonicalName()
-                    + "' for type '" + type + "'");
+            LOGGER.info("added deserializer '"
+                    + deserializer.getClass().getCanonicalName()
+                        + "' for type '" + type + "'");
         }
     }
 

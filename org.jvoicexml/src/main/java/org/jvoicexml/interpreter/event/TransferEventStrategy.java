@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -39,7 +34,6 @@ import org.jvoicexml.interpreter.formitem.TransferFormItem;
  * Event strategy to handle the end of a transfer.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  */
 final class TransferEventStrategy
@@ -63,7 +57,7 @@ final class TransferEventStrategy
      * @param formItem
      *        The current form item.
      */
-    public TransferEventStrategy(final VoiceXmlInterpreterContext ctx,
+    TransferEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
                                     final FormItem formItem) {

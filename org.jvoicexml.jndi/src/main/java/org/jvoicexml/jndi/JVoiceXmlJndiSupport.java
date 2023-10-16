@@ -64,6 +64,9 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
     private static final Logger LOGGER =
             LogManager.getLogger(JVoiceXmlJndiSupport.class);
 
+    /** The default port to use. */
+    private static final int DEFAULT_PORT = 9698;
+
     /** Reference to the interpreter. */
     private JVoiceXml jvxml;
 
@@ -91,7 +94,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
     public JVoiceXmlJndiSupport() {
         environment = new Hashtable<String, String>();
         lock = new Object();
-        classServerPort = 9698;
+        classServerPort = DEFAULT_PORT;
     }
 
     /**
@@ -253,7 +256,8 @@ public final class JVoiceXmlJndiSupport implements JndiSupport, Runnable {
                     + stub.getClass().getCanonicalName() + "("
                     + JVoiceXmlSkeleton.class.getCanonicalName()
                     + ")'");
-        } catch (java.rmi.RemoteException | NamingException | UnknownHostException | URISyntaxException re) {
+        } catch (java.rmi.RemoteException | NamingException
+                | UnknownHostException | URISyntaxException re) {
             LOGGER.error("error creating the skeleton", re);
             return false;
         }

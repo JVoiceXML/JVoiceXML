@@ -54,6 +54,12 @@ public final class GotoDemo {
             .getLogger(GotoDemo.class);
 
     /**
+     * Do not create from outside.
+     */
+    private GotoDemo() {
+    }
+
+    /**
      * The main method.
      * 
      * @param args

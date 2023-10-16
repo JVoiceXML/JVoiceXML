@@ -33,5 +33,5 @@ public interface DataTypeFactory {
      * @return corresponding data type or {@code null} if the
      *         attribute can not be converted to a data type.
      */
-    DataType getDataType(final String attribute);
+    DataType getDataType(String attribute);
 }

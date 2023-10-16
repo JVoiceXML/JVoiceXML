@@ -57,7 +57,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 final class TextStrategy extends AbstractTagStrategy
         implements SsmlParsingStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(TextStrategy.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(TextStrategy.class);
 
     /**
      * Creates a new object.
@@ -104,7 +105,8 @@ final class TextStrategy extends AbstractTagStrategy
     }
 
     /**
-     * Queues the speakable to be played back in the {@link ImplementationPlatform}
+     * Queues the speakable to be played back in the
+     * {@link ImplementationPlatform}.
      * @param context the current context
      * @param fia the current FIA
      * @param speakable the speakable to be queued

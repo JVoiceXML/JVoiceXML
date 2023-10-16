@@ -54,5 +54,5 @@ public interface GrammarEvaluator {
      * @return the determined semantic interpretation, or {@code null} if
      *         the utterance is not valid
      */
-    Object getSemanticInterpretation(final DataModel model, final String utterance);
+    Object getSemanticInterpretation(DataModel model, String utterance);
 }

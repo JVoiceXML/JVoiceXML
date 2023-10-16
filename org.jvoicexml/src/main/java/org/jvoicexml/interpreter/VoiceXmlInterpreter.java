@@ -231,7 +231,7 @@ public final class VoiceXmlInterpreter {
      * @exception JVoiceXMLEvent
      *                Error or event processing the dialog.
      */
-    public void process(Dialog dialog,
+    public void process(final Dialog dialog,
             final Map<String, Object> parameters) throws JVoiceXMLEvent {
         // There is no next dialog by default.
         nextDialog = null;
@@ -253,7 +253,8 @@ public final class VoiceXmlInterpreter {
             try {
                 fia.initialize(profile, parameters);
                 fia.mainLoop();
-            } catch (GotoNextFormEvent | GotoNextDocumentEvent | SubmitEvent e) {
+            } catch (GotoNextFormEvent | GotoNextDocumentEvent
+                      | SubmitEvent e) {
                 throw e;
             } catch (JVoiceXMLEvent event) {
                 eventbus.publish(event);

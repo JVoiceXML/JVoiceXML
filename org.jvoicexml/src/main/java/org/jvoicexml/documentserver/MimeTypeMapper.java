@@ -37,7 +37,7 @@ class MimeTypeMapper {
      * Constructs a new object.
      * @param mimeType the type to check
      */
-    public MimeTypeMapper(final MimeType mimeType) {
+    MimeTypeMapper(final MimeType mimeType) {
         type = mimeType;
     }
     

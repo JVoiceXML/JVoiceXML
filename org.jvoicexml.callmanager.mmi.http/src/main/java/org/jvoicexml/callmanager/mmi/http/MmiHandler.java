@@ -1,3 +1,24 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2014-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.callmanager.mmi.http;
 
 import java.io.IOException;
@@ -38,7 +59,7 @@ public class MmiHandler extends AbstractHandler {
         }
     }
 
-    public void removeMMIEventListener(MMIEventListener listener) {
+    public void removeMMIEventListener(final MMIEventListener listener) {
         synchronized (listeners) {
             listeners.remove(listener);
         }
@@ -47,6 +68,7 @@ public class MmiHandler extends AbstractHandler {
     /**
      * Notifies all registered listeners about a received MMI Event.
      * 
+     * @param protocol the used protocol
      * @param event
      *            the event to notify
      */
@@ -62,10 +84,15 @@ public class MmiHandler extends AbstractHandler {
         }
     }
 
+    /**
+     * 
+     * {@inheritDoc}
+     */
     @Override
-    public void handle(String target, Request baseRequest,
-            HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public void handle(final String target, final Request baseRequest,
+            final HttpServletRequest request,
+            final HttpServletResponse response)
+                    throws IOException, ServletException {
         LOGGER.info("request from " + request.getRemoteAddr());
         response.setContentType("text/html;charset=utf-8");
         final Reader reader = request.getReader();
@@ -77,7 +104,8 @@ public class MmiHandler extends AbstractHandler {
                 final Mmi mmi = (Mmi) o;
                 LOGGER.info("received MMI event: " + mmi);
                 final String protocol = request.getProtocol();
-                final DecoratedMMIEvent event = new DecoratedMMIEvent(this, mmi);
+                final DecoratedMMIEvent event =
+                        new DecoratedMMIEvent(this, mmi);
                 final Runnable runnable = new Runnable() {
                     @Override
                     public void run() {

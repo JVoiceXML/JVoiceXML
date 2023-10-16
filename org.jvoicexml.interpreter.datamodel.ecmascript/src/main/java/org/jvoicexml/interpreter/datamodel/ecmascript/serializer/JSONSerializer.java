@@ -42,7 +42,8 @@ public final class JSONSerializer implements DataModelObjectSerializer {
     @Override
     public Collection<KeyValuePair> serialize(final DataModel model,
             final String name, final Object value) throws SemanticError {
-        final Collection<KeyValuePair> pairs = new java.util.ArrayList<KeyValuePair>();
+        final Collection<KeyValuePair> pairs =
+                new java.util.ArrayList<KeyValuePair>();
         final String str = model.toString(value);
         final KeyValuePair pair = new KeyValuePair(name, str);
         pairs.add(pair);

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2015 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -48,11 +43,11 @@ public interface GrammarManager {
      * @throws IOException
      *         error loading the grammar
      */
-    void loadGrammar(final GrammarDocument document) throws IOException;
+    void loadGrammar(GrammarDocument document) throws IOException;
 
     /**
      * Unloads the given grammar.
      * @param document the grammar to unload
      */
-    void unloadGrammar(final GrammarDocument document);
+    void unloadGrammar(GrammarDocument document);
 }

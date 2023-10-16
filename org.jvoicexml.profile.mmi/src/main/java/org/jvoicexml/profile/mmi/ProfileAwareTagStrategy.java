@@ -37,5 +37,5 @@ public interface ProfileAwareTagStrategy {
      * Sets the profile.
      * @param profile the profile
      */
-    void setProfile(final MmiProfile profile);
+    void setProfile(MmiProfile profile);
 }

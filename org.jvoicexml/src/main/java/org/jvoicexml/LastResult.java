@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import java.util.Objects;
+
 /**
  * This variable container holds information about the last recognition to occur
  * within this application.
@@ -138,16 +140,7 @@ public class LastResult {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Float.floatToIntBits(confidence);
-        result = prime * result
-                + ((inputmode == null) ? 0 : inputmode.hashCode());
-        result = prime * result
-                + ((interpretation == null) ? 0 : interpretation.hashCode());
-        result = prime * result
-                + ((utterance == null) ? 0 : utterance.hashCode());
-        return result;
+        return Objects.hash(inputmode, interpretation, utterance);
     }
 
     /**

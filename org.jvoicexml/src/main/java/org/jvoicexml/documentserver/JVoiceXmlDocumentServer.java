@@ -105,7 +105,7 @@ public final class JVoiceXmlDocumentServer
     }
 
     /**
-     * Sets the maximum document log length
+     * Sets the maximum document log length.
      * @param length length to use, {@code -1} if no truncation is requested
      * @since 0.7.9
      */
@@ -117,7 +117,7 @@ public final class JVoiceXmlDocumentServer
      * {@inheritDoc}
      */
     @Override
-    public void init(Configuration configuration)
+    public void init(final Configuration configuration)
             throws ConfigurationException {
         final Collection<SchemeStrategy> configuredStrategies = configuration
                 .loadObjects(SchemeStrategy.class, "schemestrategy");
@@ -283,10 +283,12 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug("...read document");
             final String docString = document.toString();
             final String logDocument;
-            if ((maxDocumentLogLength > 3) 
+            final int dotslength = "...".length();
+            if ((maxDocumentLogLength > dotslength) 
                     && (docString.length() > maxDocumentLogLength)) {
                 logDocument = 
-                        docString.substring(0, maxDocumentLogLength - 3)
+                        docString.substring(0, 
+                                maxDocumentLogLength - dotslength)
                         + "...";
             } else {
                 logDocument = docString;

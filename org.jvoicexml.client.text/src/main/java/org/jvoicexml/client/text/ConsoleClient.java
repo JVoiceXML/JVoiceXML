@@ -48,8 +48,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @since 0.7.5
  */
 public final class ConsoleClient implements TextListener {
+
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(ConsoleClient.class);;
+
+    /** The default port of the text server. */
+    private static final int DEFAULT_TEXTSERVER_PORT = 4242;
 
     /** Server start lock. */
     private final Object lock;
@@ -77,7 +81,7 @@ public final class ConsoleClient implements TextListener {
     private void run(final URI uri) throws Exception, JVoiceXMLEvent {
         final Context context = new InitialContext();
         final JVoiceXml jvxml = (JVoiceXml) context.lookup("JVoiceXml");
-        server = new TextServer(4242);
+        server = new TextServer(DEFAULT_TEXTSERVER_PORT);
         server.addTextListener(this);
         server.start();
         synchronized (lock) {

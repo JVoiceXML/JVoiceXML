@@ -53,48 +53,49 @@ public class EmbeddedTagStrategyFactory
      */
     public EmbeddedTagStrategyFactory() 
         throws InstantiationException, IllegalAccessException,
-        ClassNotFoundException, SecurityException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
+            ClassNotFoundException, SecurityException, NoSuchMethodException,
+            IllegalArgumentException, InvocationTargetException {
         strategies = new java.util.HashMap<String, TagStrategy>();
-        strategies.put("assign",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.AssignStrategy"));
-        strategies.put("audio",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.AudioTagStrategy"));
-        strategies.put("clear",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ClearStrategy"));
-        strategies.put("data",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy"));
-        strategies.put("disconnect",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.DisconnectStrategy"));
-        strategies.put("exit",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ExitStrategy"));
-        strategies.put("goto",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.GotoStrategy"));
-        strategies.put("grammar",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy"));
-        strategies.put("if",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.IfStrategy"));
-        strategies.put("log",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.LogStrategy"));
-        strategies.put("prompt",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.PromptStrategy"));
-        strategies.put("reprompt",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.RepromptStrategy"));
-        strategies.put("return",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ReturnStrategy"));
-        strategies.put("script",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy"));
-        strategies.put("submit",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.SubmitStrategy"));
-        strategies.put("#text",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy"));
-        strategies.put("throw",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ThrowStrategy"));
-        strategies.put("submit",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.SubmitStrategy"));
-        strategies.put("value",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.ValueStrategy"));
-        strategies.put("valvarue",
-                loadStrategy("org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy"));
+        strategies.put("assign", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.AssignStrategy"));
+        strategies.put("audio", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.AudioTagStrategy"));
+        strategies.put("clear", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.ClearStrategy"));
+        strategies.put("data", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.DataStrategy"));
+        strategies.put("disconnect", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.DisconnectStrategy"));
+        strategies.put("exit", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.ExitStrategy"));
+        strategies.put("goto", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.GotoStrategy"));
+        strategies.put("grammar", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.GrammarStrategy"));
+        strategies.put("if", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.IfStrategy"));
+        strategies.put("log", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.LogStrategy"));
+        strategies.put("prompt", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.PromptStrategy"));
+        strategies.put("reprompt", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.RepromptStrategy"));
+        strategies.put("return", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.ReturnStrategy"));
+        strategies.put("script", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.ScriptStrategy"));
+        strategies.put("submit", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.SubmitStrategy"));
+        strategies.put("#text", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.TextStrategy"));
+        strategies.put("throw", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.ThrowStrategy"));
+        strategies.put("submit", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.SubmitStrategy"));
+        strategies.put("value", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.ValueStrategy"));
+        strategies.put("valvarue", loadStrategy(
+                "org.jvoicexml.profile.vxml21.tagstrategy.VarStrategy"));
     }
 
     /**

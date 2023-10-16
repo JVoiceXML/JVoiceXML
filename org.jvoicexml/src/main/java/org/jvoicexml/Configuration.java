@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -46,8 +41,8 @@ public interface Configuration {
      * @exception ConfigurationException error loading the configuration
      * @since 0.7
      */
-    <T extends Object> Collection<T> loadObjects(final Class<T> baseClass,
-            final String root) throws ConfigurationException;
+    <T extends Object> Collection<T> loadObjects(Class<T> baseClass,
+            String root) throws ConfigurationException;
 
     /**
      * Loads the object with the class defined by the given key.
@@ -62,7 +57,7 @@ public interface Configuration {
      *         object could not be loaded.
      * @exception ConfigurationException error loading the configuration
      */
-    <T extends Object> T loadObject(final Class<T> baseClass, final String key)
+    <T extends Object> T loadObject(Class<T> baseClass, String key)
         throws ConfigurationException;
 
     /**
@@ -77,6 +72,6 @@ public interface Configuration {
      * @exception ConfigurationException error loading the configuration
      * @since 0.7
      */
-    <T extends Object> T loadObject(final Class<T> baseClass)
+    <T extends Object> T loadObject(Class<T> baseClass)
         throws ConfigurationException;
 }

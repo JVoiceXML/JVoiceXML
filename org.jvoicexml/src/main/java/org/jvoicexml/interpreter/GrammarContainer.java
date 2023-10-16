@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -57,6 +52,6 @@ public interface GrammarContainer extends InputItem {
      * @param document the processed grammar document
      * @since 0.7
      */
-    void addGrammar(final GrammarDocument document);
+    void addGrammar(GrammarDocument document);
 
 }

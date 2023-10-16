@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.NewContextResponse;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class NewContextResponseDeserializer extends LifeCycleResponseDeserializer<NewContextResponse> {
+final class NewContextResponseDeserializer
+    extends LifeCycleResponseDeserializer<NewContextResponse> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public NewContextResponseDeserializer() {
+    NewContextResponseDeserializer() {
     }
     
     /**
@@ -43,7 +44,7 @@ final class NewContextResponseDeserializer extends LifeCycleResponseDeserializer
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public NewContextResponseDeserializer(final Type data, final Type statusInfo) {
+    NewContextResponseDeserializer(final Type data, final Type statusInfo) {
         super(data, statusInfo);
     }
     

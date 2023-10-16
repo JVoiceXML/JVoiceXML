@@ -35,11 +35,12 @@ public class RuleRefExpansion implements RuleExpansion {
     private ExecutableSemanticInterpretation executableSematicInterpretation;
     private SrgsSisrGrammar externalGrammar;
 
-    public RuleRefExpansion(SrgsRule rule) {
+    public RuleRefExpansion(final SrgsRule rule) {
         referencedRule = rule;
     }
 
-    public RuleRefExpansion(SrgsSisrGrammar externalGrammar, SrgsRule rule) {
+    public RuleRefExpansion(final SrgsSisrGrammar externalGrammar, 
+            final SrgsRule rule) {
         referencedRule = rule;
         this.externalGrammar = externalGrammar;
     }
@@ -50,7 +51,8 @@ public class RuleRefExpansion implements RuleExpansion {
      * 
      * @param si
      */
-    public void setExecutionSemanticInterpretation(ExecutableSemanticInterpretation si) {
+    public void setExecutionSemanticInterpretation(
+            final ExecutableSemanticInterpretation si) {
         executableSematicInterpretation = si;
     }
 
@@ -58,13 +60,15 @@ public class RuleRefExpansion implements RuleExpansion {
      * {@inheritDoc}
      */
     @Override
-    public MatchConsumption match(List<String> tokens, int offset) {
+    public MatchConsumption match(final List<String> tokens, 
+            final int offset) {
         MatchConsumption individualResult = referencedRule
                 .match(tokens, offset);
         if (individualResult != null) {
             if (externalGrammar != null) {
-                if (individualResult.getExecutationCollection().size() != 1)
+                if (individualResult.getExecutationCollection().size() != 1) {
                     LOGGER.error("SrgsRule does not have one SI component");
+                }
 
                 // Replace the current execution component with a
                 // GrammarContext, which will run
@@ -73,9 +77,11 @@ public class RuleRefExpansion implements RuleExpansion {
                         externalGrammar, referencedRule.getId(),
                         individualResult.getExecutationCollection().get(0));
                 individualResult.getExecutationCollection().clear();
-                individualResult.addExecutableSemanticInterpretation(grammarContext);
+                individualResult.addExecutableSemanticInterpretation(
+                        grammarContext);
             } else {
-                individualResult.addExecutableSemanticInterpretation(executableSematicInterpretation);
+                individualResult.addExecutableSemanticInterpretation(
+                        executableSematicInterpretation);
             }
             return individualResult;
         }
@@ -83,10 +89,11 @@ public class RuleRefExpansion implements RuleExpansion {
         return null;
     }
 
-    public void dump(String pad) {
+    public void dump(final String pad) {
         LOGGER.debug(pad + toString());
-        if (executableSematicInterpretation != null)
+        if (executableSematicInterpretation != null) {
             executableSematicInterpretation.dump(pad);
+        }
     }
     
     @Override

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -35,7 +30,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
  * JVoiceXML, yet.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 public interface Profile {
@@ -56,7 +50,7 @@ public interface Profile {
      * @param context
      *            the context for the created session.
      */
-    void initialize(final VoiceXmlInterpreterContext context);
+    void initialize(VoiceXmlInterpreterContext context);
 
     /**
      * Initialized this profile once a session is closed.
@@ -68,7 +62,7 @@ public interface Profile {
      * @param context
      *            the context for the closed session.
      */
-    void terminate(final VoiceXmlInterpreterContext context);
+    void terminate(VoiceXmlInterpreterContext context);
 
     /**
      * Retrieves the tag strategy factory Factory for {@link TagStrategy}s that

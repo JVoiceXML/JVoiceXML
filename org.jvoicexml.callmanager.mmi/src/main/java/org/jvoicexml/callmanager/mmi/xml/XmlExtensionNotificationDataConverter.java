@@ -65,9 +65,12 @@ import org.xml.sax.SAXException;
  */
 public class XmlExtensionNotificationDataConverter
         implements ExtensionNotificationDataConverter {
-    public static final String JVXML_MMI_NAMESPACE = "http://www.nowhere.org/jvxmlmmi";
+    /** The MMI namespace for JVoiceXML. */
+    public static final String JVXML_MMI_NAMESPACE =
+            "http://www.nowhere.org/jvxmlmmi";
     /** The EMMA namespace. */
-    private static final String EMMA_NAMESPACE = "http://www.w3.org/2003/04/emma";
+    private static final String EMMA_NAMESPACE =
+            "http://www.w3.org/2003/04/emma";
 
     /**
      * {@inheritDoc}
@@ -92,7 +95,7 @@ public class XmlExtensionNotificationDataConverter
     }
 
     /**
-     * Creates a semantic interpretation from the given recognition result
+     * Creates a semantic interpretation from the given recognition result.
      * 
      * @param id
      *            the emma id
@@ -137,7 +140,7 @@ public class XmlExtensionNotificationDataConverter
     }
 
     /**
-     * Possibly add semantic interpretation to the given document
+     * Possibly add semantic interpretation to the given document.
      * 
      * @param document
      *            the document
@@ -165,7 +168,7 @@ public class XmlExtensionNotificationDataConverter
 
     /**
      * Possibly add semantic interpretation as a compound object to the given
-     * document
+     * document.
      * 
      * @param document
      *            the document
@@ -204,9 +207,9 @@ public class XmlExtensionNotificationDataConverter
      * {@inheritDoc}
      */
     @Override
-    public Object convertSynthesizedOutputEvent(SynthesizedOutputEvent output)
-            throws ConversionException {
-
+    public Object convertSynthesizedOutputEvent(
+            final SynthesizedOutputEvent output)
+                    throws ConversionException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory
                 .newInstance();
         factory.setNamespaceAware(true);

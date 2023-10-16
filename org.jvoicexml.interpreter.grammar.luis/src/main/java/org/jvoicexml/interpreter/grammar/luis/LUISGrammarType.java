@@ -10,9 +10,9 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @author Dirk Schnelle-Walka
  *
  */
-public class LUISGrammarType extends GrammarType {
+public final class LUISGrammarType extends GrammarType {
     /** The grammar type {@code application/grammar+regex}. */
-    public final static MimeType GRAMMAR_TYPE;
+    public static final MimeType GRAMMAR_TYPE;
 
     static {
         try {

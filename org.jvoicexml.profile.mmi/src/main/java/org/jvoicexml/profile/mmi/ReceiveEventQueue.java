@@ -161,7 +161,8 @@ public class ReceiveEventQueue implements EventSubscriber {
         if (!(event instanceof IncomingExtensionNotificationJVoiceXmlEvent)) {
             return;
         }
-        final IncomingExtensionNotificationJVoiceXmlEvent ext = (IncomingExtensionNotificationJVoiceXmlEvent) event;
+        final IncomingExtensionNotificationJVoiceXmlEvent ext =
+                (IncomingExtensionNotificationJVoiceXmlEvent) event;
         boolean externalEventsEnabled = evaluate("externalevents.enable");
         final LastMessage message = toLastMessage(ext);
         final EventBus bus = context.getEventBus();

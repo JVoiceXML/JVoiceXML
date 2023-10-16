@@ -75,7 +75,7 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
     public static final String HTTP_SCHEME_NAME = "http";
 
     /** the storage of session identifiers. */
-    protected static SessionStorage<HttpClientBuilder> SESSION_STORAGE;
+    protected static final SessionStorage<HttpClientBuilder> SESSION_STORAGE;
 
     /** Scheme name for this strategy. */
     private String scheme;
@@ -84,7 +84,8 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
     private int defaultFetchTimeout;
 
     static {
-        final SessionIdentifierFactory<HttpClientBuilder> factory = new HttpClientSessionIdentifierFactory();
+        final SessionIdentifierFactory<HttpClientBuilder> factory =
+                new HttpClientSessionIdentifierFactory();
         SESSION_STORAGE = new SessionStorage<HttpClientBuilder>(factory);
     }
 
@@ -142,7 +143,8 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
         final RequestConfig config = setTimeout(timeout);
         try (CloseableHttpClient client = builder
                 .setDefaultRequestConfig(config).build()) {
-            final String fragmentLessUriString = StringUtils.substringBeforeLast(uri.toString(), "#");
+            final String fragmentLessUriString =
+                    StringUtils.substringBeforeLast(uri.toString(), "#");
             final URI fragmentLessUri = new URI(fragmentLessUriString);
             final URI requestUri = addParameters(parameters, fragmentLessUri);
             if (LOGGER.isDebugEnabled()) {
@@ -193,10 +195,11 @@ public final class HttpSchemeStrategy implements SchemeStrategy {
             return RequestConfig.custom().build();
 
         }
+        final int msecPerSec = 1000;
         final RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(usedTimeout * 1000)
-                .setConnectionRequestTimeout((int) (timeout * 1000))
-                .setSocketTimeout((int) (timeout * 1000)).build();
+                .setConnectTimeout(usedTimeout * msecPerSec)
+                .setConnectionRequestTimeout((int) (timeout * msecPerSec))
+                .setSocketTimeout((int) (timeout * msecPerSec)).build();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("timeout set to '" + timeout + "'");
         }

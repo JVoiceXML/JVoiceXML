@@ -477,11 +477,11 @@ public final class VoiceModalityComponent
                     session = callManager.createSession(data);
                     context.setSession(session);
                 }
-                final ExtensionNotificationDataConverter converter =
+                final ExtensionNotificationDataConverter dataConverter =
                         callManager.getExtensionNotificationDataConverter();
                 final DetailedSessionListener listener =
                         new MmiDetailedSessionListener(adapter, context,
-                                converter);
+                                dataConverter);
                 final JVoiceXmlSession jvxmlSession =
                         (JVoiceXmlSession) session;
                 jvxmlSession.addSessionListener(listener);

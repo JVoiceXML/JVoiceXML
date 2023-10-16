@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.DoneNotification;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class DoneNotificationDeserializer extends LifeCycleResponseDeserializer<DoneNotification> {
+final class DoneNotificationDeserializer
+    extends LifeCycleResponseDeserializer<DoneNotification> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public DoneNotificationDeserializer() {
+    DoneNotificationDeserializer() {
     }
     
     /**
@@ -43,7 +44,7 @@ final class DoneNotificationDeserializer extends LifeCycleResponseDeserializer<D
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public DoneNotificationDeserializer(final Type data, final Type statusInfo) {
+    DoneNotificationDeserializer(final Type data, final Type statusInfo) {
         super(data, statusInfo);
     }
     

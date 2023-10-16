@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date $
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -42,7 +37,6 @@ import org.jvoicexml.mmi.events.Mmi;
  * possible.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public class XmlExtensionNotificationDataExtractor
@@ -57,7 +51,8 @@ public class XmlExtensionNotificationDataExtractor
         try {
             context = JAXBContext.newInstance(Mmi.class);
             Marshaller marshaller = context.createMarshaller();
-            final EmmaSemanticInterpretationExtractor extractor = new EmmaSemanticInterpretationExtractor();
+            final EmmaSemanticInterpretationExtractor extractor =
+                    new EmmaSemanticInterpretationExtractor();
             marshaller.marshal(mmi, extractor);
             return extractor.getRecognitonResult();
         } catch (JAXBException e) {

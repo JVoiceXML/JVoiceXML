@@ -40,7 +40,8 @@ import org.jvoicexml.mmi.events.Mmi;
  * @since 0.7.7
  */
 @SuppressWarnings("serial")
-public class IncomingExtensionNotificationJVoiceXmlEvent extends JVoiceXMLEvent {
+public class IncomingExtensionNotificationJVoiceXmlEvent
+    extends JVoiceXMLEvent {
     /** The encapsulated MMI event. */
     private final Mmi notification;
 

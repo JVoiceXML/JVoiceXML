@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/implementation/SrgsXmlGrammarImplementation.java $
- * Version: $LastChangedRevision: 4509 $
- * Date:    $Date: 2015-01-12 09:08:00 +0100 (Mo, 12 Jan 2015) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -27,6 +22,7 @@
 package org.jvoicexml.implementation;
 
 import java.net.URI;
+import java.util.Objects;
 
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -37,7 +33,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * Implementation of a SRGS XML grammar.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 4509 $
  * @since 0.5.5
  */
 public final class SrgsXmlGrammarImplementation
@@ -106,13 +101,30 @@ public final class SrgsXmlGrammarImplementation
         return document.equals(other.getGrammarDocument());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((document == null) ? 0 : document.hashCode());
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
-        return result;
+        return Objects.hash(document, uri);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        SrgsXmlGrammarImplementation other = (SrgsXmlGrammarImplementation) obj;
+        return Objects.equals(document, other.document)
+                && Objects.equals(uri, other.uri);
     }
 }

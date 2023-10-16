@@ -82,7 +82,8 @@ final class JVoiceXmlSystemOutput
     @Override
     public void queueSpeakable(final SpeakableText speakable,
             final SessionIdentifier sessionId,
-            final DocumentServer documentServer) throws NoresourceError, BadFetchError, ConnectionDisconnectHangupEvent {
+            final DocumentServer documentServer) throws NoresourceError,
+                BadFetchError, ConnectionDisconnectHangupEvent {
         synthesizedOutput.queueSpeakable(speakable, sessionId, documentServer);
     }
 
@@ -90,9 +91,10 @@ final class JVoiceXmlSystemOutput
      * {@inheritDoc}
      */
     @Override
-    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
-            CallControlProperties callProps) throws BadFetchError,
-            NoresourceError, ConnectionDisconnectHangupEvent {
+    public void playPrompts(final SessionIdentifier sessionId,
+            final DocumentServer server, final CallControlProperties callProps)
+                    throws BadFetchError, NoresourceError,
+                        ConnectionDisconnectHangupEvent {
         synthesizedOutput.playPrompts(sessionId, server, callProps);
     }
     

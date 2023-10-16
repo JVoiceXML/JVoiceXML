@@ -28,7 +28,8 @@ import org.jvoicexml.srgs.sisr.SemanticInterpretationBlock;
 import org.jvoicexml.xml.srgs.Ruleref;
 
 /**
- * Speial rule GARBAGE as defined in https://www.w3.org/TR/speech-grammar/#S2.2.3
+ * Special rule GARBAGE as defined in
+ * https://www.w3.org/TR/speech-grammar/#S2.2.3.
  * @author Dirk Schnelle-Walka
  * @since 0.7.8
  *
@@ -37,7 +38,7 @@ class GarbageRule extends SrgsRule {
     /**
      * Constructs a new object.
      */
-    public GarbageRule() {
+    GarbageRule() {
         super(Ruleref.SPECIAL_VALUE_GARBAGE);
     }
     
@@ -45,7 +46,7 @@ class GarbageRule extends SrgsRule {
      * @see SrgsRule#match(List, int)
      */
     @Override
-    public MatchConsumption match(List<String> tokens, int index) {
+    public MatchConsumption match(final List<String> tokens, final int index) {
         int tokenCount = tokens.size();
 
         if (tokenCount == 0) {

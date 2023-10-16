@@ -302,9 +302,10 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
-            CallControlProperties callProps) throws BadFetchError,
-            NoresourceError, ConnectionDisconnectHangupEvent {
+    public void playPrompts(final SessionIdentifier id,
+            final DocumentServer server, final CallControlProperties callProps)
+                    throws BadFetchError, NoresourceError,
+                        ConnectionDisconnectHangupEvent {
         final Runnable runnable = new Runnable() {
             /**
              * {@inheritDoc}
@@ -418,7 +419,8 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -437,7 +439,8 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, mark);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -456,8 +459,9 @@ public final class Jsapi20SynthesizedOutput
                 sessionId, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
+                            listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -472,8 +476,9 @@ public final class Jsapi20SynthesizedOutput
                 sessionId);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
+                            listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -539,7 +544,8 @@ public final class Jsapi20SynthesizedOutput
                 return;
             }
 
-            final Collection<SpeakableText> skipped = new java.util.ArrayList<SpeakableText>();
+            final Collection<SpeakableText> skipped =
+                    new java.util.ArrayList<SpeakableText>();
             for (SpeakableText speakable : queuedSpeakables) {
                 if (speakable.isBargeInEnabled(bargeInType)) {
                     skipped.add(speakable);
@@ -767,7 +773,7 @@ public final class Jsapi20SynthesizedOutput
                 speakable = queuedSpeakables.remove(0);
                 final Integer queueId;
                 synchronized (queuedIds) {
-                    queueId= queuedIds.remove(speakable);
+                    queueId = queuedIds.remove(speakable);
                 }
                 if (LOGGER.isDebugEnabled() && queueId != null) {
                     LOGGER.debug(
@@ -817,7 +823,8 @@ public final class Jsapi20SynthesizedOutput
      */
     private void notifyError(final ErrorEvent error) {
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>();
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputError(error);

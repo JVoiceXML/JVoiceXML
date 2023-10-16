@@ -36,11 +36,11 @@ import org.jvoicexml.mmi.events.Mmi;
  * modality component or interaction manager.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
  * @since 0.7.7
  */
 @SuppressWarnings("serial")
-public class OutgoingExtensionNotificationJVoiceXmlEvent extends JVoiceXMLEvent {
+public class OutgoingExtensionNotificationJVoiceXmlEvent
+    extends JVoiceXMLEvent {
     /** The encapsulated MMI event. */
     private final Mmi notification;
 

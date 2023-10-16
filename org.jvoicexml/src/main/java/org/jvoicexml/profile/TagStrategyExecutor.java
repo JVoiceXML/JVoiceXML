@@ -162,7 +162,8 @@ public final class TagStrategyExecutor {
      *             Error or event executing the child node.
      * @since 0.6
      */
-    public void executeLocalTagStrategy(final VoiceXmlInterpreterContext context,
+    public void executeLocalTagStrategy(
+            final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem formItem,
             final VoiceXmlNode node) throws JVoiceXMLEvent {

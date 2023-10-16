@@ -45,7 +45,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @author Dirk Schnelle-Walka
  * @since 0.3.1
  */
-abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
+public abstract class AbstractTagStrategy implements Cloneable, TagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER = LogManager
             .getLogger(AbstractTagStrategy.class);
@@ -73,7 +73,7 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
      * <p>
      * Retrieves all attributes of the current tag and store their values in the
      * attributes map. If there is no value in the prompt, the method tries to
-     * find a value that has been set via a <code>&lt;property&gt;</code> tag.<br>
+     * find a value that has been set via a {@code &lt;property&gt;} tag.<br>
      * Implementations are requested to obtain the values via the
      * {@link #getAttribute(String)} method.
      * </p>
@@ -176,6 +176,8 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
      * Retrieves the value of an attribute that may alternatively defined by an
      * evaluated expression.
      * 
+     * @param model
+     *            the model to get the data from
      * @param pure
      *            the original name of the attribute
      * @param expr
@@ -208,18 +210,22 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
      * Retrieves the value of an optional attribute that may alternatively
      * defined by an evaluated expression.
      *
+     * @param model
+     *            the model to get the data from
      * @param pure
      *            the original name of the attribute
      * @param expr
      *            the name of the attribute that has been evaluated by the
      *            scripting engine
-     * @return value of the attribute, or null if neither pure nor expr are defined
+     * @return value of the attribute, or null if neither pure nor expr are
+     *          defined
      * @throws BadFetchError
      *             if both of the attributes are defined
      * @since 0.7.7
      */
-    protected Object getOptionalAttributeWithAlternativeExpr(final DataModel model,
-            final String pure, final String expr) throws BadFetchError {
+    protected Object getOptionalAttributeWithAlternativeExpr(
+            final DataModel model, final String pure, final String expr)
+                    throws BadFetchError {
         final boolean pureDefined = isAttributeDefined(model, pure);
         final boolean exprDefined = isAttributeDefined(model, expr);
 
@@ -244,6 +250,8 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
      * Retrieves the value of an attribute that may alternatively defined by an
      * evaluated expression.
      * 
+     * @param model
+     *            the model to get the data from
      * @param pure
      *            the original name of the attribute
      * @param expr
@@ -280,7 +288,8 @@ abstract public class AbstractTagStrategy implements Cloneable, TagStrategy {
      *            Name of the attribute.
      * @return <code>true</code> if the attribute is defined.
      */
-    protected boolean isAttributeDefined(DataModel model, final String name) {
+    protected boolean isAttributeDefined(final DataModel model,
+            final String name) {
         final Object value = attributes.get(name);
         if (value == null) {
             return false;

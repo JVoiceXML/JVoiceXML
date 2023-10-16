@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -48,9 +43,6 @@ import org.jvoicexml.xml.srgs.Grammar;
  *
  * @author Dirk Schnelle-Walka
  * @author Christoph Buente
- *
- * @version $Revision$
- *
  * @since 0.3
  */
 public interface GrammarProcessor extends Configurable {
@@ -99,9 +91,8 @@ public interface GrammarProcessor extends Configurable {
      *         if there was an error evaluating a scripting expression
      */
     GrammarDocument process(
-            final VoiceXmlInterpreterContext context,
-                final FetchAttributes attributes,
-                final Grammar grammar, final Locale language)
+            VoiceXmlInterpreterContext context, FetchAttributes attributes,
+                Grammar grammar, Locale language)
             throws NoresourceError, BadFetchError, UnsupportedFormatError,
                 SemanticError;
 

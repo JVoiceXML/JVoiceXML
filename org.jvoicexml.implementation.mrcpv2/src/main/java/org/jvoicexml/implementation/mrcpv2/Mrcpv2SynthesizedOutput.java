@@ -175,7 +175,7 @@ public final class Mrcpv2SynthesizedOutput
 
     /**
      * Queues the given speakable to the audio stream.
-     * @param text the text to be queued
+     * @param speakable the speakable to be queued
      * @throws MrcpInvocationException
      *          error invoking the MRCP
      * @throws IOException
@@ -212,8 +212,9 @@ public final class Mrcpv2SynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
-            CallControlProperties callProps) throws BadFetchError,
+    public void playPrompts(final SessionIdentifier sessionId,
+            final DocumentServer server, final CallControlProperties callProps)
+                    throws BadFetchError,
             NoresourceError, ConnectionDisconnectHangupEvent {
         // TODO play prompts only here
     }
@@ -251,7 +252,7 @@ public final class Mrcpv2SynthesizedOutput
 
     /**
      * Queues the given text prompt to the audio stream.
-     * @param text the text to be queued
+     * @param audio the audio to be queued
      * @throws MrcpInvocationException
      *          error invoking the MRCP
      * @throws IOException
@@ -287,8 +288,9 @@ public final class Mrcpv2SynthesizedOutput
                 speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
+                            listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -306,8 +308,9 @@ public final class Mrcpv2SynthesizedOutput
                 mark);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
+                            listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -325,8 +328,9 @@ public final class Mrcpv2SynthesizedOutput
                 speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                    new java.util.ArrayList<SynthesizedOutputListener>(
+                            listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -454,8 +458,8 @@ public final class Mrcpv2SynthesizedOutput
             speechClient = null;
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(
-                    "Disconnected the synthesizedoutput mrcpv2 client form the server");
+            LOGGER.debug("Disconnected the synthesizedoutput mrcpv2 client form"
+                    + " the server");
         }
     }
 

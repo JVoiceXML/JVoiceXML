@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -51,12 +46,12 @@ public interface ObservableTerminal {
      *
      * @param listener The listener.
      */
-    void addListener(final TerminalListener listener);
+    void addListener(TerminalListener listener);
 
     /**
      * Removes a listener for terminal events.
      *
      * @param listener The listener.
      */
-    void removeListener(final TerminalListener listener);
+    void removeListener(TerminalListener listener);
 }

@@ -47,7 +47,8 @@ import org.jvoicexml.xml.vxml.Var;
  */
 final class VarStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(VarStrategy.class);
+    private static final Logger LOGGER = 
+            LogManager.getLogger(VarStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;

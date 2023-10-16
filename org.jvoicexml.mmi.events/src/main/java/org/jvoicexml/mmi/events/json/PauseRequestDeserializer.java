@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.PauseRequest;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class PauseRequestDeserializer extends LifeCycleRequestDeserializer<PauseRequest> {
+final class PauseRequestDeserializer
+    extends LifeCycleRequestDeserializer<PauseRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public PauseRequestDeserializer() {
+    PauseRequestDeserializer() {
     }
     
     /**
@@ -42,7 +43,7 @@ final class PauseRequestDeserializer extends LifeCycleRequestDeserializer<PauseR
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public PauseRequestDeserializer(final Type type) {
+    PauseRequestDeserializer(final Type type) {
         super(type);
     }
     

@@ -487,7 +487,8 @@ public class VoiceXmlInterpreterContext {
         if (!interpreter.isInFinalProcessingState()) {
             try {
                 playQueuedPromptsBeforeExit();
-            } catch (BadFetchError | NoresourceError | ConfigurationException e) {
+            } catch (BadFetchError | NoresourceError 
+                    | ConfigurationException e) {
                 LOGGER.warn("unable to play prompts before exit", e);
             }
         }
@@ -562,7 +563,8 @@ public class VoiceXmlInterpreterContext {
                     }
                 }
             } catch (InternalExitEvent e) {
-                LOGGER.info("exit request. terminating processing of subdialog");
+                LOGGER.info(
+                        "exit request. terminating processing of subdialog");
                 document = null;
             } finally {
                 exitScope(Scope.DOCUMENT);
@@ -663,7 +665,8 @@ public class VoiceXmlInterpreterContext {
                 return;
             }
         } else {
-            int rc = model.createArray(loadedDocumentURIs, size, Scope.APPLICATION);
+            int rc = model.createArray(loadedDocumentURIs, size,
+                    Scope.APPLICATION);
             if (rc != DataModel.NO_ERROR) {
                 LOGGER.warn("unable to create array for loaded URIs: " + rc);
                 return;
@@ -820,17 +823,17 @@ public class VoiceXmlInterpreterContext {
      * 
      * @param document
      *            the document to initialize.
-     * @param interpreter
+     * @param ip
      *            the current interpreter, if any.
      * @exception JVoiceXMLEvent
      *                error initializing document
      * @since 0.6
      */
     private void initDocument(final VoiceXmlDocument document,
-            final VoiceXmlInterpreter interpreter) throws JVoiceXMLEvent {
+            final VoiceXmlInterpreter ip) throws JVoiceXMLEvent {
         LOGGER.info("initializing document...");
 
-        eventHandler.collect(this, interpreter, document);
+        eventHandler.collect(this, ip, document);
 
         final Vxml vxml = document.getVxml();
         final NodeList list = vxml.getChildNodes();
@@ -839,7 +842,8 @@ public class VoiceXmlInterpreterContext {
         final TagStrategyFactory factory = profile
                 .getInitializationTagStrategyFactory();
         if (factory == null) {
-            LOGGER.warn("no tag strategy defined. Initializing document skipped");
+            LOGGER.warn(
+                    "no tag strategy defined. Initializing document skipped");
             return;
         }
         for (int i = 0; i < list.getLength(); i++) {
@@ -854,7 +858,7 @@ public class VoiceXmlInterpreterContext {
                         strategy.dumpNode(model, node);
                     }
                     strategy.validateAttributes(model);
-                    strategy.execute(this, interpreter, null, null, node);
+                    strategy.execute(this, ip, null, null, node);
                 }
             }
         }

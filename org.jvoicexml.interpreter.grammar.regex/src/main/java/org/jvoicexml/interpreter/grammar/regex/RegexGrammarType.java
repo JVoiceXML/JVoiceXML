@@ -32,7 +32,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  */
 final class RegexGrammarType extends GrammarType {
-    public final static MimeType GRAMMAR_TYPE;
+    /** The grammar type. */
+    public static final MimeType GRAMMAR_TYPE;
 
     static {
         try {

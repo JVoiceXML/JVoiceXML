@@ -1,3 +1,24 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2014-2021 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.callmanager.mmi.servlet;
 
 import java.io.ByteArrayInputStream;
@@ -41,6 +62,7 @@ import org.xml.sax.SAXException;
 
 /**
  * A servlet that creates VoiceXML documents from snippets.
+ * @author Dirk Schnelle-Walka
  */
 @WebServlet(description = "creation of VoiceXML documents from snippets",
     urlPatterns = { "/VoiceXmlSnippet" })
@@ -69,10 +91,11 @@ public class VoiceXmlSnippet extends HttpServlet {
         } catch (ParserConfigurationException e) {
             throw new ServletException(e.getMessage(), e);
         }
-        TransformerFactory transFact = TransformerFactory.newInstance( );
+        TransformerFactory transFact = TransformerFactory.newInstance();
         try {
             final ServletContext context = getServletContext();
-            final URL xsltURL = context.getResource("/VoiceXmlPromptTemplate.xsl");
+            final URL xsltURL = context.getResource(
+                    "/VoiceXmlPromptTemplate.xsl");
             final String xsltSystemID = xsltURL.toExternalForm();
             promptTemplate = transFact.newTemplates(
                     new StreamSource(xsltSystemID));
@@ -84,7 +107,7 @@ public class VoiceXmlSnippet extends HttpServlet {
     }
 
     /**
-     * Creates a VoiceXML document from the given XML snippet
+     * Creates a VoiceXML document from the given XML snippet.
      * @param xml the XML snippet
      * @return create VoiceXML document
      * @throws SAXException
@@ -118,7 +141,8 @@ public class VoiceXmlSnippet extends HttpServlet {
      * @throws TransformerException
      */
     private VoiceXmlDocument createDocumentWithPrompt(final String prompt)
-            throws ParserConfigurationException, SAXException, IOException, TransformerException {
+            throws ParserConfigurationException, SAXException, IOException,
+                TransformerException {
         if (prompt.startsWith("<")) {
             return createDocument(prompt);
         }
@@ -148,7 +172,8 @@ public class VoiceXmlSnippet extends HttpServlet {
                     document = createDocument(field);
                 }
             }
-        } catch (ParserConfigurationException | SAXException | TransformerException e) {
+        } catch (ParserConfigurationException | SAXException
+                | TransformerException e) {
             throw new IOException(e.getMessage(), e);
         }
         if (document == null) {

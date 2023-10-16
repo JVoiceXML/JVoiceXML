@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -33,7 +28,6 @@ import org.jvoicexml.mmi.events.Mmi;
  * Retrieves extension information from received extension notifications.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.7
  */
 public interface ExtensionNotificationDataExtractor {
@@ -50,6 +44,6 @@ public interface ExtensionNotificationDataExtractor {
      * @throws ConversionException
      *             error extracting the {@link RecognitionResult}
      */
-    RecognitionResult getRecognitionResult(final Mmi mmi,
-            final ExtensionNotification ext) throws ConversionException;
+    RecognitionResult getRecognitionResult(Mmi mmi,
+            ExtensionNotification ext) throws ConversionException;
 }

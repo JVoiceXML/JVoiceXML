@@ -47,7 +47,7 @@ class TextConnectionInformationController
     /**
      * Constructs a new object.
      */
-    public TextConnectionInformationController() {
+    TextConnectionInformationController() {
         server = new TextServer(DEFAULT_SERVER_PORT);
     }
 

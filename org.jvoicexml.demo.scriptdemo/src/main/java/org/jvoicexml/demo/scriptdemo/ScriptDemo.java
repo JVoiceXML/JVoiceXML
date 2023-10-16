@@ -84,10 +84,12 @@ public final class ScriptDemo {
      *                Error processing the call.
      * @throws RemoteException error creating the session
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, RemoteException {
+    private void interpretDocument(final URI uri)
+            throws JVoiceXMLEvent, RemoteException {
         RemoteJVoiceXml jvxml;
         try {
-            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
+            final String jndi = RemoteJVoiceXml.class.getSimpleName();
+            jvxml = (RemoteJVoiceXml) context.lookup(jndi);
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 

@@ -133,7 +133,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
      * {@inheritDoc}
      *
      * The version information is created by <code>
-     * &lt;VERSION_MAJOR&gt;.&lt;VERSION_MINOR&gt;.&lt;VERSION_BUGFIX_LEVEL&gt;.&lt;EA|GA&gt;
+     * &lt;VERSION_MAJOR&gt;.&lt;VERSION_MINOR&gt;[-SNAPSHOT]
      * </code>.
      */
     public String getVersion() {
@@ -153,7 +153,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     }
 
     /**
-     * Provides logging information about the used environment like host system
+     * Provides logging information about the used environment like host system.
      * and sued Java version
      * 
      * @since 0.7.9
@@ -180,7 +180,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
             if (policyFile.exists()) {
                 LOGGER.info("java.security.policy:\t" + policy);
             } else {
-                LOGGER.info("java.security.policy:\t" + policy + " (not found)");
+                LOGGER.info("java.security.policy:\t" + policy
+                        + " (not found)");
             }
         } 
         // Get classloader info
@@ -223,8 +224,8 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
     }
 
     @Override
-    public Session createSession(ConnectionInformation info,
-            SessionIdentifier id) throws ErrorEvent {
+    public Session createSession(final ConnectionInformation info,
+            final SessionIdentifier id) throws ErrorEvent {
         if (state != InterpreterState.RUNNING) {
             throw new NoresourceError(
                     "JVoiceXML not running. Can't create a session!");

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -47,7 +42,7 @@ interface EventFilter {
      * @exception SemanticError
      *            error evaluating a script
      */
-    void filter(final Collection<EventStrategy> strategies,
-            final JVoiceXMLEvent event, final CatchContainer item)
+    void filter(Collection<EventStrategy> strategies,
+            JVoiceXMLEvent event, CatchContainer item)
         throws SemanticError;
 }

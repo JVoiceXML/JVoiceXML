@@ -321,7 +321,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final TagStrategyFactory factory = profile
                 .getInitializationTagStrategyFactory();
         if (factory == null) {
-            LOGGER.warn("no TagStrategyFactory defined. Initializing nodes skipped");
+            LOGGER.warn(
+                   "no TagStrategyFactory defined. Initializing nodes skipped");
             return;
         }
         for (XmlNode currentNode : nodes) {
@@ -504,7 +505,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     gotoFormItemName = e.getItem();
                     LOGGER.info("going to form item '" + gotoFormItemName
                             + "'...");
-                } catch (ConnectionDisconnectEvent | CancelEvent | ExitEvent e) {
+                } catch (ConnectionDisconnectEvent | CancelEvent
+                        | ExitEvent e) {
                     // Similar to the catch below but terminating processing
                     LOGGER.debug("caught hangup event while processing '"
                             + e.getEventType() + "'");
@@ -662,7 +664,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 // If in the final processing state do not select input items
                 if (interpreter.isInFinalProcessingState()) {
                     final boolean isInputItem = formItem instanceof InputItem;
-                    final boolean isInitialItem = formItem instanceof InitialFormItem;
+                    final boolean isInitialItem =
+                            formItem instanceof InitialFormItem;
                     if (!isInputItem && !isInitialItem) {
                         return formItem;
                     }
@@ -915,7 +918,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         Prompt lastPrompt = null;
         for (VoiceXmlNode node : prompts) {
             if (node instanceof Prompt) {
-                lastPrompt = (Prompt)node;
+                lastPrompt = (Prompt) node;
             }
             executor.executeTagStrategy(context, interpreter, this, formItem,
                     node);
@@ -952,7 +955,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      * 
      * @since 0.7.9
      */
-    private void prepareProperties() throws NoresourceError, ConnectionDisconnectHangupEvent {
+    private void prepareProperties() throws NoresourceError,
+        ConnectionDisconnectHangupEvent {
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
         final Map<String, String> properties = context.getProperties(this);
@@ -1103,9 +1107,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      * @exception ConnectionDisconnectHangupEvent
      *                the user hung up
      * @exception SemanticError
-     *                if there was an error evaluating a scripting expression or in the grammar to activate
+     *                if there was an error evaluating a scripting expression or
+     *                in the grammar to activate
      * @exception NoauthorizationError
-     *                 the grammar could not be loaded because of security constraints
+     *                 the grammar could not be loaded because of security
+     *                 constraints
      */
     private void activateModalGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
@@ -1180,7 +1186,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      * @exception SemanticError
      *                if there are no grammars to activate
      * @exception NoauthorizationError
-     *                 the grammar could not be loaded because of security constraints
+     *                 the grammar could not be loaded because of security
+     *                 constraints
      */
     private void activateGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
@@ -1244,13 +1251,15 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      * @exception SemanticError
      *                semantic error in the grammar file
      * @exception NoauthorizationError
-     *                 the grammar could not be loaded because of security constraints
+     *                 the grammar could not be loaded because of security
+     *                 constraints
      * @since 0.7.3
      */
     private void activateGrammars(
             final Collection<GrammarDocument> grammarsToActivate)
             throws BadFetchError, NoresourceError, UnsupportedLanguageError,
-            ConnectionDisconnectHangupEvent, UnsupportedFormatError, SemanticError, NoauthorizationError {
+            ConnectionDisconnectHangupEvent, UnsupportedFormatError,
+            SemanticError, NoauthorizationError {
         if (grammarsToActivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("no grammars to activate");
@@ -1552,8 +1561,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating new context and application for subdialog");
         }
-        final DocumentDescriptor descriptor = new DocumentDescriptor(resolvedUri,
-                DocumentDescriptor.MIME_TYPE_XML);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(
+                resolvedUri, DocumentDescriptor.MIME_TYPE_XML);
         descriptor.addParameters(parameters);
         // TODO acquire the configuration object
         final Configuration configuration = context.getConfiguration();
@@ -1562,7 +1571,8 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final VoiceXmlInterpreterContext subdialogContext =
                 new VoiceXmlInterpreterContext(session, configuration,
                         observer, subdialogModel);
-        final JVoiceXmlApplication subdialgApplication = new JVoiceXmlApplication(observer);
+        final JVoiceXmlApplication subdialgApplication =
+                new JVoiceXmlApplication(observer);
         subdialogContext.setApplication(subdialgApplication);
         final VoiceXmlDocument doc = subdialogContext.loadDocument(descriptor);
         subdialgApplication.addDocument(resolvedUri, doc);

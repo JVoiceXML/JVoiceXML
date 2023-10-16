@@ -70,7 +70,7 @@ final class DefaultRepromptEventStrategy
      * @param type
      *        the event type.
      */
-    public DefaultRepromptEventStrategy(final VoiceXmlInterpreterContext ctx,
+    DefaultRepromptEventStrategy(final VoiceXmlInterpreterContext ctx,
                                   final VoiceXmlInterpreter ip,
                                   final FormInterpretationAlgorithm interpreter,
                                   final FormItem formItem,

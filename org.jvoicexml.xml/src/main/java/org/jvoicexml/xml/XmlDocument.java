@@ -566,7 +566,7 @@ public abstract class XmlDocument
      *        Node to convert to an XmlNodeList
      * @return XmlNodeList representing the node.
      */
-    protected abstract NodeList getXmlNodeList(final NodeList nodeList);
+    protected abstract NodeList getXmlNodeList(NodeList nodeList);
 
     /**
      * The first child of this node.

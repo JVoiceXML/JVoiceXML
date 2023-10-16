@@ -71,8 +71,8 @@ public final class TextCall implements Call {
     private SsmlDocument lastOutput;
     /** The last observed error. */
     private JVoiceXMLEvent lastError;
-
-    final Log4jSocketServer logServer;
+    /** Reference to the log server. */
+    private final Log4jSocketServer logServer;
     
     /**
      * Server port number to use. Port number must be greater than 1024.
@@ -168,8 +168,9 @@ public final class TextCall implements Call {
         try {
             lastError = null;
             final Context context = new InitialContext();
+            final String jndi = RemoteJVoiceXml.class.getSimpleName();
             final RemoteJVoiceXml jvxml =
-                    (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
+                    (RemoteJVoiceXml) context.lookup(jndi);
 
             // Start the text server
             server.start();

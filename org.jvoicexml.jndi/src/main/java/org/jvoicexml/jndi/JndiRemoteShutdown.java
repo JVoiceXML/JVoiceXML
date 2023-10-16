@@ -103,8 +103,8 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
         Context context = null;
         try {
             context = getInitialContext();
-            final Map<?, ?> environment = context.getEnvironment();
-            final String providerUrl = environment.get(Context.PROVIDER_URL)
+            final Map<?, ?> env = context.getEnvironment();
+            final String providerUrl = env.get(Context.PROVIDER_URL)
                     .toString();
             final RemoteJVoiceXml jvxml = (RemoteJVoiceXml) context
                     .lookup(RemoteJVoiceXml.class.getSimpleName());
@@ -115,9 +115,9 @@ public final class JndiRemoteShutdown implements RemoteShutdown {
             LOGGER.error("error obtaining JVoiceXml. Server not running?", e);
             if (context != null) {
                 try {
-                    final Map<?, ?> environment = context.getEnvironment();
-                    for (Object key : environment.keySet()) {
-                        final Object value = environment.get(key);
+                    final Map<?, ?> env = context.getEnvironment();
+                    for (Object key : env.keySet()) {
+                        final Object value = env.get(key);
                         LOGGER.error(key + ": " + value);
                     }
                 } catch (NamingException ignore) {

@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL: https://svn.code.sf.net/p/jvoicexml/code/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/ScriptingEngine.java $
- * Version: $LastChangedRevision: 4209 $
- * Date:    $Date: 2014-08-15 09:10:19 +0200 (Fri, 15 Aug 2014) $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -44,7 +39,7 @@ public interface DetailedSessionListener {
      * @param session
      *            the session
      */
-    void sessionStarted(final Session session);
+    void sessionStarted(Session session);
 
     /**
      * An event was sent over the {@link org.jvoicexml.event.EventBus}.
@@ -54,7 +49,7 @@ public interface DetailedSessionListener {
      * @param event
      *            the event with detailed data
      */
-    void sessionEvent(final Session session, final JVoiceXMLEvent event);
+    void sessionEvent(Session session, JVoiceXMLEvent event);
 
     /**
      * The session has ended.
@@ -62,5 +57,5 @@ public interface DetailedSessionListener {
      * @param session
      *            the session
      */
-    void sessionEnded(final Session session);
+    void sessionEnded(Session session);
 }

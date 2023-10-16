@@ -41,7 +41,7 @@ public interface RemoteConnectable {
      * @throws IOException
      *             error establishing the connection.
      */
-    void connect(final ConnectionInformation client)
+    void connect(ConnectionInformation client)
             throws IOException;
 
     /**
@@ -51,5 +51,5 @@ public interface RemoteConnectable {
      *            data container with connection relevant data.
      * @since 0.6
      */
-    void disconnect(final ConnectionInformation client);
+    void disconnect(ConnectionInformation client);
 }

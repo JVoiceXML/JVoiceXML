@@ -65,8 +65,8 @@ public interface DocumentServer {
      *                The URI does not reference a document or an error occurred
      *                retrieving the document.
      */
-    VoiceXmlDocument getDocument(final SessionIdentifier sessionId,
-            final DocumentDescriptor descriptor) throws BadFetchError;
+    VoiceXmlDocument getDocument(SessionIdentifier sessionId,
+            DocumentDescriptor descriptor) throws BadFetchError;
 
     /**
      * Resolves the given URI of a builtin grammar to an URI that can be
@@ -75,7 +75,7 @@ public interface DocumentServer {
      * @return the resolved URI
      * @since 0.7.8
      */
-    URI resolveBuiltinUri(final URI uri);
+    URI resolveBuiltinUri(URI uri);
 
     /**
      * Adds the given grammar document to the documents store and retrieves the
@@ -90,8 +90,8 @@ public interface DocumentServer {
      *                error generating the URI for the document
      * @since 0.7.7
      */
-    URI addGrammarDocument(final SessionIdentifier sessionId,
-            final GrammarDocument document) throws URISyntaxException;
+    URI addGrammarDocument(SessionIdentifier sessionId,
+            GrammarDocument document) throws URISyntaxException;
 
     /**
      * Returns the external Grammar referenced by <code>URI</code>.
@@ -117,9 +117,8 @@ public interface DocumentServer {
      *             The URI does not reference a document or an error occurred
      *             retrieving the document.
      */
-    GrammarDocument getGrammarDocument(final SessionIdentifier sessionId,
-            final URI uri, final MimeType type,
-            final FetchAttributes attributes)
+    GrammarDocument getGrammarDocument(SessionIdentifier sessionId,
+            URI uri, MimeType type, FetchAttributes attributes)
                     throws BadFetchError;
 
     /**
@@ -134,8 +133,8 @@ public interface DocumentServer {
      * @exception BadFetchError
      *                Error retrieving the audio file.
      */
-    AudioInputStream getAudioInputStream(final SessionIdentifier sessionId,
-            final URI uri) throws BadFetchError;
+    AudioInputStream getAudioInputStream(SessionIdentifier sessionId,
+            URI uri) throws BadFetchError;
 
     /**
      * Retrieves an object of the given type from the given URI.
@@ -149,8 +148,7 @@ public interface DocumentServer {
      *             Error retrieving the object.
      * @since 0.6
      */
-    Object getObject(final SessionIdentifier sessionId,
-            final DocumentDescriptor descriptor)
+    Object getObject(SessionIdentifier sessionId, DocumentDescriptor descriptor)
             throws BadFetchError;
 
     /**
@@ -162,7 +160,7 @@ public interface DocumentServer {
      * @throws org.jvoicexml.event.error.BadFetchError
      *             Error writing.
      */
-    URI storeAudio(final AudioInputStream in) throws BadFetchError;
+    URI storeAudio(AudioInputStream in) throws BadFetchError;
 
     /**
      * Notification that the given session is closed. Now the document server
@@ -172,7 +170,7 @@ public interface DocumentServer {
      *            the Id of the current JVoiceXML session.
      * @since 0.7
      */
-    void sessionClosed(final SessionIdentifier sessionId);
+    void sessionClosed(SessionIdentifier sessionId);
 
     /**
      * Stops this document server.

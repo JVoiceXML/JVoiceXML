@@ -108,7 +108,7 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
      */
     @Override
     public Object getSemanticInterpretation(final DataModel model,
-            String utterance) {
+            final String utterance) {
         final HttpClientBuilder builder = HttpClientBuilder.create();
         if (PROXY_HOST != null) {
             HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
@@ -128,8 +128,8 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
             final int status = statusLine.getStatusCode();
             if (status != HttpStatus.SC_OK) {
                 final String reasonPhrase = statusLine.getReasonPhrase();
-                LOGGER.error("error accessing '" + uri +"': " +
-                        reasonPhrase + " (HTTP error code "
+                LOGGER.error("error accessing '" + uri + "': "
+                        + reasonPhrase + " (HTTP error code "
                         + status + ")");
                 return null;
             }
@@ -137,7 +137,8 @@ public class LUISGrammarEvaluator implements GrammarEvaluator {
             final InputStream input = entity.getContent();
             final Object interpretation = parseLUISResponse(model, input);
             return interpretation;
-        } catch (IOException | URISyntaxException | ParseException | SemanticError e) {
+        } catch (IOException | URISyntaxException | ParseException
+                | SemanticError e) {
             LOGGER.error(e.getMessage(), e);
             return null;
         }

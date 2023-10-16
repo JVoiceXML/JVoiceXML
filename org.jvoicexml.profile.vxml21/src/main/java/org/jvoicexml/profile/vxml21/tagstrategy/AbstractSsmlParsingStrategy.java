@@ -53,7 +53,7 @@ abstract class AbstractSsmlParsingStrategy
     /**
      * Constructs a new object.
      */
-    public AbstractSsmlParsingStrategy() {
+    AbstractSsmlParsingStrategy() {
         attributes = new java.util.HashMap<String, Object>();
     }
 
@@ -63,7 +63,7 @@ abstract class AbstractSsmlParsingStrategy
      * <p>
      * Retrieves all attributes of the current tag and store their values in the
      * attributes map. If there is no value in the prompt, the method tries to
-     * find a value that has been set via a <code>&lt;property&gt;</code> tag.<br>
+     * find a value that has been set via a {@code &lt;property&gt;} tag.<br>
      * Implementations are requested to obtain the values via the
      * {@link #getAttribute(String)} method.
      * </p>
@@ -169,7 +169,8 @@ abstract class AbstractSsmlParsingStrategy
      *            Name of the attribute.
      * @return <code>true</code> if the attribute is defined.
      */
-    protected boolean isAttributeDefined(DataModel model, final String name) {
+    protected boolean isAttributeDefined(final DataModel model, 
+            final String name) {
         final Object value = attributes.get(name);
         if (value == null) {
             return false;

@@ -62,10 +62,12 @@ class ImplementationPlatformReaper extends Thread {
     /**
      * Creates a new object.
      * @param impl the implementation platform
+     * @param in the user input
+     * @param out the user output
      */
     ImplementationPlatformReaper(
-            final JVoiceXmlImplementationPlatform impl, final JVoiceXmlUserInput in,
-            final JVoiceXmlSystemOutput out) {
+            final JVoiceXmlImplementationPlatform impl,
+            final JVoiceXmlUserInput in, final JVoiceXmlSystemOutput out) {
         lock = new Object();
         platform = impl;
         if (in != null) {

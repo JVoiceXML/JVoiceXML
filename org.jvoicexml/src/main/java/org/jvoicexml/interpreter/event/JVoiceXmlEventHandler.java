@@ -133,7 +133,8 @@ public final class JVoiceXmlEventHandler
         eventbus = bus;
         events = new java.util.LinkedList<JVoiceXMLEvent>();
         
-        final HangupEventStrategy hangupEventStrategy = new HangupEventStrategy();
+        final HangupEventStrategy hangupEventStrategy =
+                new HangupEventStrategy();
         addStrategy(hangupEventStrategy);
     }
 
@@ -241,8 +242,8 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
-     * Filters the list of catches for valid entries
-     * @param item the curren tform item
+     * Filters the list of catches for valid entries.
+     * @param item the current form item
      * @param catches list of catches under review
      * @return valid catches
      * @since 0.7.9
@@ -253,8 +254,8 @@ public final class JVoiceXmlEventHandler
         final Collection<AbstractCatchElement> filtered =
                 new java.util.ArrayList<AbstractCatchElement>();
         for (AbstractCatchElement catchElement : catches) {
-            final TokenList events = catchElement.getEventList();
-            for (String eventType : events) {
+            final TokenList catchEvents = catchElement.getEventList();
+            for (String eventType : catchEvents) {
                 if (eventType.equals(Filled.TAG_NAME)
                         && (item instanceof InitialFormItem)) {
                     // TODO The spec does not tell what to do in this case,
@@ -285,16 +286,17 @@ public final class JVoiceXmlEventHandler
             final FormItem item,
             final Collection<AbstractCatchElement> catches) {
         for (AbstractCatchElement catchElement : catches) {
-            final TokenList events = catchElement.getEventList();
-            if (events.isEmpty()) {
+            final TokenList catchEvents = catchElement.getEventList();
+            if (catchEvents.isEmpty()) {
                 final EventStrategy strategy = new CatchEventStrategy(context,
                         interpreter, fia, item, catchElement,
                         "org.jvoicexml.event");
                 addStrategy(strategy);
             } else {
-                for (String eventType : events) {
-                    final EventStrategy strategy = new CatchEventStrategy(context,
-                            interpreter, fia, item, catchElement, eventType);
+                for (String eventType : catchEvents) {
+                    final EventStrategy strategy =
+                            new CatchEventStrategy(context, interpreter, fia,
+                                    item, catchElement, eventType);
                     addStrategy(strategy);
                 }
             }
@@ -521,7 +523,8 @@ public final class JVoiceXmlEventHandler
      * chaining of {@link EventFilter}s.
      */
     @Override
-    public void processEvent(final CatchContainer item, JVoiceXMLEvent event)
+    public void processEvent(final CatchContainer item,
+            JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         if (event == null) {
             if (LOGGER.isDebugEnabled()) {
@@ -555,7 +558,6 @@ public final class JVoiceXmlEventHandler
             filter.filter(matchingStrategies, event, item);
             if (matchingStrategies.isEmpty()) {
                 LOGGER.info("no matching strategy for type '" + type + "'");
-
                 final JVoiceXMLEvent copy = event;
                 event = null;
 
@@ -672,14 +674,14 @@ public final class JVoiceXmlEventHandler
      * {@inheritDoc}
      */
     @Override
-    public void removedForScopeChange(Scope previous, Scope next,
-            Collection<EventStrategy> items) {
+    public void removedForScopeChange(final Scope previous, final Scope next,
+            final Collection<EventStrategy> items) {
         maybeUnsubscribeFromEventBus(items);
     }
     
     /**
      * Remove subscriptions to the events of the removed strategies if
-     * there are no other strategies on the scope stack
+     * there are no other strategies on the scope stack.
      * @param items the strategies that were removed
      * @since 0.7.9
      */

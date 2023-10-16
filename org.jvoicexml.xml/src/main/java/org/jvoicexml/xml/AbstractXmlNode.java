@@ -203,7 +203,7 @@ public abstract class AbstractXmlNode
      */
     public AbstractXmlNode appendDeepClone(final AbstractXmlNode origin) {
         final String tag = origin.getNodeName();
-        final AbstractXmlNode clone = (AbstractXmlNode)addChild(tag);
+        final AbstractXmlNode clone = (AbstractXmlNode) addChild(tag);
         final NamedNodeMap attributes = origin.getAttributes();
         for (int i = 0; i < attributes.getLength(); i++) {
             final Node attribute = attributes.item(i);
@@ -857,7 +857,7 @@ public abstract class AbstractXmlNode
      *        Name of child.
      * @return True if the sub-tag is allowed on this node.
      */
-    protected abstract boolean canContainChild(final String childName);
+    protected abstract boolean canContainChild(String childName);
 
     /**
      * {@inheritDoc}
@@ -872,7 +872,8 @@ public abstract class AbstractXmlNode
             final Transformer transformer = transformerFactory.newTransformer();
             final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty(
+                    OutputKeys.OMIT_XML_DECLARATION, "yes");
             final Source source = new DOMSource(node);
             transformer.transform(source, result);
             return out.toString(encoding);

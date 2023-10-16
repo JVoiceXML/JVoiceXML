@@ -612,7 +612,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public Integer answer(final InvocationOnMock invocation)
                     throws Throwable {
-                final Collection grammars = invocation.getArgumentAt(0,
+                final Collection<?> grammars = invocation.getArgumentAt(0,
                         Collection.class);
                 synchronized (lock) {
                     lock.notifyAll();

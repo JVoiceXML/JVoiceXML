@@ -39,7 +39,7 @@ public interface RuleExpansion {
     MatchConsumption match(List<String> tokens, int offset);
 
     void setExecutionSemanticInterpretation(
-            final ExecutableSemanticInterpretation si);
+            ExecutableSemanticInterpretation si);
 
     /**
      * Dumps the current contents on the console.

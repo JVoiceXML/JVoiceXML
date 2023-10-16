@@ -18,7 +18,8 @@ import org.apache.logging.log4j.server.TcpSocketServer;
  */
 public class Log4jSocketServer {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(Log4jSocketServer.class);
+    private static final Logger LOGGER = 
+            LogManager.getLogger(Log4jSocketServer.class);
 
     /** The port number to use. */
     private final int port;

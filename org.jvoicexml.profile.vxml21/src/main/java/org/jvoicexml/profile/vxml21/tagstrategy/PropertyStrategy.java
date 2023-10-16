@@ -58,7 +58,7 @@ class PropertyStrategy extends AbstractTagStrategy {
     /**
      * Constructs a new object.
      */
-    public PropertyStrategy() {
+    PropertyStrategy() {
     }
 
     /**
@@ -103,6 +103,7 @@ class PropertyStrategy extends AbstractTagStrategy {
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
         fia.setLocalProperty(name, value);
-        LOGGER.info("set local property '" + name + "' to value '" + value + "'");
+        LOGGER.info("set local property '" + name + "' to value '" + value
+                + "'");
     }
 }

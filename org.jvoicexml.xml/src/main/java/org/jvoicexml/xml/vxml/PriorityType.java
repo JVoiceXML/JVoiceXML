@@ -85,5 +85,4 @@ public enum PriorityType {
                     + "' cannot be resolved to an param value type");
         }
     }
-
 }

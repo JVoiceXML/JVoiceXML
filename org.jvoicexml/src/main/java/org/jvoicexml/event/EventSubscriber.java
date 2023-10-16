@@ -33,5 +33,5 @@ public interface EventSubscriber {
      * Notification about the given event.
      * @param event the event
      */
-    void onEvent(final JVoiceXMLEvent event);
+    void onEvent(JVoiceXMLEvent event);
 }

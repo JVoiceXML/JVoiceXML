@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -56,19 +51,19 @@ public interface MappedDocumentRepository {
      * @exception URISyntaxException
      *            if the path can not be converted to a valid URI.
      */
-    URI getUri(final String path) throws URISyntaxException;
+    URI getUri(String path) throws URISyntaxException;
 
     /**
      * Adds the given document to this repository.
      * @param uri URI as a key for later retrieval.
      * @param document Document to be added.
      */
-    void addDocument(final URI uri, final String document);
+    void addDocument(URI uri, String document);
 
     /**
      * Adds the given document to this repository.
      * @param uri URI as a key for later retrieval.
      * @param document Document to be added.
      */
-    void addDocument(final URI uri, final VoiceXmlDocument document);
+    void addDocument(URI uri, VoiceXmlDocument document);
 }

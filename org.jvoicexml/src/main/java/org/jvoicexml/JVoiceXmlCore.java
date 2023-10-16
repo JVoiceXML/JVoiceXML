@@ -34,8 +34,6 @@ import org.jvoicexml.interpreter.GrammarProcessor;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision$
- *
  * @since 0.4.1
  */
 public interface JVoiceXmlCore
@@ -91,7 +89,7 @@ public interface JVoiceXmlCore
      * @exception ErrorEvent
      *            Error creating the session.
      */
-    Session createSession(final ConnectionInformation info,
-            final ImplementationPlatform platform, final SessionIdentifier id)
+    Session createSession(ConnectionInformation info,
+            ImplementationPlatform platform, SessionIdentifier id)
             throws ErrorEvent;
 }

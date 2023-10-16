@@ -28,11 +28,9 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
-import java.util.Locale;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,21 +42,6 @@ import org.jvoicexml.UuidSessionIdentifier;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.srgs.GrammarType;
-import org.jvoicexml.xml.ssml.Break;
-import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Choice;
-import org.jvoicexml.xml.vxml.Field;
-import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.Menu;
-import org.jvoicexml.xml.vxml.Noinput;
-import org.jvoicexml.xml.vxml.Nomatch;
-import org.jvoicexml.xml.vxml.Prompt;
-import org.jvoicexml.xml.vxml.Reprompt;
-import org.jvoicexml.xml.vxml.Value;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Demo implementation for an interaction with the user.
@@ -95,104 +78,6 @@ public final class InputDemo {
     }
 
     /**
-     * Create the VoiceXML document.
-     *
-     * @return Created VoiceXML document, <code>null</code> if an error occurs.
-     * @throws URISyntaxException
-     *             error creating the document
-     * @throws ParserConfigurationException
-     *             error creating the document
-     */
-    private VoiceXmlDocument createDocument()
-            throws URISyntaxException, ParserConfigurationException {
-        final VoiceXmlDocument document = new VoiceXmlDocument();
-        final Vxml vxml = document.getVxml();
-        vxml.setXmlLang(Locale.US);
-
-        final Menu menu = vxml.appendChild(Menu.class);
-        menu.setId("mainmenu");
-
-        final Prompt promptMenu = menu.appendChild(Prompt.class);
-        promptMenu.addText(
-                "Please enter 1 to list the titles or 2 to watch a movie");
-        final Choice choiceList = menu.appendChild(Choice.class);
-        choiceList.setNext("#list");
-        choiceList.setDtmf("1");
-        final Choice choiceWatch = menu.appendChild(Choice.class);
-        choiceWatch.setNext("#watch");
-        choiceWatch.setDtmf("2");
-
-        final Form formList = vxml.appendChild(Form.class);
-        formList.setId("list");
-        final Block blockList = formList.appendChild(Block.class);
-        final Prompt promptList = blockList.appendChild(Prompt.class);
-
-        promptList.addText("lord of the rings");
-        promptList.appendChild(Break.class);
-        promptList.addText("the magnificent seven");
-        promptList.appendChild(Break.class);
-        promptList.addText("two thousand one a space odyssey");
-        promptList.appendChild(Break.class);
-        promptList.addText("the matrix");
-        promptList.appendChild(Break.class);
-        promptList.addText("finding nemo");
-        promptList.appendChild(Break.class);
-        promptList.addText("spider man");
-        promptList.appendChild(Break.class);
-        promptList.addText("mystic river");
-        promptList.appendChild(Break.class);
-        promptList.addText("the italian job");
-        promptList.appendChild(Break.class);
-        promptList.addText("chicago");
-        promptList.appendChild(Break.class);
-        promptList.addText("a beautiful mind");
-        promptList.appendChild(Break.class);
-        promptList.addText("gladiator");
-        promptList.appendChild(Break.class);
-        promptList.addText("american beauty");
-        promptList.appendChild(Break.class);
-        promptList.addText("the magnificant seven");
-
-        final Form formWatch = vxml.appendChild(Form.class);
-        formWatch.setId("watch");
-
-        final Field field = formWatch.appendChild(Field.class);
-        final String fieldName = "movie";
-        field.setName(fieldName);
-
-        final Prompt prompt = field.appendChild(Prompt.class);
-        prompt.addText("Which movie do you want to watch?");
-        prompt.setTimeout("10s");
-
-        final Grammar grammar = field.appendChild(Grammar.class);
-        final URI grammarUri = InputDemo.class.getResource("/movies.srgs")
-                .toURI();
-        grammar.setSrc(grammarUri);
-        grammar.setType(GrammarType.SRGS_XML);
-
-        final Noinput noinput = field.appendChild(Noinput.class);
-        noinput.addText("Please say something!");
-        noinput.appendChild(Reprompt.class);
-
-        final Noinput noinputSecond = field.appendChild(Noinput.class);
-        noinputSecond.setCount("2");
-        noinputSecond.addText("Please say a film title!");
-        noinputSecond.appendChild(Reprompt.class);
-
-        final Nomatch nomatch = field.appendChild(Nomatch.class);
-        nomatch.addText("Please say a film title!");
-        nomatch.appendChild(Reprompt.class);
-
-        /** @todo Move this into a filled section, when the scope works. */
-        final Block block = formWatch.appendChild(Block.class);
-        block.addText("You can watch the film");
-        final Value blockValue = block.appendChild(Value.class);
-        blockValue.setExpr(fieldName);
-
-        return document;
-    }
-
-    /**
      * Call the VoiceXML interpreter context to process the given XML document.
      *
      * @param uri
@@ -202,10 +87,12 @@ public final class InputDemo {
      * @throws RemoteException 
      *                  JVoiceXML not found
      */
-    private void interpretDocument(final URI uri) throws JVoiceXMLEvent, RemoteException {
+    private void interpretDocument(final URI uri) 
+            throws JVoiceXMLEvent, RemoteException {
         RemoteJVoiceXml jvxml;
         try {
-            jvxml = (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
+            final String jndi = RemoteJVoiceXml.class.getSimpleName();
+            jvxml = (RemoteJVoiceXml) context.lookup(jndi);
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining JVoiceXml", ne);
 
@@ -245,7 +132,8 @@ public final class InputDemo {
             // Reading from stdin does not work from within gradle
             String dtmf = br.readLine();
             if (dtmf == null) {
-                System.out.println("No input received. Did you start from gradle?");
+                System.out.println(
+                        "No input received. Did you start from gradle?");
                 return 0;
             }
             dtmf = dtmf.trim();
@@ -272,12 +160,10 @@ public final class InputDemo {
         final InputDemo demo = new InputDemo();
 
         try {
-            final VoiceXmlDocument document = demo.createDocument();
             final URI uri = InputDemo.class.getResource("/movies.vxml").toURI();
-
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent | URISyntaxException
-                | ParserConfigurationException | RemoteException e) {
+                | RemoteException e) {
             LOGGER.error("error processing the document", e);
         }
     }

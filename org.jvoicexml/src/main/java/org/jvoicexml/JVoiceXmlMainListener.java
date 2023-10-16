@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -28,7 +23,6 @@ package org.jvoicexml;
 /**
  * A listener to monitor the states of JVoiceXmlMain.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.5
  */
 public interface JVoiceXmlMainListener {
@@ -39,7 +33,7 @@ public interface JVoiceXmlMainListener {
      *        the exception that caused all the trouble
      * @since 0.7.6
      */
-    void jvxmlStartupError(final Throwable exception);
+    void jvxmlStartupError(Throwable exception);
 
     /**
      * JVoiceXml has been started.

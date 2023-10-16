@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL:https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/RemoteClient.java $
- * Version: $LastChangedRevision:161 $
- * Date:    $Date:2006-11-30 10:36:05 +0100 (Do, 30 Nov 2006) $
- * Author:  $LastChangedBy:schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2014 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -140,7 +135,7 @@ public interface ConnectionInformation extends Serializable {
      * @param id the session identifier
      * @since 0.7.9
      */
-    void setSessionIdentifier(final SessionIdentifier id);
+    void setSessionIdentifier(SessionIdentifier id);
     
     /**
      * Retrieves the session identifier.

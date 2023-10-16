@@ -46,5 +46,5 @@ public interface XmlNodeFactory<T extends XmlNode> {
      * @return Instance of a <code>XmlNode</code>, or <code>null</code> if
      *         there is no known implementation.
      */
-    T getXmlNode(final Node node);
+    T getXmlNode(Node node);
 }

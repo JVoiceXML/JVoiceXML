@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -32,7 +27,6 @@ import java.util.Iterator;
  * Collection that holds all elements of the current scope.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.6
  * @param <E> type of elements in the collection.
  */
@@ -48,7 +42,7 @@ final class ScopedCollectionItem<E>
      * Constructs a new object.
      * @param s the scope of this collection.
      */
-    public ScopedCollectionItem(final Scope s) {
+    ScopedCollectionItem(final Scope s) {
         collection = new java.util.ArrayList<E>();
         scope = s;
     }

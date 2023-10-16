@@ -69,7 +69,7 @@ final class SocketETLClient extends Thread {
      * @param protocolAdapter the protocol adapter
      * @param client the connected client socket.
      */
-    public SocketETLClient(final SocketETLProtocolAdapter protocolAdapter,
+    SocketETLClient(final SocketETLProtocolAdapter protocolAdapter,
             final Socket client) {
         adapter = protocolAdapter;
         socket = client;

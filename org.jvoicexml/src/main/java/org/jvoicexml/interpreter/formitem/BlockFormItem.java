@@ -89,7 +89,8 @@ public final class BlockFormItem extends AbstractControlItem {
             int rc = setFormItemVariable(Boolean.TRUE);
             if (rc == 0) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("block '" + getName() + "' marked as visited.");
+                    LOGGER.debug("block '" + getName()
+                        + "' marked as visited.");
                 }
             } else {
                 LOGGER.warn("unable to mark block '" + getName()
@@ -129,7 +130,8 @@ public final class BlockFormItem extends AbstractControlItem {
      * {@inheritDoc}
      */
     @Override
-    public void init(final DataModel model) throws SemanticError, BadFetchError {
+    public void init(final DataModel model) throws SemanticError,
+        BadFetchError {
         final String name = getName();
         final Object expression = evaluateExpression(model);
         if (expression == null) {

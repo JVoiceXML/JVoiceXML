@@ -29,12 +29,13 @@ import org.jvoicexml.mmi.events.ResumeRequest;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class ResumeRequestDeserializer extends LifeCycleRequestDeserializer<ResumeRequest> {
+final class ResumeRequestDeserializer
+    extends LifeCycleRequestDeserializer<ResumeRequest> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public ResumeRequestDeserializer() {
+    ResumeRequestDeserializer() {
     }
     
     /**
@@ -42,7 +43,7 @@ final class ResumeRequestDeserializer extends LifeCycleRequestDeserializer<Resum
      * type {@code type}.
      * @param type type of the object in the data field
      */
-    public ResumeRequestDeserializer(final Type type) {
+    ResumeRequestDeserializer(final Type type) {
         super(type);
     }
     

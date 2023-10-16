@@ -72,8 +72,7 @@ public interface XmlNode
      *
      * @see XmlNodeFactory
      */
-    XmlNode newInstance(final Node n,
-            XmlNodeFactory<? extends XmlNode> factory);
+    XmlNode newInstance(Node n, XmlNodeFactory<? extends XmlNode> factory);
 
     /**
      * Adds an instance of the specified child class to this node. This causes a
@@ -85,7 +84,7 @@ public interface XmlNode
      * @return Newly created and appended node or null if the child is not
      *         allowed on this node.
      */
-    XmlNode addChild(final String tagName);
+    XmlNode addChild(String tagName);
 
     /**
      * Convenient method to get the value of an attribute.
@@ -95,7 +94,7 @@ public interface XmlNode
      * @return Value of theattribute, <code>null</code> if the value of the
      *         attribute cannot be retrieved.
      */
-    String getAttribute(final String attribute);
+    String getAttribute(String attribute);
 
     /**
      * Convenient method to set the value of an attribute. If the assigned value
@@ -107,7 +106,7 @@ public interface XmlNode
      *        New value of the attribute or <code>null</code> to remove the
      *        attribute.
      */
-    void setAttribute(final String name, final String value);
+    void setAttribute(String name, String value);
 
     /**
      * Returns a collection of permitted attribute names for the node.
@@ -129,7 +128,7 @@ public interface XmlNode
      *         empty collection is returned.
      * @since 0.5
      */
-    <T extends XmlNode> Collection<T> getChildNodes(final Class<T> tagClass);
+    <T extends XmlNode> Collection<T> getChildNodes(Class<T> tagClass);
 
     /**
      * Return a collection of all child nodes.

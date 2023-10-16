@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -30,7 +25,6 @@ import java.util.Collection;
 /**
  * An observer for scope related changes to a {@link ScopedSet}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.3
  * @param <E> type of the scoped set
  */
@@ -40,5 +34,5 @@ public interface ScopedSetObserver<E> {
      * @param set the changed set
      * @param removed the removed items
      */
-    void scopedSetChange(final ScopedSet<E> set, final Collection<E> removed);
+    void scopedSetChange(ScopedSet<E> set, Collection<E> removed);
 }

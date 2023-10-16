@@ -57,7 +57,7 @@ public enum GenderType {
      * Do not create from outside.
      * @param name name of the gender type.
      */
-    private GenderType(final String name) {
+    GenderType(final String name) {
         type = name;
     }
 

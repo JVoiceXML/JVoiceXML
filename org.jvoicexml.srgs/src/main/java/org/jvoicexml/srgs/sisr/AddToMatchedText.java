@@ -31,7 +31,7 @@ public class AddToMatchedText implements ExecutableSemanticInterpretation {
             .getLogger(AddToMatchedText.class);
     private String matchedText;
 
-    public AddToMatchedText(String text) {
+    public AddToMatchedText(final String text) {
         matchedText = text;
     }
 
@@ -39,7 +39,7 @@ public class AddToMatchedText implements ExecutableSemanticInterpretation {
         return matchedText;
     }
 
-    public void setMatchedText(String matchedText) {
+    public void setMatchedText(final String matchedText) {
         this.matchedText = matchedText;
     }
 
@@ -68,9 +68,9 @@ public class AddToMatchedText implements ExecutableSemanticInterpretation {
                     0, null);
         } else {
             context.evaluateString(scope,
-                    "meta.current=function() {return {text:'" + metaCurrent
-                            + " " + matchedText + "', score:1.0};};".replace("'", "\\'"),
-                    "AddToMatchedText:set meta1", 0, null);
+                   "meta.current=function() {return {text:'" + metaCurrent
+                   + " " + matchedText + "', score:1.0};};".replace("'", "\\'"),
+                   "AddToMatchedText:set meta1", 0, null);
         }
     }
 }

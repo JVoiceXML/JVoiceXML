@@ -43,5 +43,5 @@ public interface ContextHandlerProvider {
      * Notifies the provider about the base URI of the web server.
      * @param uri base URI
      */
-    void setServerUri(final URI uri);
+    void setServerUri(URI uri);
 }

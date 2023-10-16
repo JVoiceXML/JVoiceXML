@@ -21,12 +21,12 @@
 package org.jvoicexml.event.error;
 
 /**
- * An {@code error.noresource} with specific detail information
+ * An {@code error.noresource} with specific detail information.
 .* @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
 public class NoResourceDetailError extends NoresourceError {
-    /** The serial version UID */
+    /** The serial version UID. */
     private static final long serialVersionUID = 6456139552876751394L;
     /** The detail message. */
     private final String detail;
@@ -84,7 +84,8 @@ public class NoResourceDetailError extends NoresourceError {
      * @param cause
      *        The cause.
      */
-    public NoResourceDetailError(final String det, final String message, final Throwable cause) {
+    public NoResourceDetailError(final String det, final String message,
+            final Throwable cause) {
         super(message, cause);
         detail = det;
     }

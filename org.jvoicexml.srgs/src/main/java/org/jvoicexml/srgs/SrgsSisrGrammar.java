@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -54,39 +55,45 @@ public class SrgsSisrGrammar
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(SrgsSisrGrammar.class);
+    /** The associated grammar node. */
     private Grammar grammarNode;
+    /** The detected root rule. */
     private String rootRule;
+    /** URI of the grammar. */
     private URI uri;
+    /** {@code true} if we are checking a literal. */
     private boolean isLiteral;
 
+    /** Found global tags. */
     private SemanticInterpretationBlock globalTags =
             new SemanticInterpretationBlock();
+    /** Known rules. */
     private Map<String, SrgsRule> rules =
             new java.util.HashMap<String, SrgsRule>();
 
     /** A pool of grammars shared by all that were parsed together. */
     private Map<URI, SrgsSisrGrammar> grammarPool;
 
-    public SrgsSisrGrammar(Grammar grammar, URI uri,
-            Map<URI, SrgsSisrGrammar> grammarPool) {
+    public SrgsSisrGrammar(final Grammar grammar, final URI u,
+            final Map<URI, SrgsSisrGrammar> pool) {
         grammarNode = grammar;
-        this.uri = uri;
+        uri = u;
         rootRule = grammar.getRoot();
         final String tagFormat = grammar.getTagFormat();
         isLiteral = tagFormat != null
                 && tagFormat.equals("semantics/1.0-literals");
-        this.grammarPool = grammarPool;
+        this.grammarPool = pool;
     }
 
     public Grammar getGrammar() {
         return grammarNode;
     }
 
-    public SrgsSisrGrammar getGrammarFromPool(URI uri) {
-        return grammarPool.get(uri);
+    public SrgsSisrGrammar getGrammarFromPool(final URI u) {
+        return grammarPool.get(u);
     }
 
-    public void putGrammarInPool(SrgsSisrGrammar grammar) {
+    public void putGrammarInPool(final SrgsSisrGrammar grammar) {
         grammarPool.put(grammar.getURI(), grammar);
     }
 
@@ -94,12 +101,12 @@ public class SrgsSisrGrammar
         return grammarPool;
     }
 
-    public SisrRecognitionResult isValid(String[] words) {
+    public SisrRecognitionResult isValid(final String[] words) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public void addGlobalTagContent(String tagContents) {
+    public void addGlobalTagContent(final String tagContents) {
         globalTags.append(tagContents);
     }
 
@@ -107,12 +114,17 @@ public class SrgsSisrGrammar
         return globalTags;
     }
 
-    public void addRule(SrgsRule rule) {
+    public void addRule(final SrgsRule rule) {
         rules.put(rule.getId(), rule);
     }
 
-    public SrgsRule getRule(String id, boolean needsToBePublic) {
-        String desiredRuleId = id == null ? rootRule : id;
+    public SrgsRule getRule(final String id, final boolean needsToBePublic) {
+        final String desiredRuleId;
+        if (id == null) {
+            desiredRuleId = rootRule;
+        } else {
+            desiredRuleId = id;
+        }
 
         final SrgsRule rule = rules.get(desiredRuleId);
         if (rule == null) {
@@ -143,7 +155,7 @@ public class SrgsSisrGrammar
      */
     @Override
     public Object getSemanticInterpretation(final DataModel model,
-            String utterance) {
+            final String utterance) {
         LOGGER.info("processing '" + utterance + "'");
         if (utterance == null || utterance.length() == 0) {
             return null;
@@ -181,8 +193,8 @@ public class SrgsSisrGrammar
         return isLiteral;
     }
 
-    public void setLiteral(boolean isLiteral) {
-        this.isLiteral = isLiteral;
+    public void setLiteral(final boolean flag) {
+        isLiteral = flag;
     }
 
     /**
@@ -231,18 +243,8 @@ public class SrgsSisrGrammar
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((globalTags == null) ? 0 : globalTags.hashCode());
-        result = prime * result
-                + ((grammarNode == null) ? 0 : grammarNode.hashCode());
-        result = prime * result + (isLiteral ? 1231 : 1237);
-        result = prime * result
-                + ((rootRule == null) ? 0 : rootRule.hashCode());
-        result = prime * result + ((rules == null) ? 0 : rules.hashCode());
-        result = prime * result + ((uri == null) ? 0 : uri.hashCode());
-        return result;
+        return Objects.hash(globalTags, grammarNode, isLiteral, rootRule, rules,
+                uri);
     }
 
     /**

@@ -77,7 +77,7 @@ final class InputItemRecognitionEventStrategy
      * @param formItem
      *            The current form item.
      */
-    public InputItemRecognitionEventStrategy(
+    InputItemRecognitionEventStrategy(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm algorithm,

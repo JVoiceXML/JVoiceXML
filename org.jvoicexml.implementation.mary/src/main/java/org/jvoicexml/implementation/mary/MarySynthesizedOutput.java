@@ -130,8 +130,9 @@ public final class MarySynthesizedOutput
      * {@inheritDoc}
      */
     @Override
-    public void playPrompts(SessionIdentifier sessionId, DocumentServer server,
-            CallControlProperties callProps) throws BadFetchError,
+    public void playPrompts(final SessionIdentifier sessionId,
+            final DocumentServer server, final CallControlProperties callProps)
+                    throws BadFetchError,
             NoresourceError, ConnectionDisconnectHangupEvent {
         // TODO Refactor the synthess queue to play only here
         

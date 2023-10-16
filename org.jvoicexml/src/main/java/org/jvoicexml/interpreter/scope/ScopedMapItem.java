@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -35,7 +30,6 @@ package org.jvoicexml.interpreter.scope;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.3
  *
  * @see ScopedMap
@@ -57,7 +51,7 @@ final class ScopedMapItem<V> {
      * @param s The scope of this map item.
      * @param v The value of this map item.
      */
-    public ScopedMapItem(final Scope s, final V v) {
+    ScopedMapItem(final Scope s, final V v) {
         scope = s;
         value = v;
     }

@@ -43,7 +43,7 @@ import org.jvoicexml.xml.vxml.JVoiceXmlData;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;data&gt;</code> node with
- * extensions from JVoiceXML
+ * extensions from JVoiceXML.
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Data
@@ -72,7 +72,7 @@ final class JVoiceXmlDataStrategy extends DataStrategy {
      * attribute.
      */
     @Override
-    public void validateAttributes(DataModel model) throws ErrorEvent {
+    public void validateAttributes(final DataModel model) throws ErrorEvent {
         super.validateAttributes(model);
         final String mimeType = (String) getAttribute(
                 JVoiceXmlData.ATTRIBUTE_JVOICEXML_TYPE);

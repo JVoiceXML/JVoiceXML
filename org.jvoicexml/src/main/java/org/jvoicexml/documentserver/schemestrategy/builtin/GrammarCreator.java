@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -47,7 +42,7 @@ public interface GrammarCreator {
      * @exception IOException
      *            error reading the grammar
      */
-    byte[] createGrammar(final URI uri) throws BadFetchError, IOException;
+    byte[] createGrammar(URI uri) throws BadFetchError, IOException;
 
     /**
      * Retrieves the type name of this grammar creator.

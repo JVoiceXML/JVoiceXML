@@ -125,43 +125,62 @@ public final class Mmi implements Serializable {
 
     /** The serial version UID. */
     private static final long serialVersionUID = 5100515080041567275L;
-    @XmlElement(name = "NewContextRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "NewContextRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected NewContextRequest newContextRequest;
-    @XmlElement(name = "NewContextResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "NewContextResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected NewContextResponse newContextResponse;
-    @XmlElement(name = "ClearContextRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "ClearContextRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ClearContextRequest clearContextRequest;
-    @XmlElement(name = "ClearContextResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "ClearContextResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ClearContextResponse clearContextResponse;
-    @XmlElement(name = "CancelRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "CancelRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected CancelRequest cancelRequest;
-    @XmlElement(name = "CancelResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "CancelResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected CancelResponse cancelResponse;
-    @XmlElement(name = "DoneNotification", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "DoneNotification",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected DoneNotification doneNotification;
-    @XmlElement(name = "ExtensionNotification", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "ExtensionNotification",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ExtensionNotification extensionNotification;
-    @XmlElement(name = "PauseRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "PauseRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PauseRequest pauseRequest;
-    @XmlElement(name = "PauseResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "PauseResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PauseResponse pauseResponse;
-    @XmlElement(name = "PrepareRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "PrepareRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PrepareRequest prepareRequest;
-    @XmlElement(name = "PrepareResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "PrepareResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected PrepareResponse prepareResponse;
-    @XmlElement(name = "ResumeRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "ResumeRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ResumeRequest resumeRequest;
-    @XmlElement(name = "ResumeResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "ResumeResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected ResumeResponse resumeResponse;
-    @XmlElement(name = "StartRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "StartRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StartRequest startRequest;
-    @XmlElement(name = "StartResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "StartResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StartResponse startResponse;
-    @XmlElement(name = "StatusRequest", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "StatusRequest",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StatusRequest statusRequest;
-    @XmlElement(name = "StatusResponse", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "StatusResponse",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     protected StatusResponse statusResponse;
-    @XmlAttribute(name = "version", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "version",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     protected BigDecimal version;
 
     /**
@@ -277,7 +296,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link NewContextRequest }
      * 
      */
-    public void setNewContextRequest(NewContextRequest value) {
+    public void setNewContextRequest(final NewContextRequest value) {
         this.newContextRequest = value;
     }
 
@@ -298,7 +317,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link NewContextResponse }
      * 
      */
-    public void setNewContextResponse(NewContextResponse value) {
+    public void setNewContextResponse(final NewContextResponse value) {
         this.newContextResponse = value;
     }
 
@@ -319,7 +338,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link ClearContextRequest }
      * 
      */
-    public void setClearContextRequest(ClearContextRequest value) {
+    public void setClearContextRequest(final ClearContextRequest value) {
         this.clearContextRequest = value;
     }
 
@@ -340,7 +359,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link ClearContextResponse }
      * 
      */
-    public void setClearContextResponse(ClearContextResponse value) {
+    public void setClearContextResponse(final ClearContextResponse value) {
         this.clearContextResponse = value;
     }
 
@@ -361,7 +380,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link CancelRequest }
      * 
      */
-    public void setCancelRequest(CancelRequest value) {
+    public void setCancelRequest(final CancelRequest value) {
         this.cancelRequest = value;
     }
 
@@ -382,7 +401,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link CancelResponse }
      * 
      */
-    public void setCancelResponse(CancelResponse value) {
+    public void setCancelResponse(final CancelResponse value) {
         this.cancelResponse = value;
     }
 
@@ -403,7 +422,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link DoneNotification }
      * 
      */
-    public void setDoneNotification(DoneNotification value) {
+    public void setDoneNotification(final DoneNotification value) {
         this.doneNotification = value;
     }
 
@@ -424,7 +443,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link ExtensionNotification }
      * 
      */
-    public void setExtensionNotification(ExtensionNotification value) {
+    public void setExtensionNotification(final ExtensionNotification value) {
         this.extensionNotification = value;
     }
 
@@ -445,7 +464,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link PauseRequest }
      * 
      */
-    public void setPauseRequest(PauseRequest value) {
+    public void setPauseRequest(final PauseRequest value) {
         this.pauseRequest = value;
     }
 
@@ -466,7 +485,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link PauseResponse }
      * 
      */
-    public void setPauseResponse(PauseResponse value) {
+    public void setPauseResponse(final PauseResponse value) {
         this.pauseResponse = value;
     }
 
@@ -487,7 +506,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link PrepareRequest }
      * 
      */
-    public void setPrepareRequest(PrepareRequest value) {
+    public void setPrepareRequest(final PrepareRequest value) {
         this.prepareRequest = value;
     }
 
@@ -508,7 +527,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link PrepareResponse }
      * 
      */
-    public void setPrepareResponse(PrepareResponse value) {
+    public void setPrepareResponse(final PrepareResponse value) {
         this.prepareResponse = value;
     }
 
@@ -529,7 +548,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link ResumeRequest }
      * 
      */
-    public void setResumeRequest(ResumeRequest value) {
+    public void setResumeRequest(final ResumeRequest value) {
         this.resumeRequest = value;
     }
 
@@ -550,7 +569,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link ResumeResponse }
      * 
      */
-    public void setResumeResponse(ResumeResponse value) {
+    public void setResumeResponse(final ResumeResponse value) {
         this.resumeResponse = value;
     }
 
@@ -571,7 +590,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link StartRequest }
      * 
      */
-    public void setStartRequest(StartRequest value) {
+    public void setStartRequest(final StartRequest value) {
         this.startRequest = value;
     }
 
@@ -592,7 +611,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link StartResponse }
      * 
      */
-    public void setStartResponse(StartResponse value) {
+    public void setStartResponse(final StartResponse value) {
         this.startResponse = value;
     }
 
@@ -613,7 +632,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link StatusRequest }
      * 
      */
-    public void setStatusRequest(StatusRequest value) {
+    public void setStatusRequest(final StatusRequest value) {
         this.statusRequest = value;
     }
 
@@ -634,7 +653,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link StatusResponse }
      * 
      */
-    public void setStatusResponse(StatusResponse value) {
+    public void setStatusResponse(final StatusResponse value) {
         this.statusResponse = value;
     }
 
@@ -655,7 +674,7 @@ public final class Mmi implements Serializable {
      *            allowed object is {@link BigDecimal }
      * 
      */
-    public void setVersion(BigDecimal value) {
+    public void setVersion(final BigDecimal value) {
         this.version = value;
     }
 
@@ -692,7 +711,7 @@ public final class Mmi implements Serializable {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

@@ -38,7 +38,7 @@ public interface SynthesizedOutputListener {
      * @param event the output event.
      * @since 0.6
      */
-    void outputStatusChanged(final SynthesizedOutputEvent event);
+    void outputStatusChanged(SynthesizedOutputEvent event);
 
     /**
      * An error occurred while an output processes an output.
@@ -53,5 +53,5 @@ public interface SynthesizedOutputListener {
      * @param error the error
      * @since 0.7.4
      */
-    void outputError(final ErrorEvent error);
+    void outputError(ErrorEvent error);
 }

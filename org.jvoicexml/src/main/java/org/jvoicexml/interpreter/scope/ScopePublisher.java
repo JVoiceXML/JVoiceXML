@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2013 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -30,7 +25,6 @@ package org.jvoicexml.interpreter.scope;
  * A publisher to propagate {@link Scope} changes.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @since 0.3
  */
@@ -40,12 +34,12 @@ public interface ScopePublisher {
      * <code>ScopeSubscriber</code>s.
      * @param subscriber The subscriber to add.
      */
-    void addScopeSubscriber(final ScopeSubscriber subscriber);
+    void addScopeSubscriber(ScopeSubscriber subscriber);
 
     /**
      * Remove the given subscriber from the list of known
      * <code>ScopeSubscriber</code>s.
      * @param subscriber The subscriber to remove.
      */
-    void removeScopeSubscriber(final ScopeSubscriber subscriber);
+    void removeScopeSubscriber(ScopeSubscriber subscriber);
 }

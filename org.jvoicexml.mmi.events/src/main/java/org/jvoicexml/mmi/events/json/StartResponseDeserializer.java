@@ -30,12 +30,13 @@ import org.jvoicexml.mmi.events.StartResponse;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class StartResponseDeserializer extends LifeCycleResponseDeserializer<StartResponse> {
+final class StartResponseDeserializer
+    extends LifeCycleResponseDeserializer<StartResponse> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public StartResponseDeserializer() {
+    StartResponseDeserializer() {
     }
     
     /**
@@ -44,7 +45,7 @@ final class StartResponseDeserializer extends LifeCycleResponseDeserializer<Star
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public StartResponseDeserializer(final Type data, final Type statusInfo) {
+    StartResponseDeserializer(final Type data, final Type statusInfo) {
         super(data, statusInfo);
     }
     

@@ -102,8 +102,8 @@ public interface DataModel {
      * 
      * @param scope
      *            the scope to create
-     * @return {@code NO_ERROR} upon success, failure status if a scope already exists
-     *         with the specified name.
+     * @return {@code NO_ERROR} upon success, failure status if a scope already
+     *          exists with the specified name.
      */
     int createScope(Scope scope);
 
@@ -508,7 +508,7 @@ public interface DataModel {
      * @return deserializer to use
      * @since 0.7.9
      */
-    DataModelObjectDeserializer getDeserializer(final MimeType type);
+    DataModelObjectDeserializer getDeserializer(MimeType type);
     
     /**
      * Copies all values from the current data model to the given datamodel
@@ -522,5 +522,5 @@ public interface DataModel {
      *          error copying values
      * @since 0.7.9
      */
-    int copyValues(final DataModel model) throws SemanticError;
+    int copyValues(DataModel model) throws SemanticError;
 }

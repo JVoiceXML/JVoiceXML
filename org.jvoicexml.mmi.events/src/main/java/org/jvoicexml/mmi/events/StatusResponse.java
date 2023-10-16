@@ -90,7 +90,8 @@ public final class StatusResponse extends LifeCycleEvent
      * @return possible object is {@link String }
      * 
      */
-    @XmlAttribute(name = "Context", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlAttribute(name = "Context",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public String getContext() {
         return context;
     }
@@ -112,7 +113,8 @@ public final class StatusResponse extends LifeCycleEvent
      * @return possible object is {@link StatusResponseType }
      * 
      */
-    @XmlAttribute(name = "Status", namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
+    @XmlAttribute(name = "Status",
+            namespace = "http://www.w3.org/2008/04/mmi-arch", required = true)
     public StatusResponseType getStatus() {
         return status;
     }
@@ -132,7 +134,8 @@ public final class StatusResponse extends LifeCycleEvent
      * Retrieves the statusInfo property.
      * @return the statusInfo property
      */
-    @XmlElement(name = "StatusInfo", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "StatusInfo",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public AnyComplexType getStatusInfo() {
         return statusInfo;
     }
@@ -173,7 +176,7 @@ public final class StatusResponse extends LifeCycleEvent
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

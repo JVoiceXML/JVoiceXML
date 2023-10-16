@@ -28,4 +28,5 @@
  * Definition of the behaviour of tags of the sVoiceXML 2.1 profile.
  * @author Dirk Schnelle-Walka
  *
- */package org.jvoicexml.profile.vxml21.tagstrategy;
+ */
+package org.jvoicexml.profile.vxml21.tagstrategy;

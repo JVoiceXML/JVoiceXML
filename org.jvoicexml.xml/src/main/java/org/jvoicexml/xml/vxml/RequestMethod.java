@@ -46,7 +46,7 @@ public enum RequestMethod {
      * Do not create from outside.
      * @param name name of the request method
      */
-    private RequestMethod(final String name) {
+    RequestMethod(final String name) {
         method = name;
     }
 

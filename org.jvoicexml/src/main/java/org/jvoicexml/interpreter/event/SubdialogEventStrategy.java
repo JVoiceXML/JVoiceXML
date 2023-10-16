@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -38,7 +33,6 @@ import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
  * Default catch event strategy for the subdialog tag.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7.4
  */
 final class SubdialogEventStrategy
@@ -62,7 +56,7 @@ final class SubdialogEventStrategy
      * @param formItem
      *        The current form item.
      */
-    public SubdialogEventStrategy(final VoiceXmlInterpreterContext ctx,
+    SubdialogEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
                                     final FormItem formItem) {

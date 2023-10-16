@@ -84,7 +84,7 @@ final class RecordingEventStrategy
      * @param recordingFormat
      *            audio format to use for recording.
      */
-    public RecordingEventStrategy(final VoiceXmlInterpreterContext ctx,
+    RecordingEventStrategy(final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm algorithm,
             final FormItem formItem, final AudioFormat recordingFormat) {

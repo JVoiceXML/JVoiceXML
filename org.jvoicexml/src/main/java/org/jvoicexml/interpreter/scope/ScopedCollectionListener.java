@@ -38,6 +38,6 @@ public interface ScopedCollectionListener<E> {
      * @param items removed items
      * @since 0.7.9
      */
-    public void removedForScopeChange(final Scope previous, final Scope next,
-            final Collection<E> items);
+    void removedForScopeChange(Scope previous, Scope next,
+            Collection<E> items);
 }

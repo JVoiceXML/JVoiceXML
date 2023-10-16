@@ -54,7 +54,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  */
 final class GotoStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER = LogManager.getLogger(GotoStrategy.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(GotoStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
@@ -151,11 +152,13 @@ final class GotoStrategy extends AbstractTagStrategy {
      */
     private FetchAttributes getFetchAttributes() {
         final FetchAttributes attributes = new FetchAttributes();
-        final String fetchHint = (String) getAttribute(Goto.ATTRIBUTE_FETCHHINT);
+        final String fetchHint = 
+                (String) getAttribute(Goto.ATTRIBUTE_FETCHHINT);
         if (fetchHint != null) {
             attributes.setFetchHint(fetchHint);
         }
-        final String fetchTimeout = (String) getAttribute(Goto.ATTRIBUTE_FETCHTIMEOUT);
+        final String fetchTimeout =
+                (String) getAttribute(Goto.ATTRIBUTE_FETCHTIMEOUT);
         if (fetchTimeout != null) {
             final TimeParser parser = new TimeParser(fetchTimeout);
             final long seconds = parser.parse();

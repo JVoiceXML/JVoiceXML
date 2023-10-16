@@ -44,7 +44,7 @@ public interface ImplementationPlatformFactory extends Configurable {
      *            Error assigning the calling device to TTS or recognizer.
      */
     ImplementationPlatform getImplementationPlatform(
-            final ConnectionInformation info) throws NoresourceError;
+            ConnectionInformation info) throws NoresourceError;
 
     /**
      * Closes all implementation platforms.

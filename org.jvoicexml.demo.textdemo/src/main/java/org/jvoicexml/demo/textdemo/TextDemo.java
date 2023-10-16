@@ -72,11 +72,13 @@ public final class TextDemo implements TextListener {
      * will be called subsequently.
      */
     public void sequentialMode() {
-        LOGGER.info("starting sequential mode of " + MAX_SESSIONS + " sessions");
+        LOGGER.info("starting sequential mode of " + MAX_SESSIONS
+                + " sessions");
         try {
             final Context context = new InitialContext();
+            final String jndi = RemoteJVoiceXml.class.getSimpleName();
             final RemoteJVoiceXml jvxml =
-                    (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
+                    (RemoteJVoiceXml) context.lookup(jndi);
             final URI dialog =
                     TextDemo.class.getResource("/helloworld.vxml").toURI();
             for (int i = 0; i < MAX_SESSIONS; i++) {
@@ -84,7 +86,8 @@ public final class TextDemo implements TextListener {
                 server.start();
                 server.waitStarted();
                 LOGGER.info("initiating call " + i + "...");
-                final ConnectionInformation info = server.getConnectionInformation();
+                final ConnectionInformation info =
+                        server.getConnectionInformation();
                 final SessionIdentifier id = new UuidSessionIdentifier();
                 final Session session = jvxml.createSession(info, id);
                 session.call(dialog);
@@ -95,7 +98,8 @@ public final class TextDemo implements TextListener {
                 LOGGER.info("...done with call " + i);
             }
         } catch (NamingException | ErrorEvent | UnknownHostException
-                | URISyntaxException | InterruptedException | RemoteException e) {
+                | URISyntaxException | InterruptedException
+                | RemoteException e) {
             LOGGER.fatal(e.getMessage(), e);
             return;
         }        
@@ -117,8 +121,9 @@ public final class TextDemo implements TextListener {
 
         try {
             final Context context = new InitialContext();
+            final String jndi = RemoteJVoiceXml.class.getSimpleName();
             final RemoteJVoiceXml jvxml =
-                    (RemoteJVoiceXml) context.lookup(RemoteJVoiceXml.class.getSimpleName());
+                    (RemoteJVoiceXml) context.lookup(jndi);
             final URI dialog =
                     TextDemo.class.getResource("/helloworld.vxml").toURI();
             LOGGER.info("initiating " + MAX_SESSIONS + " calls...");

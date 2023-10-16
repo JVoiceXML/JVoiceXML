@@ -69,7 +69,8 @@ public final class PrepareRequest extends LifeCycleRequest
      * @return possible object is {@link ContentURLType }
      * 
      */
-    @XmlElement(name = "ContentURL", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "ContentURL",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public ContentURLType getContentURL() {
         return contentURL;
     }
@@ -123,7 +124,8 @@ public final class PrepareRequest extends LifeCycleRequest
      * @return possible object is {@link AnyComplexType }
      * 
      */
-    @XmlElement(name = "Content", namespace = "http://www.w3.org/2008/04/mmi-arch")
+    @XmlElement(name = "Content",
+            namespace = "http://www.w3.org/2008/04/mmi-arch")
     public AnyComplexType getContent() {
         return content;
     }
@@ -154,7 +156,7 @@ public final class PrepareRequest extends LifeCycleRequest
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

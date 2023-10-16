@@ -66,8 +66,8 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
      *                  the user hung up
      */
     void queueSpeakable(SpeakableText speakable,
-            final SessionIdentifier sessionId,
-            final DocumentServer documentServer)
+            SessionIdentifier sessionId,
+            DocumentServer documentServer)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent;
     
@@ -89,8 +89,8 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    void playPrompts(final SessionIdentifier sessionId,
-            final DocumentServer server, final CallControlProperties callProps)
+    void playPrompts(SessionIdentifier sessionId,
+            DocumentServer server, CallControlProperties callProps)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent;
     

@@ -52,7 +52,7 @@ public interface GrammarParser<T> {
      * @throws IOException
      *         error loading the grammar
      */
-    GrammarImplementation<T> load(final URI uri) throws IOException;
+    GrammarImplementation<T> load(URI uri) throws IOException;
     
     /**
      * Parses a given {@link GrammarDocument} into a {@link GrammarEvaluator}.
@@ -67,6 +67,6 @@ public interface GrammarParser<T> {
      * @throws UnsupportedFormatError
      *             the grammar format is not supported
      */
-    GrammarEvaluator parse(final GrammarDocument document) throws IOException,
+    GrammarEvaluator parse(GrammarDocument document) throws IOException,
             UnsupportedFormatError;
 }

@@ -28,19 +28,22 @@ import org.apache.log4j.Logger;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public class SemanticInterpretationBlock implements ExecutableSemanticInterpretation {
-    private static final Logger LOGGER = Logger.getLogger(SemanticInterpretationBlock.class);
+public class SemanticInterpretationBlock 
+    implements ExecutableSemanticInterpretation {
+    /** Logger instance. */
+    private static final Logger LOGGER = 
+            Logger.getLogger(SemanticInterpretationBlock.class);
     private StringBuffer tagContent = new StringBuffer();
     private String lastRulename = null;
 
     public SemanticInterpretationBlock() {
     }
 
-    public SemanticInterpretationBlock(String text) {
+    public SemanticInterpretationBlock(final String text) {
         append(text);
     }
 
-    public void append(String text) {
+    public void append(final String text) {
         if (text == null || text.trim().length() == 0) {
             if (tagContent == null || tagContent.length() == 0) {
                 StringWriter sw = new StringWriter();
@@ -63,7 +66,7 @@ public class SemanticInterpretationBlock implements ExecutableSemanticInterpreta
         return lastRulename;
     }
 
-    public void setLastRulename(String lastRulename) {
+    public void setLastRulename(final String lastRulename) {
         this.lastRulename = lastRulename;
     }
 
@@ -78,12 +81,12 @@ public class SemanticInterpretationBlock implements ExecutableSemanticInterpreta
         return newCopy;
     }
 
-    public void dump(String pad) {
+    public void dump(final String pad) {
         LOGGER.debug(pad + "SI: " + tagContent);
     }
 
     @Override
-    public void execute(Context context, Scriptable scope) {
+    public void execute(final Context context, final Scriptable scope) {
         LOGGER.debug("executing: " + tagContent);
 
         context.evaluateString(scope, tagContent.toString(),

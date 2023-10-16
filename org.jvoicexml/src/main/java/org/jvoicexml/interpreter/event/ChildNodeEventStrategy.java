@@ -64,7 +64,7 @@ final class ChildNodeEventStrategy
      * @param type
      *        The event type.
      */
-    public ChildNodeEventStrategy(final VoiceXmlInterpreterContext ctx,
+    ChildNodeEventStrategy(final VoiceXmlInterpreterContext ctx,
                                   final VoiceXmlInterpreter ip,
                                   final FormInterpretationAlgorithm interpreter,
                                   final FormItem formItem,

@@ -59,7 +59,7 @@ public enum ModeType {
      * @param name
      *            name of the mode.
      */
-    private ModeType(final String name) {
+    ModeType(final String name) {
         mode = name;
     }
 

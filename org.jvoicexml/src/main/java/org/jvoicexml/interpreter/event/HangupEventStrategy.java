@@ -63,7 +63,7 @@ public final class HangupEventStrategy implements EventStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void process(JVoiceXMLEvent event) throws JVoiceXMLEvent {
+    public void process(final JVoiceXMLEvent event) throws JVoiceXMLEvent {
         hangupEvent = event;
     }
     

@@ -30,12 +30,13 @@ import org.jvoicexml.mmi.events.ResumeResponse;
  * @author Dirk Schnelle-Walka
  * @since 0.7.9
  */
-final class ResumeResponseDeserializer extends LifeCycleResponseDeserializer<ResumeResponse> {
+final class ResumeResponseDeserializer
+    extends LifeCycleResponseDeserializer<ResumeResponse> {
     /**
      * Constructs a new object assuming the data field contains any
      * {@link Object}.
      */
-    public ResumeResponseDeserializer() {
+    ResumeResponseDeserializer() {
     }
     
     /**
@@ -44,7 +45,7 @@ final class ResumeResponseDeserializer extends LifeCycleResponseDeserializer<Res
      * @param data type of the object in the data field
      * @param statusInfo type of the object in the status field
      */
-    public ResumeResponseDeserializer(final Type data, final Type statusInfo) {
+    ResumeResponseDeserializer(final Type data, final Type statusInfo) {
         super(data, statusInfo);
     }
     

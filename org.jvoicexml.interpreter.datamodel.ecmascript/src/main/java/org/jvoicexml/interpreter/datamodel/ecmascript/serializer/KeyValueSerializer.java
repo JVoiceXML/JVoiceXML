@@ -44,7 +44,8 @@ public final class KeyValueSerializer implements DataModelObjectSerializer {
     @Override
     public Collection<KeyValuePair> serialize(final DataModel model,
             final String name, final Object value) throws SemanticError {
-        final Collection<KeyValuePair> pairs = new java.util.ArrayList<KeyValuePair>();
+        final Collection<KeyValuePair> pairs =
+                new java.util.ArrayList<KeyValuePair>();
         if (value instanceof Scriptable) {
             final Scriptable scriptable = (Scriptable) value;
             serialize(scriptable, name, pairs);
