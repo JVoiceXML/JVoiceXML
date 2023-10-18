@@ -54,9 +54,9 @@ dependencies {
     compile project(':org.jvoicexml.implementation.mrcpv2')
     compile project(':org.jvoicexml.zanzibar')
     
-    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.sip', version: '0.3.1-SNAPSHOT'
-    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.rtp', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.2-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.sip', version: '0.3.2-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.rtp', version: '0.3.2-SNAPSHOT'
     compile group: 'org.jvoicexml', name: 'org.mrcp4j', version: '0.3-SNAPSHOT'
     compile group: 'concurrent', name: 'concurrent', version: '1.3.4'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
@@ -129,6 +129,7 @@ task copyReferencedLibraries(type: Copy) {
          'org.speechforge.cairo.rtp*.jar',
          'org.speechforge.cairo.server*.jar',
          'org.mrcp4j*.jar',
+         'org.jvoicexml.client*.jar',
          'org.jvoicexml.client.mrcpv2*.jar',
          'org.jvoicexml.implementation.mrcpv2*.jar',
          'org.jvoicexml.zanzibar*.jar',

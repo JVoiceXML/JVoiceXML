@@ -96,7 +96,7 @@ public class SipServer implements SessionListener {
     private int cairoSipPort;
     private String cairoSipAddress;
 
-    private String mode = "mccpv2";
+    private String mode = "mrcpv2";
 
     private int baseReceiverRtpPort;
     private int maxConnects;
@@ -420,14 +420,10 @@ public class SipServer implements SessionListener {
             int remoteRtpPort, Vector supportedFormats, SipSession mrcpSession,
             SipSession pbxSession)
             throws UnknownHostException, SdpException, Exception {
-        SdpMessage pbxResponse;
-        pbxResponse = constructInviteResponseToPbx(remoteRtpPort,
+        SdpMessage pbxResponse = constructInviteResponseToPbx(remoteRtpPort,
                 remoteHostName, supportedFormats);
-
         sipAgent.sendResponse(pbxSession, pbxResponse);
-
         dialogService.startNewMrcpDialog(pbxSession, mrcpSession);
-
         return pbxResponse;
     }
 
@@ -558,6 +554,8 @@ public class SipServer implements SessionListener {
         // pbx). the construct method below blindly gets a tts and recog
         // resoruce
         SipSession internalSession = null;
+        LOGGER.info("forwarding invite to cairo at '" + cairoSipAddress 
+                + ":" + cairoSipPort + "'");
         try {
             final SdpMessage message = constructInviteRequestToCairo(
                     pbxRtpPort, pbxHost, pbxSessionName, pbxFormats);

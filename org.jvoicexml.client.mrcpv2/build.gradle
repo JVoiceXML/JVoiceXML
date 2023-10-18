@@ -28,7 +28,7 @@ dependencies {
     compile project(':org.jvoicexml')
     compile project(':org.jvoicexml.client')
 
-    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.1-SNAPSHOT'
+    compile group: 'org.jvoicexml', name: 'org.speechforge.cairo.client', version: '0.3.2-SNAPSHOT'
 }
 
 jar {
