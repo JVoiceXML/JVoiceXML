@@ -29,6 +29,8 @@
         <beans:property name="applications">
             <beans:map>
                 <!--APPLICATION PLACEHOLDER-->
+                <beans:entry key="cairogate" 
+                    value="http://localhost:8080/org.jvoicexml.demo.helloworldservletdemo.servlet/HelloWorld"/>
             </beans:map>
         </beans:property>
     </beans:bean>

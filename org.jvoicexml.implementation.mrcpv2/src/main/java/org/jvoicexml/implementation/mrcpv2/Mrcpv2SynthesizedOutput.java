@@ -146,29 +146,15 @@ public final class Mrcpv2SynthesizedOutput
             final SessionIdentifier sessionId,
             final DocumentServer documentServer)
                     throws NoresourceError, BadFetchError {
-        String speakText = null;
-        boolean urlPrompt = false;
-        queueCount++;
-        LOGGER.info("Queue count incremented, now " + queueCount);
         try {
             if (speakable instanceof SpeakableSsmlText) {
                 final SpeakableSsmlText text = (SpeakableSsmlText) speakable;
                 queuePrompts(text);
-            }
-            if (urlPrompt) {
-                LOGGER.info(String.format("Using URL: %s", speakText));
             } else {
-                LOGGER.info(String.format("Using TTS!: %s", speakText));
+                LOGGER.warn("no means to queue '" + speakable + "'");
             }
-
-            speechClient.queuePrompt(urlPrompt, speakText);
-        } catch (MrcpInvocationException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (NoMediaControlChannelException e) {
+        } catch (MrcpInvocationException | IOException |
+                InterruptedException | NoMediaControlChannelException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
     }
@@ -240,7 +226,7 @@ public final class Mrcpv2SynthesizedOutput
         if (prompt.isEmpty()) {
             return;
         }
-        LOGGER.info("queueing URL '" + prompt + "'");
+        LOGGER.info("queueing text '" + prompt + "'");
         speechClient.queuePrompt(false, prompt);
         synchronized (lock) {
             queueCount++;

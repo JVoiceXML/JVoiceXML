@@ -193,6 +193,15 @@ public final class SipCallManager
         try {
             final Mrcpv2ConnectionInformation info =
                     createConnectionInformation(pbxSession, mrcpSession);
+            final URI calledDeviceUri = info.getCalledDevice();
+            final String calledDevice = calledDeviceUri.toString();
+            final String application = applications.get(calledDevice);
+            if (application == null) {
+                LOGGER.warn("no application configured for '" + calledDevice
+                        + "'");
+                throw new Exception("no application configured for '"
+                        + calledDevice + "'");
+            }
             final ImplementationPlatform platform =
                     platformFactory.getImplementationPlatform(info);
             final JVoiceXmlCallControl call =
@@ -213,15 +222,11 @@ public final class SipCallManager
                 sessions.put(id, session);
             }
 
-            // Get the random code
-            final String randomCode = getRandomCode(pbxSession);
             // Append the sessionId to the application uri
-            final String applicationUri =
-                    applications.get(info.getCalledDevice().toString())
-                    + "?sessionId=" + jsession.getSessionId() + "&randomCode="
-                    + randomCode;
+            final String applicationUri = application
+                    + "?sessionId=" + jsession.getSessionId();
 
-            LOGGER.info("called number: '" + info.getCalledDevice() + "'");
+            LOGGER.info("called number: '" + calledDevice + "'");
             LOGGER.info("calling application '" + applicationUri + "'...");
 
             // start the application
@@ -298,30 +303,6 @@ public final class SipCallManager
         } else {
             return new URI(displayName);
         }
-    }
-
-    /**
-     * Tries to obtain a random code from the calling number.
-     * 
-     * @param pbxSession
-     *            the PBX session
-     * @return random code, empty string if there is none.
-     * @since 0.7.8
-     */
-    private String getRandomCode(final SipSession pbxSession) {
-        final String callingNumber =
-                pbxSession.getSipDialog().getRemoteParty().getURI().toString();
-        final int maxCodeLength = 8;
-        if (callingNumber.startsWith("sip:")) {
-            String[] parts = callingNumber.split(":");
-            String[] parts2 = parts[1].split("@");
-            String number = parts2[0];
-            if (number.length() > maxCodeLength) {
-                return number.substring(maxCodeLength);
-            }
-        }
-        LOGGER.warn("No randomCode used.");
-        return "";
     }
 
     /**

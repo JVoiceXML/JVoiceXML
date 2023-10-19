@@ -22,7 +22,6 @@
  */
 package org.jvoicexml.zanzibar.sip;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -40,7 +39,6 @@ import javax.sdp.Connection;
 import javax.sdp.Media;
 import javax.sdp.MediaDescription;
 import javax.sdp.SdpException;
-import javax.sdp.SdpParseException;
 import javax.sdp.SessionDescription;
 import javax.sdp.SessionName;
 import javax.sip.ClientTransaction;
@@ -55,7 +53,6 @@ import org.mrcp4j.MrcpResourceType;
 import org.mrcp4j.client.MrcpChannel;
 import org.mrcp4j.client.MrcpFactory;
 import org.mrcp4j.client.MrcpProvider;
-import org.mrcp4j.message.header.IllegalValueException;
 import org.speechforge.cairo.sip.ResourceUnavailableException;
 import org.speechforge.cairo.sip.SdpMessage;
 import org.speechforge.cairo.sip.SessionListener;
@@ -259,8 +256,9 @@ public class SipServer implements SessionListener {
             if (!networkInterface.isLoopback()) {
                 Enumeration<InetAddress> inetAddresses = networkInterface
                         .getInetAddresses();
-                if (inetAddresses.hasMoreElements())
+                if (inetAddresses.hasMoreElements()) {
                     return inetAddresses.nextElement();
+                }
             }
         }
         return InetAddress.getLocalHost();
@@ -301,17 +299,22 @@ public class SipServer implements SessionListener {
         sipAgent.dispose();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public synchronized SdpMessage processInviteResponse(boolean ok,
             SdpMessage response, SipSession session) {
-        LOGGER.debug("Gotta invite response, ok is: " + ok);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Gotta invite response, ok is: " + ok);
+        }
         SdpMessage pbxResponse = null;
         if (ok) {
             final ClientTransaction transcation = session.getCtx();
             final SessionPair pair = waitingList.remove(transcation);
             if (pair == null) {
-                LOGGER.warn(
-                        "Could not find corresponding external request in waiting list: "
-                                + transcation);
+                LOGGER.warn("Could not find corresponding external request in"
+                        + " waiting list: " + transcation);
                 return null;
             }
             // Get the MRCP media channels (need the port number and the
@@ -389,24 +392,13 @@ public class SipServer implements SessionListener {
                 // _logger.debug(">>>>Here is the invite response:");
                 // _logger.debug(pbxResponse.getSessionDescription().toString());
 
-            } catch (UnknownHostException e) {
-                LOGGER.warn(e.getMessage(), e);
-            } catch (SdpParseException e) {
-                LOGGER.warn(e.getMessage(), e);
-            } catch (IllegalArgumentException e) {
-                LOGGER.warn(e.getMessage(), e);
-            } catch (IllegalValueException e) {
-                LOGGER.warn(e.getMessage(), e);
-            } catch (IOException e) {
-                LOGGER.warn(e.getMessage(), e);
-            } catch (SdpException e) {
-                LOGGER.warn(e.getMessage(), e);
             } catch (Exception e) {
                 LOGGER.warn(e.getMessage(), e);
+                return null;
             }
 
             // TODO: Need to keep track of the "forwarded" Session. the one
-            // that wa created to get the resourses for MRCPv2. The original
+            // that was created to get the resourses for MRCPv2. The original
             // Session came from the pbx
             // session.setForward(forward);
         } else {
@@ -420,8 +412,8 @@ public class SipServer implements SessionListener {
             int remoteRtpPort, Vector supportedFormats, SipSession mrcpSession,
             SipSession pbxSession)
             throws UnknownHostException, SdpException, Exception {
-        SdpMessage pbxResponse = constructInviteResponseToPbx(remoteRtpPort,
-                remoteHostName, supportedFormats);
+        final SdpMessage pbxResponse = constructInviteResponseToPbx(
+                remoteRtpPort, remoteHostName, supportedFormats);
         sipAgent.sendResponse(pbxSession, pbxResponse);
         dialogService.startNewMrcpDialog(pbxSession, mrcpSession);
         return pbxResponse;
@@ -635,11 +627,11 @@ public class SipServer implements SessionListener {
     private SdpMessage constructInviteResponseToPbx(int cairoRtpPort,
             String cairoHost, Vector formats)
             throws UnknownHostException, SdpException {
-        SdpMessage sdpMessage = SdpMessage.createNewSdpSessionMessage(
+        final SdpMessage sdpMessage = SdpMessage.createNewSdpSessionMessage(
                 mySipAddress, cairoHost, "The session Name");
-        MediaDescription rtpChannel = SdpMessage
+        final MediaDescription rtpChannel = SdpMessage
                 .createRtpChannelRequest(cairoRtpPort, formats);
-        Vector<MediaDescription> v = new Vector<MediaDescription>();
+        final Vector<MediaDescription> v = new Vector<MediaDescription>();
         // rtpChannel.setAttribute("ptime", "60");
         v.add(rtpChannel);
         sdpMessage.getSessionDescription().setMediaDescriptions(v);
@@ -781,6 +773,10 @@ public class SipServer implements SessionListener {
         this.dialogService = dialogService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void processInfoRequest(SipSession session, String contentType,
             String contentSubType, String content) {
 
