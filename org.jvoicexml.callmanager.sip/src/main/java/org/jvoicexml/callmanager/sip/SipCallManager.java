@@ -151,12 +151,13 @@ public final class SipCallManager
         final Session jvxmlSession = session.getJvxmlSession();
         jvxmlSession.hangup();
         try {
-            // need to check for null mrcp session
             final SipSession mrcpsession = session.getMrcpSession();
             if (mrcpsession != null) {
+                LOGGER.info("terminating MRCP session '" + mrcpsession + "'");
                 mrcpsession.bye();
             }
             final SipSession pbxsession = session.getPbxSession();
+            LOGGER.info("terminating PBX session '" + pbxsession + "'");
             pbxsession.bye();
             final SpeechClient client = session.getSpeechClient();
             client.stopActiveRecognitionRequests();
@@ -222,15 +223,11 @@ public final class SipCallManager
                 sessions.put(id, session);
             }
 
-            // Append the sessionId to the application uri
-            final String applicationUri = application
-                    + "?sessionId=" + jsession.getSessionId();
-
             LOGGER.info("called number: '" + calledDevice + "'");
-            LOGGER.info("calling application '" + applicationUri + "'...");
+            LOGGER.info("calling application '" + application + "'...");
 
             // start the application
-            final URI uri = new URI(applicationUri);
+            final URI uri = new URI(application);
             jsession.call(uri);
         } catch (Exception  e) {
             LOGGER.error(e.getMessage(), e);
@@ -241,10 +238,18 @@ public final class SipCallManager
         }
     }
 
+    /**
+     * Creates a connection info for the provided {@code pbxSession}
+     * and {@code mrcpSession}.
+     * @param pbxSession the PBX session
+     * @param mrcpSession the MRCP session
+     * @return created connection identifier
+     * @throws URISyntaxException
+     *          remote parties do not denote a URI
+     */
     private Mrcpv2ConnectionInformation createConnectionInformation(
             final SipSession pbxSession, final SipSession mrcpSession)
                     throws URISyntaxException {
-
         // Create a session (so we can get other signals from the caller)
         // and release resources upon call completion
         final Dialog dialog = pbxSession.getSipDialog();

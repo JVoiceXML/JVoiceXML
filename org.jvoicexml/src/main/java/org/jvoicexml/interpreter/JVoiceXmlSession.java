@@ -164,6 +164,11 @@ public class JVoiceXmlSession extends Thread
     @Override
     public void addSessionListener(final SessionListener listener) {
         synchronized (sessionListeners) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("adding session listener '" + listener 
+                        + "' in scope '" 
+                        + sessionListeners.getCurrentScope() + "'");
+            }
             sessionListeners.add(listener);
         }
     }
@@ -174,6 +179,11 @@ public class JVoiceXmlSession extends Thread
     @Override
     public void removeSessionListener(final SessionListener listener) {
         synchronized (sessionListeners) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("adding session listener '" + listener 
+                        + "' in scope '" 
+                        + sessionListeners.getCurrentScope() + "'");
+            }
             sessionListeners.remove(listener);
         }
     }
@@ -361,6 +371,7 @@ public class JVoiceXmlSession extends Thread
             final VoiceXmlDocument doc = context.loadDocument(descriptor);
             final URI resolvedUri = descriptor.getUri();
             application.addDocument(resolvedUri, doc);
+            logCalledApplication(resolvedUri);
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '" + application + "'",
                     e);
@@ -374,8 +385,6 @@ public class JVoiceXmlSession extends Thread
             cleanup();
             return;
         }
-
-        logCalledApplication();
 
         processingError = null;
         createSessionVariables();
@@ -421,7 +430,7 @@ public class JVoiceXmlSession extends Thread
      * 
      * @since 0.7.9
      */
-    private void logCalledApplication() {
+    private void logCalledApplication(final URI uri) {
         final URI calledDevice;
         final URI callingDevice;
         final String protocolName;
@@ -432,7 +441,8 @@ public class JVoiceXmlSession extends Thread
             protocolName = info.getProtocolName();
             protocolVersion = info.getProtocolVersion();
             LOGGER.info("start processing application '" + application
-                    + "' called from '" + callingDevice + "' to " + "'"
+                    + "' with document '" + uri + "' called from '" 
+                    + callingDevice + "' to " + "'"
                     + calledDevice + "' using protocol '" + protocolName
                     + "' version '" + protocolVersion + "'...");
         } else {
@@ -475,8 +485,10 @@ public class JVoiceXmlSession extends Thread
      * @since 0.7.3
      */
     private void notifySessionStarted() {
+        LOGGER.info("notifying session listeners start");
         synchronized (sessionListeners) {
             for (SessionListener listener : sessionListeners) {
+                LOGGER.info("notifying " + listener);
                 listener.sessionStarted(this);
             }
         }
@@ -485,6 +497,7 @@ public class JVoiceXmlSession extends Thread
                 listener.sessionStarted(this);
             }
         }
+        LOGGER.info("done notifying session listeners start");
     }
 
     /**
@@ -494,8 +507,10 @@ public class JVoiceXmlSession extends Thread
      */
     private void notifySessionEnded() {
         // First: notify all listeners
+        LOGGER.info("notifying session listeners end");
         synchronized (sessionListeners) {
             for (SessionListener listener : sessionListeners) {
+                LOGGER.info("notifying " + listener);
                 listener.sessionEnded(this);
             }
         }
@@ -505,6 +520,7 @@ public class JVoiceXmlSession extends Thread
                 listener.sessionEnded(this);
             }
         }
+        LOGGER.info("done notifying session listeners end");
 
         // Also notify the end of the session via the sem
         synchronized (sem) {
