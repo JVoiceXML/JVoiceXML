@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.interpreter.scope;
 
+import java.util.Iterator;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,5 +84,21 @@ public final class TestScopedCollection {
         Assert.assertTrue(collection.contains(test2));
         Assert.assertFalse(collection.contains(test3));
         Assert.assertEquals(2, collection.size());
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.scope.ScopedCollection#add(java.lang.Object)}.
+     */
+    @Test
+    public void testIteratoe() {
+        ScopedCollection<String> collection =
+            new ScopedCollection<String>(observer);
+        String test1 = "test1";
+        String test2 = "test2";
+        collection.add(test1);
+        collection.add(test2);
+        final Iterator<String> iterator = collection.iterator();
+        Assert.assertEquals(test1, iterator.next());
+        Assert.assertEquals(test2, iterator.next());
     }
 }
