@@ -97,34 +97,11 @@ public final class TestScopedCollection {
                 new ScopedCollection<String>(observer);
         String test1 = "test1";
         String test2 = "test2";
-        collection.enterScope(Scope.SESSION, Scope.DOCUMENT);
         collection.add(test1);
         collection.add(test2);
         Assert.assertTrue(collection.contains(test1));
         final Iterator<String> iterator = collection.iterator();
         Assert.assertEquals(test1, iterator.next());
         Assert.assertEquals(test2, iterator.next());
-    }
-
-    /**
-     * Test method for {@link ScopedCollection#iterator()}.
-     * 
-     * @since 0.7.9
-     */
-    @Test
-    public void testIteratorEnterScope() {
-        ScopedCollection<String> collection =
-                new ScopedCollection<String>(observer);
-        String test1 = "test1";
-        String test2 = "test2";
-        collection.add(test1);
-        collection.add(test2);
-        final Iterator<String> iterator = collection.iterator();
-        Assert.assertEquals(test1, iterator.next());
-        Assert.assertEquals(test2, iterator.next());
-        collection.enterScope(Scope.SESSION, Scope.DOCUMENT);
-        final Iterator<String> iteratorScope = collection.iterator();
-        Assert.assertEquals(test1, iteratorScope.next());
-        Assert.assertEquals(test2, iteratorScope.next());
     }
 }

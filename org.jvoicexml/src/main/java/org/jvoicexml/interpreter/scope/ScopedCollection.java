@@ -252,7 +252,8 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public Iterator<E> iterator() {
-        return view.iterator();
+        final Collection<E> currentView = getView();
+        return currentView.iterator();
     }
 
     /**

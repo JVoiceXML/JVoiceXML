@@ -164,11 +164,6 @@ public class JVoiceXmlSession extends Thread
     @Override
     public void addSessionListener(final SessionListener listener) {
         synchronized (sessionListeners) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("adding session listener '" + listener 
-                        + "' in scope '" 
-                        + sessionListeners.getCurrentScope() + "'");
-            }
             sessionListeners.add(listener);
         }
     }
@@ -179,11 +174,6 @@ public class JVoiceXmlSession extends Thread
     @Override
     public void removeSessionListener(final SessionListener listener) {
         synchronized (sessionListeners) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("adding session listener '" + listener 
-                        + "' in scope '" 
-                        + sessionListeners.getCurrentScope() + "'");
-            }
             sessionListeners.remove(listener);
         }
     }
@@ -485,10 +475,8 @@ public class JVoiceXmlSession extends Thread
      * @since 0.7.3
      */
     private void notifySessionStarted() {
-        LOGGER.info("notifying session listeners start");
         synchronized (sessionListeners) {
             for (SessionListener listener : sessionListeners) {
-                LOGGER.info("notifying " + listener);
                 listener.sessionStarted(this);
             }
         }
@@ -497,7 +485,6 @@ public class JVoiceXmlSession extends Thread
                 listener.sessionStarted(this);
             }
         }
-        LOGGER.info("done notifying session listeners start");
     }
 
     /**
@@ -507,10 +494,8 @@ public class JVoiceXmlSession extends Thread
      */
     private void notifySessionEnded() {
         // First: notify all listeners
-        LOGGER.info("notifying session listeners end");
         synchronized (sessionListeners) {
             for (SessionListener listener : sessionListeners) {
-                LOGGER.info("notifying " + listener);
                 listener.sessionEnded(this);
             }
         }
@@ -520,7 +505,6 @@ public class JVoiceXmlSession extends Thread
                 listener.sessionEnded(this);
             }
         }
-        LOGGER.info("done notifying session listeners end");
 
         // Also notify the end of the session via the sem
         synchronized (sem) {
