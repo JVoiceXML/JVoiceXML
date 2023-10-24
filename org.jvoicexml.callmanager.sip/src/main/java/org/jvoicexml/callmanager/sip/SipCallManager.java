@@ -49,8 +49,6 @@ import org.jvoicexml.implementation.jvxml.JVoiceXmlCallControl;
 import org.jvoicexml.zanzibar.sip.SipServer;
 import org.jvoicexml.zanzibar.speechlet.SpeechletService;
 import org.mrcp4j.client.MrcpChannel;
-import org.mrcp4j.client.MrcpInvocationException;
-import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientImpl;
 import org.speechforge.cairo.sip.SipSession;
@@ -159,17 +157,6 @@ public final class SipCallManager
             final SipSession pbxsession = session.getPbxSession();
             LOGGER.info("terminating PBX session '" + pbxsession + "'");
             pbxsession.bye();
-            final SpeechClient client = session.getSpeechClient();
-            client.stopActiveRecognitionRequests();
-            client.shutdown();
-        } catch (MrcpInvocationException e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (NoMediaControlChannelException e) {
-            LOGGER.error(e.getMessage(), e);
         } catch (SipException e) {
             LOGGER.error(e.getMessage(), e);
         }

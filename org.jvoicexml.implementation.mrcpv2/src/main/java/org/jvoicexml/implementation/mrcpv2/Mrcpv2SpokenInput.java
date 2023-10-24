@@ -31,7 +31,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
@@ -257,16 +256,14 @@ public final class Mrcpv2SpokenInput
 
             lastUsedTimeout = speech.getTimeoutAsMsec();
             boolean hotword = false;
-            boolean attachGrammar = true;
-            GrammarImplementation<?> firstGrammar = activeGrammars.iterator().next(); 
-            GrammarDocument firstGrammarDocument = (GrammarDocument) firstGrammar.getGrammarDocument();
-            // TODO use the URI here instead of putting the URI inside the document in 
-            // org.jvoicexml.interpreter.grammar.halef.HalefGrammarParser.java
-            // TODO load the application type from the grammar
-            LOGGER.info(String.format("Starting recognition with url: %s", firstGrammarDocument.getDocument()));
-            speechClient.setContentType("application/wfst");
-            speechClient.recognize(
-                    firstGrammarDocument.getDocument(), hotword,
+            boolean attachGrammar = false;
+            GrammarImplementation<?> firstGrammar = 
+                    activeGrammars.iterator().next(); 
+            final URI uri = firstGrammar.getURI();
+            final GrammarType type = firstGrammar.getMediaType();
+            LOGGER.info("Starting recognition with url: %s", uri.toString());
+            speechClient.setContentType(type.toString());
+            speechClient.recognize(uri.toString(), hotword,
                     attachGrammar, lastUsedTimeout);
         } catch (MrcpInvocationException e) {
             LOGGER.error("MRCPv2 invocation exception while initiating a "
