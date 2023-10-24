@@ -154,7 +154,7 @@ public final class JVoiceXmlMain extends Thread implements JVoiceXmlCore {
 
     /**
      * Provides logging information about the used environment like host system.
-     * and sued Java version
+     * and used Java version
      * 
      * @since 0.7.9
      */
