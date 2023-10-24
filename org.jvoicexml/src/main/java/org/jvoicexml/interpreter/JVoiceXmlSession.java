@@ -361,6 +361,7 @@ public class JVoiceXmlSession extends Thread
             final VoiceXmlDocument doc = context.loadDocument(descriptor);
             final URI resolvedUri = descriptor.getUri();
             application.addDocument(resolvedUri, doc);
+            logCalledApplication(resolvedUri);
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '" + application + "'",
                     e);
@@ -374,8 +375,6 @@ public class JVoiceXmlSession extends Thread
             cleanup();
             return;
         }
-
-        logCalledApplication();
 
         processingError = null;
         createSessionVariables();
@@ -421,7 +420,7 @@ public class JVoiceXmlSession extends Thread
      * 
      * @since 0.7.9
      */
-    private void logCalledApplication() {
+    private void logCalledApplication(final URI uri) {
         final URI calledDevice;
         final URI callingDevice;
         final String protocolName;
@@ -432,7 +431,8 @@ public class JVoiceXmlSession extends Thread
             protocolName = info.getProtocolName();
             protocolVersion = info.getProtocolVersion();
             LOGGER.info("start processing application '" + application
-                    + "' called from '" + callingDevice + "' to " + "'"
+                    + "' with document '" + uri + "' called from '" 
+                    + callingDevice + "' to " + "'"
                     + calledDevice + "' using protocol '" + protocolName
                     + "' version '" + protocolVersion + "'...");
         } else {

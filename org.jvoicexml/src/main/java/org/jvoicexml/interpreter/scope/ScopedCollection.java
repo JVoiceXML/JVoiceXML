@@ -90,6 +90,15 @@ public final class ScopedCollection<E>
     }
 
     /**
+     * Retrieves the current scope of this scoped collection.
+     * @return the current scope
+     * @since 0.7.9
+     */
+    public Scope getCurrentScope() {
+        return scope;
+    }
+
+    /**
      * Adds the provided listener to the list of known scoped collection
      * listeners.
      * @param listener the listener to add

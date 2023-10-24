@@ -291,7 +291,6 @@ public final class JVoiceXmlApplication
         if (application != null) {
             return application.toString();
         }
-
         return "Unknown application";
     }
 }

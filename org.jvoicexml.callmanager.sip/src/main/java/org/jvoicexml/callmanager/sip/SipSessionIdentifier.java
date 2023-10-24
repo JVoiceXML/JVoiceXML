@@ -85,4 +85,11 @@ public class SipSessionIdentifier implements SessionIdentifier {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "SipSessionIdentifier[id=" + id + "]";
+    }
 }
