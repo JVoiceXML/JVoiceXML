@@ -26,7 +26,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 \include{version}
 
 \title{JVoiceXML \jvxmlversion \\ User Guide}
-\version{0.7.7}
+\version{\jvxmlversion}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -313,10 +313,10 @@ and synthesizers. This platform is useful, if you are interested in an easy
 integration with commercial server based speech engines.
 
 An open source MRCPv2 implementation is available via the Cairo project. You can
-download Cairo from \url{http://cairo.sourceforge.net}. Cairo makes use of JMF
+download Cairo from \url{https://github.com/JVoiceXML/cairo}. Cairo makes use of JMF
 2.1.1e to stream the audio. JMF is available from Oracle at
 \url{http://www.oracle.com/technetwork/java/javase/download-142937.html}. Note
-that JMF is outdated and does not work with 64bit Java under Windows.
+that JMF is outdated and does not work well with 64bit Java under Windows.
 Follow the instructions to install Cairo and JMF. Then, start Cairo. The
 connection will not work, if cairo is not present when JVoiceXML starts. 
 
@@ -358,19 +358,10 @@ Cairo on the same machine as described in section~\ref{sec:jndi-port}.
 
 After the start of JVoiceXML, prepare your softphone to call JVoiceXML.
 For our
-tests we use x-lite (\url{http://www.counterpath.com/x-lite.html}).
-Create a new account and make
-sure that the settings are as shown in figure~\ref{fig:sip-properties}.
-\begin{figure}
-\begin{center}
-\includegraphics[width=.5\linewidth]{SIPProperties.jpg}
-\end{center}
-\caption{X-Lite Properties}
-\label{fig:sip-properties}
-\end{figure}
-Make sure, that the Proxy point to the URL of your computer running JVoiceXML
-and the port that you configured in the file \texttt{mrcpv2-callmanager.xml}. 
-Unselect \emph{Register with domain and receive calls}.
+tests we use Jitsi Desktop (\url{https://desktop.jitsi.org/}).
+We are using a registrarless configuration. In case you are using any other 
+phone, please deactivate options like
+\emph{Register with domain and receive calls}.
 
 Afterwards you should be able to call JVoiceXML with the number that you
 specified in the application configuration.
@@ -478,7 +469,7 @@ JVoiceXML features two modes
   \item controlled by a client program.
 \end{enumerate}
 
-The first mode is pretty much what is known from other voice browsers. Here,
+The first mode is pretty much what you may know from other voice browsers. Here,
 you usually initiate a call and JVoiceXML maps the incoming call to a VoiceXML
 document. This is explained in more detail in chapter~\ref{cha:callmanager}.
 
@@ -493,53 +484,18 @@ programmatically.
 
 Note, that there is no graphical user interface right now. 
 
-\subsection{Linux}
-
-The shell script \texttt{startup.sh} located in the \texttt{bin} folder
+The shell script \texttt{jvxml-startup.sh} located in the \texttt{bin} folder
 of your JVoiceXML installation can be used to start the browser.
 
-It is written to work independent to the current folder. Simply call
+This should be called from the directory where you installed JVoiceXML.
+Simply call
 
 \begin{lstlisting}
-sh JVOICEXML_HOME/bin/startup.sh
+cd JVOICEXML_HOME
+sh ./bin/jvxml-startup.sh
 \end{lstlisting}
 
-On recent Ubuntu and Ubuntu-derived setups, start JVoiceXML using this command:
-\begin{lstlisting}
-padsp ./startup.sh
-\end{lstlisting}
 
-On these systems, pulse is the default audio manager. Using the previously
-mentioned way you'll most likely get no
-sound, since Java doesn't work properly with alsa (breaks up quickly, calls
-the alsa API in stupid ways, so that sound cannot be used by multiple apps
-concurrently, locks itself out from using sound etc.), whereas padsp simulates
-oss, with which Java works right.
-
-
-After the start lots of debug information will be displayed.
-It may take a while until the TTS engine and the recognizer are launched.
-The voice browser can be used, if you see the message
-
-\begin{lstlisting}
-VoiceXML interpreter <version> (Revision <number>) started.
-\end{lstlisting}
-
-\subsection{Windows}
-
-The windows executable \texttt{JVoiceXML.exe} located in the \texttt{bin}
-folder of your JVoiceXML installation can be used to start the browser.
-However, the preferred way is to use the batch or shell scripts.
-The executable is simply a wrapped Java call and should also work with a
-double-click in the windows explorer.
-
-From The command line prompt, call
-
-\begin{lstlisting}
-JVOICEXML_HOME\bin\JVoiceXML.exe
-\end{lstlisting}
-
-If you start the browser from the windows explorer, a command prompt will open.
 After the start lots of debug information will be displayed.
 It may take a while until the TTS engine and the recognizer are launched.
 The voice browser can be used, if you see the message
@@ -576,22 +532,12 @@ to
 
 If this still does not help, do not hesitate to contact the author of this
 document. I am always interested in improving the voice browser. This is
-easier if I know the problems with it. The preferred way is over the mailing
-lists.
-
-If you want to discuss the coding, make suggestions for improvement or if
-you have trouble building the binaries, use the
-\url{http://lists.sourceforge.net/lists/listinfo/jvoicexml-developer}
-developer list.
-
-If you want to get help on our API for your current project, use the
-\url{http://lists.sourceforge.net/lists/listinfo/jvoicexml-user} user list.
+easier if I know the problems with it. The preferred way is over issues in 
+GitHub~\url{https://github.com/JVoiceXML/JVoiceXML/issues}.
 
 \section{Shutdown of the Voice Browser}
 
-The \texttt{bin} folder also contains the files to stop the browser. The
-relevant files depend on your operating system and are described in the following
-sections.
+The \texttt{bin} folder also contains the files to stop the browser. 
 
 Please avoid to stop the browser using \lstinline{CTRL-C} or by closing the
 window. If you have JNDI configured JVoiceXML starts the \lstinline{rmiregistry}.
@@ -599,32 +545,15 @@ The registry may not shutdown properly if you closed the voice browser this way
 and may keep the configured port active. This will result in some error messages
 if you restart JVoiceXML.
 
-
-\subsection{Linux}
-
-The shell script \texttt{stutdown.sh} located in the \texttt{bin} folder
+The shell script \texttt{jvxml-stutdown.sh} located in the \texttt{bin} folder
 of your JVoiceXML installation can be used to stop the browser.
 
-It is written to work independent to the current folder. Simply call
+This should be called from the directory where you installed JVoiceXML.
+Simply call
 
 \begin{lstlisting}
-sh JVOICEXML_HOME/bin/shutdown.sh
-\end{lstlisting}
-
-This will make an RMI call to the voice browser and asks it to shutdown.
-
-\subsection{Windows}
-
-The windows executable \texttt{Shutdown.exe} located in the \texttt{bin}
-folder of your JVoiceXML installation can be used to stop the browser.
-
-The executable is simply a wrapped Java call and should also work with a
-double-click in the windows explorer.
-
-From The command line prompt, call
-
-\begin{lstlisting}
-JVOICEXML_HOME\bin\Shutdown.exe
+cd JVOICEXML_HOME
+sh ./bin/jvxml-shutdown.sh
 \end{lstlisting}
 
 This will make an RMI call to the voice browser and asks it to shutdown.
