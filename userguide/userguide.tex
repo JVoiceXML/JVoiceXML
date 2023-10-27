@@ -25,7 +25,7 @@ linkcolor=black, colorlinks=black, colorlinks=true,
 
 \include{version}
 
-\title{JVoiceXML \jvxmlversion \\ User Guide}
+\title{JVoiceXML User Guide}
 \version{\jvxmlversion}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
@@ -413,6 +413,11 @@ following:
 2468 [JVoiceXmlMain] INFO  ...  - 1 instance(s) of type 'dummy'
 \end{lstlisting}
 
+If you want to disable a configuration, the recommended way is to create a
+subfolder in \texttt{JVOICEXML\_HOME/config} and move the unused configuration
+files there.
+
+
 JVoiceXML features a flexible and modular configuration concept. Each
 implementation platform can add custom libraries without the need to adapt the
 startup script. The following code snippet shows the configuration of the text
@@ -504,7 +509,30 @@ The voice browser can be used, if you see the message
 VoiceXML interpreter <version> (Revision <number>) started.
 \end{lstlisting}
 
-\subsection{Troubleshooting}
+\section{Shutdown of the Voice Browser}
+
+The \texttt{bin} folder also contains the files to stop the browser. 
+
+Please avoid to stop the browser using \lstinline{CTRL-C} or by closing the
+window. If you have JNDI configured JVoiceXML starts the \lstinline{rmiregistry}.
+The registry may not shutdown properly if you closed the voice browser this way
+and may keep the configured port active. This will result in some error messages
+if you restart JVoiceXML.
+
+The shell script \texttt{jvxml-stutdown.sh} located in the \texttt{bin} folder
+of your JVoiceXML installation can be used to stop the browser.
+
+This should be called from the directory where you installed JVoiceXML.
+Simply call
+
+\begin{lstlisting}
+cd JVOICEXML_HOME
+sh ./bin/jvxml-shutdown.sh
+\end{lstlisting}
+
+This will make an RMI call to the voice browser and asks it to shutdown.
+
+\section{Troubleshooting}
 
 JVoiceXML should run out of the box. However, it may happen that you discover
 problems at startup or while you work with the voice browser. Here the logging
@@ -535,66 +563,38 @@ document. I am always interested in improving the voice browser. This is
 easier if I know the problems with it. The preferred way is over issues in 
 GitHub~\url{https://github.com/JVoiceXML/JVoiceXML/issues}.
 
-\section{Shutdown of the Voice Browser}
-
-The \texttt{bin} folder also contains the files to stop the browser. 
-
-Please avoid to stop the browser using \lstinline{CTRL-C} or by closing the
-window. If you have JNDI configured JVoiceXML starts the \lstinline{rmiregistry}.
-The registry may not shutdown properly if you closed the voice browser this way
-and may keep the configured port active. This will result in some error messages
-if you restart JVoiceXML.
-
-The shell script \texttt{jvxml-stutdown.sh} located in the \texttt{bin} folder
-of your JVoiceXML installation can be used to stop the browser.
-
-This should be called from the directory where you installed JVoiceXML.
-Simply call
-
-\begin{lstlisting}
-cd JVOICEXML_HOME
-sh ./bin/jvxml-shutdown.sh
-\end{lstlisting}
-
-This will make an RMI call to the voice browser and asks it to shutdown.
-
 \section{Running the Demos}
 
 The browser comes with some demo programs. You'll find them in the
-directory \texttt{JVOICEXML\_HOME/demo}. Use the IDE of your choice
-and explore there contents. Some features of the browser can 
+directory \texttt{JVOICEXML\_HOME/demo}. Use the IDE of your choice or a text
+editor and explore there contents. Some features of the browser can 
 become more clear with them.
 
-The demos are designed to work with the JSAPI 2.0 implementation platform. Make
-sure that you have this configuration enabled before running the demos.
+Most of the demos are designed to work with the JSAPI 2.0 implementation
+platform. Make sure that you have this configuration enabled before running the
+demos.
 
-The demo programs feature an ANT script which can be used for starting.
-There may be some properties that need to be overwritten in the installed
-version. For this purpose there is a template \lstinline{ant.properties} of
-relevant properties in the folder \lstinline{JVOICEXML_HOME/demo/config-props}.
-To override these properties copy the file \texttt{ant.properties} to the
-folder \lstinline{JVOICEXML_HOME/demo/personal-props}. This way you are able
-to keep the original settings but also override custom values.
+The demo programs feature an Gradle script which can be used for starting.
+See also section~\ref{sec:required-software} before running the demos.
 
 In most cases it should be sufficient to change to each demo directory
-and call
+and call after JVoiceXML has been started
 
 \begin{lstlisting}
-ant run
+gradle run
 \end{lstlisting}
 
 The procedure described above will not work for the
-\emph{HelloWorldServletDemo}. In this case you have to add the location of
-\texttt{servlet-api.jar} to the \texttt{jvoicexml.properties} by adjusting the
-property \texttt{servlet.lib.dir}.
+\emph{HelloWorldServletDemo}.
 
-Before you can run this demo, call
+Before you can run this demo, create a war file from the project
+\texttt{org.jvoicexml.demo.helloworldservletdemo.servlet} via
 
 \begin{lstlisting}
-ant war
+gradle war
 \end{lstlisting}
 
-to create a war archive that must be deployed to you servlet container
+This war archive must be deployed to you servlet container
 before running the demo.
 
 The demos are also suitable to get you started with your own first tests.
