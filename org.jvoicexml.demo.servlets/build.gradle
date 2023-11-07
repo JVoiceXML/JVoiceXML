@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'checkstyle'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+checkstyle {
+    configFile file("${project(':org.jvoicexml').projectDir}/src/templates/jvoicexml-checks.xml")
+}
+
+dependencies {
+    if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
+        compile project(':org.jvoicexml.xml')
+    } else {
+        compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
+    }
+
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+}
+
+war {
+    from 'src/main/webapp'
+    baseName 'org.jvoicexml.demo.servlets'
+    version = JVOICEXML_VERSION
+
+    manifest {
+        attributes("Implementation-Title": "JVoiceXML Demo Servlets",
+                   'Implementation-Vendor': 'switch',
+                   'Implementation-Version': JVOICEXML_VERSION,
+                   'Built-By'       : System.properties['user.name'],
+                   'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                   'Created-By'     : "Gradle ${gradle.gradleVersion}",
+                   'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                   'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}")
+    }
+}
+
