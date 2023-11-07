@@ -256,15 +256,16 @@ public final class Mrcpv2SpokenInput
 
             lastUsedTimeout = speech.getTimeoutAsMsec();
             boolean hotword = false;
-            boolean attachGrammar = false;
+            boolean attachGrammar = true;
             GrammarImplementation<?> firstGrammar = 
                     activeGrammars.iterator().next(); 
             final URI uri = firstGrammar.getURI();
             final GrammarType type = firstGrammar.getMediaType();
-            LOGGER.info("Starting recognition with url: %s", uri.toString());
+            LOGGER.info("Starting recognition with url '" + uri.toString()
+                + "'");
             speechClient.setContentType(type.toString());
             speechClient.recognize(uri.toString(), hotword,
-                    attachGrammar, lastUsedTimeout);
+                    lastUsedTimeout);
         } catch (MrcpInvocationException e) {
             LOGGER.error("MRCPv2 invocation exception while initiating a "
                     + "recognition request", e);

@@ -32,6 +32,7 @@
     <Loggers>
         <Logger name="org.jvoicexml" level="debug" />
         <Logger name="org.speechforge.cairo" level="debug"/>
+        <Logger name="org.mrcp4j" level="debug" />
         <Logger name="org.eclipse.jetty" level="info"/>
         <Logger name="gov.nist" level="info"/>
         <Logger name="net.sourceforge.gjtapi" level="info"/>
