@@ -73,7 +73,7 @@ def getIP() {
 run {
     mainClassName = "org.jvoicexml.demo.helloworldservletdemo.HelloWorldDemo"
     classpath += files("${buildDir}/resources/main")
-    args 'http://localhost:8080/org.jvoicexml.demo.helloworldservletdemo.servlet/HelloWorld'
+    args 'http://localhost:8080/org.jvoicexml.demo.servlets/HelloWorld'
     jvmArgs = ["-Djvoicexml.config=${buildDir}/resources/main",
                "-Djava.security.manager",
                "-Djava.rmi.server.codebase=http://${getIP()}:9698/",
