@@ -3,7 +3,7 @@
 	<name>org.jvoicexml.demo.helloworldservletdemo.servlet</name>
 	<comment></comment>
 	<projects>
-		<project>org.jvoicexml</project>
+		<project>org.jvoicexml.client</project>
 		<project>org.jvoicexml.xml</project>
 	</projects>
 	<buildSpec>
