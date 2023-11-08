@@ -494,6 +494,18 @@ distributions {
                     filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
                 }
             }
+            into('demo/org.jvoicexml.demo.servlets') {
+                from(project(':org.jvoicexml.demo.servlets').projectDir) {
+                    exclude "**/build",
+                    "**/logging",
+                    "**/bin",
+                    "build.gradle"
+                }
+                from(project(':org.jvoicexml.demo.servlets').projectDir) {
+                    include "build.gradle"
+                    filter{ it.replaceAll('JVOICEXML_VERSION', "\'${JVOICEXML_VERSION}\'")}
+                }
+            }
             into('demo/org.jvoicexml.demo.simpleinputdemo') {
                 from(project(':org.jvoicexml.demo.simpleinputdemo').projectDir) {
                     exclude "**/build",

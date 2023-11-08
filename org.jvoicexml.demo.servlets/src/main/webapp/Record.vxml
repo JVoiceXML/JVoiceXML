@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    version="2.1" xml:lang="en-US"
+    xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <meta content="Dirk Schnelle-Walka" name="author" />
+    <meta content="2023 switch" name="copyright" />
+    <form>
+        <record maxtime="5s" name="msg">
+            <prompt>Please record a message</prompt>
+        </record>
+        <block>
+            <prompt>
+                Your message was
+                <audio expr="msg" />
+            </prompt>
+        </block>
+    </form>
+</vxml>

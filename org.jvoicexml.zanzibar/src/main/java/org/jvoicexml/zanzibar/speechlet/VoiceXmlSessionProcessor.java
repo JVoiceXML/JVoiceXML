@@ -94,7 +94,7 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
     public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
         _logger.debug("Recog result: "+r.getText());
         try {
-            _context.getSpeechClient().playBlocking(false,r.getText());
+            _context.getSpeechClient().playBlocking(r.getText());
         } catch (MrcpInvocationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -105,9 +105,6 @@ public class VoiceXmlSessionProcessor implements Runnable, SessionProcessor, Spe
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (NoMediaControlChannelException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-        } catch (InvalidSessionAddressException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
         }       

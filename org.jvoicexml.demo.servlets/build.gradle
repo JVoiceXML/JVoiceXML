@@ -17,10 +17,8 @@ checkstyle {
 
 dependencies {
     if (project.property('JVOICEXML_DEVELOPMENT_ENVIRONMENT') == 'true') {
-        compile project(':org.jvoicexml.client')
         compile project(':org.jvoicexml.xml')
     } else {
-        compile group: 'org.jvoicexml', name: 'org.jvoicexml.client', version: JVOICEXML_VERSION
         compile group: 'org.jvoicexml', name: 'org.jvoicexml.xml', version: JVOICEXML_VERSION
     }
 
@@ -28,12 +26,12 @@ dependencies {
 }
 
 war {
-    from 'WebContent'
-    baseName 'org.jvoicexml.demo.helloworldservletdemo.servlet'
+    from 'src/main/webapp'
+    baseName 'org.jvoicexml.demo.servlets'
     version = JVOICEXML_VERSION
 
     manifest {
-        attributes("Implementation-Title": "JVoiceXML Hello World Servlet",
+        attributes("Implementation-Title": "JVoiceXML Demo Servlets",
                    'Implementation-Vendor': 'switch',
                    'Implementation-Version': JVOICEXML_VERSION,
                    'Built-By'       : System.properties['user.name'],

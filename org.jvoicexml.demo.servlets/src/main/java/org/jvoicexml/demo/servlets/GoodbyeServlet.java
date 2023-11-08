@@ -18,8 +18,7 @@
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  */
-
-package org.jvoicexml.demo.helloworldservletdemo.servlet;
+package org.jvoicexml.demo.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,55 +30,38 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.Submit;
-import org.jvoicexml.xml.vxml.Var;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * Servlet that generates a 'hello world' VoiceXML document and calls the
- * <em>Goodbye</em> servlet.
+ * Servlet that generates a 'goodbye' VoiceXML document.
  *
  * @author Dirk Schnelle-Walka
- *
- * @see org.jvoicexml.demo.helloworldservletdemo.servlet.GoodbyeServlet
  */
-@WebServlet(displayName = "HelloWorld", 
-    description = "VoiceXML Hello World Demo", urlPatterns = "/HelloWorld")
-public final class HelloWorldServlet
+@WebServlet(displayName = "Goodbye", description = "VoiceXML Goodbye Demo",
+    urlPatterns = "/Goodbye")
+public final class GoodbyeServlet
         extends HttpServlet {
     /** The serial version UID. */
-    private static final long serialVersionUID = 8678456219150026410L;
-
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            LogManager.getLogger(HelloWorldServlet.class);
+    private static final long serialVersionUID = 657492536387249327L;
 
     /**
      * Construct a new object.
      */
-    public HelloWorldServlet() {
+    public GoodbyeServlet() {
     }
 
     /**
-     * Create a simple VoiceXML document containing the hello world phrase.
+     * Create a simple VoiceXML document containing the obtained message.
      *
-     * @param request
-     *        HttpServletRequest object that contains the request the client has
-     *        made of the servlet
-     * @param response
-     *        HttpServletResponse object that contains the response the servlet
-     *        sends to the client
+     * @param message
+     *        The message to prompt.
      * @return Created VoiceXML document, <code>null</code> if an error
      *         occurs.
      */
-    private VoiceXmlDocument createHelloWorld(final HttpServletRequest request,
-                                              final HttpServletResponse
-                                              response) {
+    private VoiceXmlDocument createResponse(final String message) {
         final VoiceXmlDocument document;
 
         try {
@@ -92,28 +74,15 @@ public final class HelloWorldServlet
 
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-
-        final Var var = form.appendChild(Var.class);
-        var.setName("message");
-        var.setExpr("'Goodbye!'");
-
         final Block block = form.appendChild(Block.class);
-        block.addText("Hello World!");
-
-        final StringBuffer url = request.getRequestURL();
-        final String path = request.getServletPath();
-        url.delete(url.length() - path.length() + 1, url.length());
-        url.append("Goodbye");
-
-        final Submit next = block.appendChild(Submit.class);
-        next.setNext(response.encodeURL(url.toString()));
-        next.setNamelist("message");
+        block.addText(message);
 
         return document;
     }
 
     /**
-     * Returns a hello world VoiceXML document.
+     * Retrieves a parameter from the hello world servlet and echoes
+     * this in a new VoiceXML document.
      *
      * @param request
      *        HttpServletRequest object that contains the request the client has
@@ -134,18 +103,15 @@ public final class HelloWorldServlet
             IOException {
         response.setContentType("text/xml");
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating hello world VoiceXML document...");
+        final String message;
+        if (request.getParameter("message") == null) {
+            message =  "Goodbye!";
+        } else {
+            message = request.getParameter("message");
         }
 
-        final VoiceXmlDocument document = createHelloWorld(request, response);
+        final VoiceXmlDocument document = createResponse(message);
         final String xml = document.toXml();
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("returning document");
-            LOGGER.debug(xml);
-        }
-
         final PrintWriter out = response.getWriter();
         out.println(xml);
     }

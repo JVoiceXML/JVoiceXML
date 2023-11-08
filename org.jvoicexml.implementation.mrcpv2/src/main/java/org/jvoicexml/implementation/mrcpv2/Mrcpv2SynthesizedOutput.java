@@ -22,7 +22,9 @@
 package org.jvoicexml.implementation.mrcpv2;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -227,7 +229,8 @@ public final class Mrcpv2SynthesizedOutput
             return;
         }
         LOGGER.info("queueing text '" + prompt + "'");
-        speechClient.queuePrompt(false, prompt);
+        speechClient.setContentType("text/plain");
+        speechClient.queuePrompt(prompt);
         synchronized (lock) {
             queueCount++;
             if (LOGGER.isDebugEnabled()) {
@@ -253,8 +256,11 @@ public final class Mrcpv2SynthesizedOutput
             throws MrcpInvocationException, IOException, InterruptedException,
                 NoMediaControlChannelException {
         final String src = audio.getSrc();
-        LOGGER.info("queueing URL '" + src + "'");
-        speechClient.queuePrompt(true, src);
+        final URL url = new URL(src);
+        LOGGER.info("queueing URL '" + url + "'");
+        final List<URL> urls = new java.util.ArrayList<URL>();
+        urls.add(url);
+        speechClient.queuePrompt(urls);
         synchronized (lock) {
             queueCount++;
             if (LOGGER.isDebugEnabled()) {
