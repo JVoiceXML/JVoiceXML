@@ -523,4 +523,12 @@ public interface DataModel {
      * @since 0.7.9
      */
     int copyValues(DataModel model) throws SemanticError;
+    
+    /**
+     * Generates a human readable form of the error code.
+     * @param errorCode the error code to convert
+     * @return human readable representation of the error code
+     * @since 0.7.9
+     */
+    String errorCodeToString(int errorCode);
 }

@@ -181,9 +181,17 @@ abstract class AbstractInputItem extends AbstractFormItem implements InputItem {
         // Create the variable
         final String name = getName();
         final Object expression = evaluateExpression(model);
-        model.createVariable(name, expression);
+        int rc = model.createVariable(name, expression);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error creating variable '" + name + "'"
+                    + model.errorCodeToString(rc));
+        }
         final String shadowVariableName = getShadowVarContainerName();
-        model.createVariable(shadowVariableName);
+        rc = model.createVariable(shadowVariableName);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error creating shadowvariable '" + shadowVariableName
+                    + "'" + model.errorCodeToString(rc));
+        }
         LOGGER.info("initialized input form item '" + name + "' with '"
                 + expression + "'");
 

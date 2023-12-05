@@ -358,7 +358,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         for (String name : parameters.keySet()) {
             final Object value = parameters.get(name);
             int rc = model.updateVariable(name, value);
-            if (rc != 0) {
+            if (rc != DataModel.NO_ERROR) {
                 throw new SemanticError("Parameter '" + name
                         + "' has not been defined!"); 
             }
@@ -819,7 +819,11 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             final DataModel model = context.getDataModel();
             for (InputItem input : justFilled) {
                 final String name = input.getName();
-                model.deleteVariable(name);
+                int rc = model.deleteVariable(name);
+                if (rc != DataModel.NO_ERROR) {
+                    LOGGER.warn("error deleting variable '" + name + "': "
+                            + model.errorCodeToString(rc));
+                }
             }
         }
     }

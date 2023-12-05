@@ -106,8 +106,12 @@ final class CatchEventStrategy extends AbstractEventStrategy {
         // event that was thrown.
         final DataModel model = context.getDataModel();
         final String name = event.getEventType();
-        model.createVariable("_event", name);
-
+        int rc = model.createVariable("_event", name);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error creating variable _event: "
+                    + model.errorCodeToString(rc));
+        }
+        
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
 
@@ -134,23 +138,66 @@ final class CatchEventStrategy extends AbstractEventStrategy {
         final VoiceXmlInterpreterContext context =
                 getVoiceXmlInterpreterContext();
         final DataModel model = context.getDataModel();
-        model.resizeArray("lastresult$", 1, Scope.APPLICATION);
+        int rc = model.resizeArray("lastresult$", 1, Scope.APPLICATION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error resizing array for lastresult$ : "
+                    + model.errorCodeToString(rc));
+        }
         final Object value = model.readArray("lastresult$", 0,
                 Scope.APPLICATION, Object.class);
-        model.createVariableFor(value, "confidence", result.getConfidence());
-        model.createVariableFor(value, "utterance", result.getUtterance());
-        model.createVariableFor(value, "inputmode", result.getMode().name());
-        model.createVariableFor(value, "interpretation",
+        rc = model.createVariableFor(value, "confidence",
+                result.getConfidence());
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$[0].confidence : "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.createVariableFor(value, "utterance", result.getUtterance());
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$[0].utterance : "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.createVariableFor(value, "inputmode", 
+                result.getMode().name());
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$[0].inputmode : "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.createVariableFor(value, "interpretation",
                 result.getSemanticInterpretation(model));
-        model.updateArray("lastresult$", 0, value, Scope.APPLICATION);
-        model.createVariable("lastresult$.interpretation",
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$[0].interpretation : "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.updateArray("lastresult$", 0, value, Scope.APPLICATION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error updating array for lastresult$ : "
+                    + model.errorCodeToString(rc));
+        }
+        
+        rc = model.createVariable("lastresult$.interpretation",
                 result.getSemanticInterpretation(model), Scope.APPLICATION);
-        model.createVariable("lastresult$.confidence", result.getConfidence(),
-                Scope.APPLICATION);
-        model.createVariable("lastresult$.utterance", result.getUtterance(),
-                Scope.APPLICATION);
-        model.createVariable("lastresult$.inputmode", result.getMode().name(),
-                Scope.APPLICATION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$.interpretation : "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.createVariable("lastresult$.confidence",
+                result.getConfidence(), Scope.APPLICATION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$.interpretation : "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.createVariable("lastresult$.utterance",
+                result.getUtterance(), Scope.APPLICATION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$.utterance : "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.createVariable("lastresult$.inputmode",
+                result.getMode().name(), Scope.APPLICATION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error lastresult$.inputmode : "
+                    + model.errorCodeToString(rc));
+        }
     }
     
 }

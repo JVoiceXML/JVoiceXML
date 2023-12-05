@@ -404,9 +404,18 @@ public class JVoiceXmlSession extends Thread
         final DataModel model = getDataModel();
         scopeObserver.enterScope(Scope.SESSION);
         final Connection connection = new Connection(info);
-        model.createVariable("session.connection", connection, Scope.SESSION);
-        model.createVariable("session.sessionid", identifier.getId(),
+        int rc = model.createVariable("session.connection", connection,
                 Scope.SESSION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error creating session.connection variable: "
+                    + model.errorCodeToString(rc));
+        }
+        rc = model.createVariable("session.sessionid", identifier.getId(),
+                Scope.SESSION);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error creating session.sessionid variable: "
+                    + model.errorCodeToString(rc));
+        }
         
         /// Let the connection info know about the connection status
         final EventBus eventbus = context.getEventBus();

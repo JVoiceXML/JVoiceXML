@@ -180,7 +180,11 @@ public final class InitialFormItem extends AbstractControlItem
         // Create the variable
         final String name = getName();
         final Object expression = evaluateExpression(model);
-        model.createVariable(name, expression);
+        int rc = model.createVariable(name, expression);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error creating variable '" + name + "': "
+                    + model.errorCodeToString(rc));
+        }
         LOGGER.info("initialized initial form item '" + name + "' with '"
                 + expression + "'");
 

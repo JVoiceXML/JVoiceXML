@@ -661,14 +661,16 @@ public class VoiceXmlInterpreterContext {
             int rc = model.resizeArray(loadedDocumentURIs, size,
                     Scope.APPLICATION);
             if (rc != DataModel.NO_ERROR) {
-                LOGGER.warn("unable to resize array for loaded URIs: " + rc);
+                LOGGER.warn("unable to resize array for loaded URIs: "
+                        + model.errorCodeToString(rc));
                 return;
             }
         } else {
             int rc = model.createArray(loadedDocumentURIs, size,
                     Scope.APPLICATION);
             if (rc != DataModel.NO_ERROR) {
-                LOGGER.warn("unable to create array for loaded URIs: " + rc);
+                LOGGER.warn("unable to create array for loaded URIs: " 
+                        + model.errorCodeToString(rc));
                 return;
             }
         }
@@ -678,7 +680,7 @@ public class VoiceXmlInterpreterContext {
                     Scope.APPLICATION);
             if (rc != DataModel.NO_ERROR) {
                 LOGGER.warn("unable to update array for loaded URIs at " + i
-                        + ": " + rc);
+                        + ": " + model.errorCodeToString(rc));
                 return;
             }
         }

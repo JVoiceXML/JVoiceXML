@@ -134,10 +134,15 @@ public final class BlockFormItem extends AbstractControlItem {
         BadFetchError {
         final String name = getName();
         final Object expression = evaluateExpression(model);
+        int rc;
         if (expression == null) {
-            model.createVariable(name);
+            rc = model.createVariable(name);
         } else {
-            model.createVariable(name, expression);
+            rc = model.createVariable(name, expression);
+        }
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error creating variable '" + name + "'"
+                    + model.errorCodeToString(rc));
         }
         LOGGER.info("initialized block form item '" + name + "' with '"
                 + expression + "'");

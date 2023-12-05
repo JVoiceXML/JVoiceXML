@@ -126,7 +126,11 @@ public final class FieldFormItem extends AbstractGrammarContainer {
         final DataModel model = context.getDataModel();
         final String shadowVariableName = getShadowVarContainerName();
         final LastResult lastresult = toLastResult(model, result);
-        model.updateVariable(shadowVariableName, lastresult);
+        int rc = model.updateVariable(shadowVariableName, lastresult);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error updating shadow variable " + shadowVariableName
+                    + model.errorCodeToString(rc));
+        }
 
         // Check for semantic interpretation
         final Object interpretation = result.getSemanticInterpretation(model);

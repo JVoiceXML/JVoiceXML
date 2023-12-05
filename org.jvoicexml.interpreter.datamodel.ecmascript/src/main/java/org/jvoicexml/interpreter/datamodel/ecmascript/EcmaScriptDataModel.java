@@ -30,6 +30,7 @@ import javax.activation.MimeType;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.datamodel.AbstractDataModel;
 import org.jvoicexml.interpreter.datamodel.DataModel;
 import org.jvoicexml.interpreter.datamodel.DataModelObjectDeserializer;
 import org.jvoicexml.interpreter.datamodel.DataModelObjectSerializer;
@@ -53,7 +54,7 @@ import org.mozilla.javascript.ScriptableObject;
  * @author Dirk Schnelle-Walka
  * @since 0.7.7
  */
-public class EcmaScriptDataModel implements DataModel {
+public class EcmaScriptDataModel extends AbstractDataModel {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(EcmaScriptDataModel.class);

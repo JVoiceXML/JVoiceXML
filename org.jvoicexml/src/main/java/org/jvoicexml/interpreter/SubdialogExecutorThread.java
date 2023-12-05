@@ -107,6 +107,7 @@ final class SubdialogExecutorThread extends Thread {
         try {
             // We need to copy the values here to ensure that the contexts are
             // associated with this thread.
+            model.createScope(Scope.APPLICATION);
             sourceModel.copyValues(model);
             model.createScope(Scope.DIALOG);
             final DocumentDescriptor descriptor = new DocumentDescriptor(uri,
