@@ -27,6 +27,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.grammar.GrammarParser;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.speechforge.cairo.client.SessionManager;
 
 /**
@@ -44,7 +45,7 @@ public final class Mrcpv2SpokenInputFactory
     private int instances;
 
     /** The configured grammar parser. */
-    private List<GrammarParser<?>> parsers;
+    private List<GrammarType> grammarTypes;
 
     /** Number of instances created. */
     private int currentInstance;
@@ -71,7 +72,7 @@ public final class Mrcpv2SpokenInputFactory
     public SpokenInput createResource() throws NoresourceError {
         final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
         input.setSessionManager(sessionManager);
-        input.setGrammarParsers(parsers);
+        input.setGrammarTypes(grammarTypes);
 
         return input;
     }
@@ -154,7 +155,11 @@ public final class Mrcpv2SpokenInputFactory
         sessionManager = manager;
     }
 
-    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
-        parsers = grammarParsers;
+    /**
+     * Sets the grammar types that are supported by this factory.
+     * @param types the grammar types to set
+     */
+    public void setGrammarTypes(final List<GrammarType> types) {
+        grammarTypes = types;
     }
 }

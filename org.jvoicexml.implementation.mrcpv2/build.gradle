@@ -29,6 +29,7 @@ version = JVOICEXML_VERSION
 
 configurations {
     jvxmlConfiguration
+    all*.exclude module: 'junit:junit:3.8.1'
 }
 
 def jvxmlConfigurationDir = "${projectDir}/src/main/config"
