@@ -40,10 +40,12 @@ import org.speechforge.cairo.sip.SipSession;
  *  applicationType|applicationName. (for example vxml:HelloWorld or basic:Parrot)
  * 
  * @author Spencer Lord {@literal <}<a href="mailto:salord@users.sourceforge.net">salord@users.sourceforge.net</a>{@literal >}
+ * @author Dirk Schnelle-Walka
  */
 public class ApplicationBySipHeaderService implements SpeechletService {
-    
-    private static Logger _logger = Logger.getLogger(ApplicationBySipHeaderService.class);
+    /** Logger for this class. */
+    private static final Logger LOGGER = 
+	    Logger.getLogger(ApplicationBySipHeaderService.class);
     
     //contains the active Dialogs   (TODO: Maybe should rename Dialog to Speech Applications or Speech Sessions)
     private  Map<String, SessionProcessor> dialogs;
@@ -140,12 +142,12 @@ public class ApplicationBySipHeaderService implements SpeechletService {
             throw new Exception("No Application Specified");
 
         String app[] = aname.trim().split("\\|");
-        _logger.debug("Starting ne dialog, app name: "+aname);
+        LOGGER.debug("Starting ne dialog, app name: "+aname);
         SessionProcessor dialog = null;
         if (app[0].equals("vxml")) {
             dialog = new VoiceXmlSessionProcessor(jvxml);
         } else if (app[0].equals("beanId")) {
-            // Create an instance of the Speech application/Session  usinh the application name to lookup beanId
+            // Create an instance of the Speech application/Session  using the application name to lookup beanId
             dialog = (SessionProcessor) SpeechletServerMain.context.getBean(app[1]);
         } else if (app[0].equals("classname")) {
             //TODO: catch no class found exception
@@ -162,7 +164,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
         //turn on or off the instrumentation for this dialog
         dialog.setInstrumentation(instrumentation);
         
-        _logger.info("Starting a new "+context.getPBXSession().getApplicationName()+" speechlet with session id = "+ context.getPBXSession().getId());
+        LOGGER.info("Starting a new "+context.getPBXSession().getApplicationName()+" speechlet with session id = "+ context.getPBXSession().getId());
         dialog.startup(context, app[1]);
         addDialog(dialog);
         return dialog;
@@ -172,7 +174,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
      * @see com.speechdynamix.mrcp.client.DialogService#StopDialog(org.speechforge.cairo.util.sip.SipSession)
      */
     public void stopDialog(SipSession session) throws SipException {
-        _logger.info("Stopping a "+session.getApplicationName()+ " speechlet with session id = "+ session.getId());
+        LOGGER.info("Stopping a "+session.getApplicationName()+ " speechlet with session id = "+ session.getId());
         SessionProcessor d = getDialog(session.getId());
         d.stop();
         removeDialog(d);
@@ -206,7 +208,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
             dialogs.put(dialog.getId(), dialog);
         } else {
             // TODO: invalid session
-            _logger.info("Can not add to session queue.  Invalid session.  No dialog.");
+            LOGGER.info("Can not add to session queue.  Invalid session.  No dialog.");
         }
     }
 
@@ -223,7 +225,7 @@ public class ApplicationBySipHeaderService implements SpeechletService {
             dialogs.remove(dialog.getId());           
         } else {
             // TODO: invalid session
-            _logger.info("Can not remove from session queue.  Invalid session.  No dialog.");
+            LOGGER.info("Can not remove from session queue.  Invalid session.  No dialog.");
         }
     }
 

@@ -117,10 +117,24 @@ public class SipServer implements SessionListener {
     private final Map<ClientTransaction, SessionPair> waitingList;
     private Set<String> calleeRegistry = new HashSet<String>();
 
+    /**
+     * Creates a new SIP server.
+     * 
+     * @throws SipException if the SIP stack could not be initialized
+     */
     public SipServer() throws SipException {
         waitingList = new HashMap<ClientTransaction, SessionPair>();
     }
 
+    /**
+     * Creates a new SIP server.
+     * 
+     * @param mySipAddress the SIP address of this server
+     * @param stackName    the name of the SIP stack
+     * @param port         the port to listen on
+     * @param transport    the transport protocol to use
+     * @throws SipException if the SIP stack could not be initialized
+     */
     public SipServer(String mySipAddress, String stackName, int port,
             String transport) throws SipException {
         this.mySipAddress = mySipAddress;
