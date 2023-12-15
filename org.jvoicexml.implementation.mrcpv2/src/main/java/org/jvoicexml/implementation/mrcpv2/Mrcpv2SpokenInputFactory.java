@@ -47,12 +47,6 @@ public final class Mrcpv2SpokenInputFactory
     /** The configured grammar parser. */
     private List<GrammarType> grammarTypes;
 
-    /** Number of instances created. */
-    private int currentInstance;
-
-    /** Base port number. */
-    private int basePort;
-
     /** The type of resource that this factory will create. */
     private final String type;
 
@@ -106,36 +100,6 @@ public final class Mrcpv2SpokenInputFactory
      */
     public Class<SpokenInput> getResourceType() {
         return SpokenInput.class;
-    }
-
-    /**
-     * @return the currentInstance
-     */
-    public int getCurrentInstance() {
-        return currentInstance;
-    }
-
-    /**
-     * @param num
-     *            the currentInstance to set
-     */
-    public void setCurrentIntance(final int num) {
-        currentInstance = num;
-    }
-
-    /**
-     * @return the basePort
-     */
-    public int getBasePort() {
-        return basePort;
-    }
-
-    /**
-     * @param port
-     *            the basePort to set
-     */
-    public void setBasePort(final int port) {
-        basePort = port;
     }
 
     /**

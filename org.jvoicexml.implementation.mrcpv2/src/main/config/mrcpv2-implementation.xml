@@ -18,10 +18,18 @@
 
   <beans:bean class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SpokenInputFactory">
       <beans:property name="instances" value="1" />
-      <beans:property name="basePort" value="42346" />
-      <property name="grammarParsers">
+      <property name="grammarTypes">
       <list>
-          <bean class="org.jvoicexml.srgs.SrgsSisrXmlGrammarParser" />
+          <bean class="org.jvoicexml.xml.srgs.GrammarType">
+              <constructor-arg value="application" />
+              <constructor-arg value="srgs+xml" />
+              <constructor-arg value="true" />
+           </bean>
+          <bean class="org.jvoicexml.xml.srgs.GrammarType">
+              <constructor-arg value="application" />
+              <constructor-arg value="x-jsgf" />
+              <constructor-arg value="false" />
+           </bean>
       </list>    
      </property>
   </beans:bean>

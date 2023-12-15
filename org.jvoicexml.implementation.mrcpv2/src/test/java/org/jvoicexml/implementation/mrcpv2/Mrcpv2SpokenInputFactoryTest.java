@@ -25,7 +25,6 @@ public class Mrcpv2SpokenInputFactoryTest {
     public void testCreateResource() throws NoresourceError {
         final Mrcpv2SpokenInputFactory factory = new Mrcpv2SpokenInputFactory();
         factory.setInstances(1);
-        factory.setBasePort(10000);
         factory.setSessionManager(new SessionManager());
         final List<GrammarType> grammarTypes = 
                 new java.util.ArrayList<GrammarType>();
@@ -37,5 +36,4 @@ public class Mrcpv2SpokenInputFactoryTest {
         Assert.assertNotNull(input);
         Assert.assertEquals(grammarTypes, input.getSupportedGrammarTypes());
     }
-
 }
