@@ -27,6 +27,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.grammar.GrammarParser;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.speechforge.cairo.client.SessionManager;
 
 /**
@@ -44,13 +45,7 @@ public final class Mrcpv2SpokenInputFactory
     private int instances;
 
     /** The configured grammar parser. */
-    private List<GrammarParser<?>> parsers;
-
-    /** Number of instances created. */
-    private int currentInstance;
-
-    /** Base port number. */
-    private int basePort;
+    private List<GrammarType> grammarTypes;
 
     /** The type of resource that this factory will create. */
     private final String type;
@@ -71,7 +66,7 @@ public final class Mrcpv2SpokenInputFactory
     public SpokenInput createResource() throws NoresourceError {
         final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
         input.setSessionManager(sessionManager);
-        input.setGrammarParsers(parsers);
+        input.setGrammarTypes(grammarTypes);
 
         return input;
     }
@@ -108,36 +103,6 @@ public final class Mrcpv2SpokenInputFactory
     }
 
     /**
-     * @return the currentInstance
-     */
-    public int getCurrentInstance() {
-        return currentInstance;
-    }
-
-    /**
-     * @param num
-     *            the currentInstance to set
-     */
-    public void setCurrentIntance(final int num) {
-        currentInstance = num;
-    }
-
-    /**
-     * @return the basePort
-     */
-    public int getBasePort() {
-        return basePort;
-    }
-
-    /**
-     * @param port
-     *            the basePort to set
-     */
-    public void setBasePort(final int port) {
-        basePort = port;
-    }
-
-    /**
      * @return the sipService
      */
     public SessionManager getSessionManager() {
@@ -154,7 +119,11 @@ public final class Mrcpv2SpokenInputFactory
         sessionManager = manager;
     }
 
-    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
-        parsers = grammarParsers;
+    /**
+     * Sets the grammar types that are supported by this factory.
+     * @param types the grammar types to set
+     */
+    public void setGrammarTypes(final List<GrammarType> types) {
+        grammarTypes = types;
     }
 }

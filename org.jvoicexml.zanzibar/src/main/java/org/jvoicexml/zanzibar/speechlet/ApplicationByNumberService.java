@@ -43,11 +43,13 @@ import gov.nist.javax.sip.header.To;
  * An Speech Application Container that creates applications using name in the TO header (the number called) prepended by an underscore.
  * 
  * @author Spencer Lord {@literal <}<a href="mailto:salord@users.sourceforge.net">salord@users.sourceforge.net</a>{@literal >}
+ * @author Dirk Schnelle-Walka
  */
 public class ApplicationByNumberService implements SpeechletService {
     
-    /** The _logger. */
-    private static Logger _logger = Logger.getLogger(ApplicationByNumberService.class);
+    /** Logger for this class. */
+    private static Logger LOGGER = 
+	    Logger.getLogger(ApplicationByNumberService.class);
     
     //contains the active Dialogs   (TODO: Maybe should rename Dialog to Speech Applications or Speech Sessions)
     /** The dialogs. */
@@ -131,11 +133,11 @@ public class ApplicationByNumberService implements SpeechletService {
         if (uri.isSipURI()) {
             aname = ((SipURI) uri).getUser();
         } else {
-            _logger.warn("Unhandled URI type in SIP TO header ");
+            LOGGER.warn("Unhandled URI type in SIP TO header ");
         }
 
         
-        _logger.debug("session id:" +session.getId());
+        LOGGER.debug("session id:" +session.getId());
         //_logger.debug("session id.forward:" +session.getForward().getId());
         if (aname == null) 
             throw new Exception("No Application Specified");
@@ -160,10 +162,10 @@ public class ApplicationByNumberService implements SpeechletService {
      * @see com.speechdynamix.mrcp.client.DialogService#StopDialog(org.speechforge.cairo.util.sip.SipSession)
      */
     public void stopDialog(SipSession session) throws SipException {
-        _logger.info("Stoping Session: "+session.getId());
+        LOGGER.info("Stoping Session: "+session.getId());
         SessionProcessor d = getDialog(session.getId());
         if (d == null) {
-            _logger.warn("stopping a dialog -- but not in the list");
+            LOGGER.warn("stopping a dialog -- but not in the list");
         } else {
            d.stop();
            removeDialog(d);
@@ -177,12 +179,12 @@ public class ApplicationByNumberService implements SpeechletService {
      * @param dialog the dialog
      */
     private synchronized void addDialog(SessionProcessor dialog) {
-        _logger.debug("adding Dialog with sessionid: "+dialog.getId());
+        LOGGER.debug("adding Dialog with sessionid: "+dialog.getId());
         if (dialog.getSession() != null) {
             dialogs.put(dialog.getId(), dialog);
         } else {
             // TODO: invalid session
-            _logger.info("Can not add to session queue.  Invalid session.  No dialog.");
+            LOGGER.info("Can not add to session queue.  Invalid session.  No dialog.");
         }
     }
 
@@ -199,7 +201,7 @@ public class ApplicationByNumberService implements SpeechletService {
             SessionProcessor d = dialogs.remove(dialog.getId());
         } else {
             // TODO: invalid session
-            _logger.info("Can not remove from session queue.  Invalid session.  No dialog.");
+            LOGGER.info("Can not remove from session queue.  Invalid session.  No dialog.");
         }
     }
 
@@ -216,7 +218,7 @@ public class ApplicationByNumberService implements SpeechletService {
     }
 
     public void dtmf(SipSession session, char code) {
-        _logger.debug("Dialog Sevice got a dtmf signal, code= "+code);
+        LOGGER.debug("Dialog Sevice got a dtmf signal, code= "+code);
 
         
         //get the session Processor

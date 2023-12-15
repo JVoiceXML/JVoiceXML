@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -81,8 +80,8 @@ public final class Mrcpv2SpokenInput
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listeners;
 
-    /** The grammar parser to use. */
-    private final Map<String, GrammarParser<?>> parsers;
+    /** Supported grammar types. */
+    private final Collection<GrammarType> grammarTypes;
 
     // TODO Handle load and activate grammars properly on the server. At
     // present the mrcpv2 server does not support it. So just saving the grammar
@@ -109,7 +108,7 @@ public final class Mrcpv2SpokenInput
     public Mrcpv2SpokenInput() {
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         listeners = new java.util.ArrayList<SpokenInputListener>();
-        parsers = new java.util.HashMap<String, GrammarParser<?>>();
+        grammarTypes = new java.util.ArrayList<GrammarType>();
         lastUsedTimeout = SpeechRecognizerProperties.DEFAULT_NO_INPUT_TIMEOUT;
     }
 
@@ -124,21 +123,14 @@ public final class Mrcpv2SpokenInput
     }
 
     /**
-     * Set the grammar parsers to use.
+     * Sets the grammar types that are supported by this spoken input instance.
      * 
-     * @param grammarParsers
-     *            the grammar parsers to use
+     * @param types
+     *            the supported grammar types.
      * @since 0.7.8
      */
-    public void setGrammarParsers(final List<GrammarParser<?>> grammarParsers) {
-        for (GrammarParser<?> parser : grammarParsers) {
-            final GrammarType type = parser.getType();
-            parsers.put(type.toString(), parser);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("added parser '" + parser + "' for grammar type '"
-                        + type + "'");
-            }
-        }
+    public void setGrammarTypes(final Collection<GrammarType> types) {
+        grammarTypes.addAll(types);
     }
 
     /**
@@ -196,11 +188,11 @@ public final class Mrcpv2SpokenInput
     public GrammarImplementation<?> loadGrammar(final URI uri,
             final GrammarType type)
             throws NoresourceError, UnsupportedFormatError, IOException {
-        final GrammarParser<?> parser = parsers.get(type.toString());
-        if (parser == null) {
+        if (!grammarTypes.contains(type)) {
             throw new UnsupportedFormatError("'" + type + "' is not supported");
         }
-        return parser.load(uri);
+        return new Mrcpv2GrammarImplementation<Object>(uri, type,
+                ModeType.VOICE);
     }
 
     /**
@@ -256,7 +248,6 @@ public final class Mrcpv2SpokenInput
 
             lastUsedTimeout = speech.getTimeoutAsMsec();
             boolean hotword = false;
-            boolean attachGrammar = true;
             GrammarImplementation<?> firstGrammar = 
                     activeGrammars.iterator().next(); 
             final URI uri = firstGrammar.getURI();
@@ -298,7 +289,9 @@ public final class Mrcpv2SpokenInput
 
         final SpokenInputEvent event = new RecognitionStartedEvent(this, null);
         fireInputEvent(event);
-        LOGGER.debug("recognition started");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("recognition started");
+        }
     }
 
     /**
@@ -323,7 +316,9 @@ public final class Mrcpv2SpokenInput
             LOGGER.warn("No Media Control Channel Exception while stopping "
                     + "recognition." + e.getLocalizedMessage());
         }
-        LOGGER.debug("recognition stopped");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("recognition stopped");
+        }
     }
 
     /**
@@ -368,7 +363,8 @@ public final class Mrcpv2SpokenInput
             speechClient = null;
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
-                        "Disconnected the spoken input mrcpv2 client form the server");
+                        "Disconnected the spoken input mrcpv2 client form"
+                                + " the server");
             }
             return;
         }
@@ -395,12 +391,7 @@ public final class Mrcpv2SpokenInput
      */
     @Override
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        Collection<GrammarType> supportedTypes =
-                new java.util.HashSet<GrammarType>();
-        for (GrammarParser<?> parser : parsers.values()) {
-            supportedTypes.add(parser.getType());
-        }
-        return supportedTypes;
+        return grammarTypes;
     }
 
     /**
