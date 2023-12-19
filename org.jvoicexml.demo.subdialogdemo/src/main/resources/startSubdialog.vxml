@@ -3,8 +3,10 @@
       version="2.1" xml:lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
     <form id="start_subdialog">
+        <var name="handedover" />
         <block>
             <prompt>Hello from the subdialog!</prompt>
+            <prompt>You called the subdialog with <value expr="handedover" /></prompt>
             <return/>
         </block>
     </form>

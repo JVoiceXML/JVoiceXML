@@ -84,6 +84,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.vxml.Param;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -293,7 +294,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         final DataModel model = context.getDataModel();
         final Collection<XmlNode> children = dialog.getChildNodes();
         initializeNodes(model, children);
-        if (parameters != null) {
+        if ((parameters != null) && !parameters.isEmpty()) {
             updateParameters(parameters, model);
         }
 

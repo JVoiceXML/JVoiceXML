@@ -46,6 +46,7 @@ import org.jvoicexml.xml.vxml.Elseif;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
+import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Help;
 import org.jvoicexml.xml.vxml.If;
 import org.jvoicexml.xml.vxml.Menu;
@@ -678,5 +679,28 @@ public final class TestExecutableMenuForm {
                 Assert.fail("unknown tag: '" + tag + "'");
             }
         }
+    }
+
+    /**
+     * Testcase for {@link ExecutalePlainForm#getChildNodes()}.
+     * @throws Exception test failed
+     * @throws BadFetchError test failed
+     */
+    @Test
+    public void testGetChildNodes() throws Exception, BadFetchError {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Menu menu = vxml.appendChild(Menu.class);
+        final Noinput noinput = menu.appendChild(Noinput.class);
+        final Help help = menu.appendChild(Help.class);
+        final Catch catchNode = menu.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final ExecutableMenuForm dialog = new ExecutableMenuForm();
+        dialog.setNode(menu);
+        dialog.setChoiceConverter(new SrgsXmlChoiceConverter());
+        extractField(dialog);
+        final Collection<XmlNode> elements = dialog.getChildNodes();
+        Assert.assertEquals(4, elements.size());
     }
 }
