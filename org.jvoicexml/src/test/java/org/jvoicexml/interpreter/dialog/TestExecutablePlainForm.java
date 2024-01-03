@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Catch;
 import org.jvoicexml.xml.vxml.Filled;
@@ -106,5 +107,26 @@ public class TestExecutablePlainForm {
                 Assert.fail("unknown tag: '" + tag + "'");
             }
         }
+    }
+
+    /**
+     * Testcase for {@link ExecutalePlainForm#getChildNodes()}.
+     * @throws Exception test failed
+     */
+    @Test
+    public void testGetChildNodes() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        form.appendChild(Filled.class);
+        final Noinput noinput = form.appendChild(Noinput.class);
+        final Help help = form.appendChild(Help.class);
+        final Catch catchNode = form.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final ExecutablePlainForm dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
+        final Collection<XmlNode> elements = dialog.getChildNodes();
+        Assert.assertEquals(4, elements.size());
     }
 }

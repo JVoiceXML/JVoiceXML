@@ -91,6 +91,7 @@ public final class ExecutablePlainForm
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<XmlNode> getChildNodes() {
         return form.getChildren();
     }
@@ -102,7 +103,6 @@ public final class ExecutablePlainForm
             final VoiceXmlInterpreterContext context) throws BadFetchError {
         if (items == null) {
             items = new java.util.ArrayList<FormItem>();
-
             final NodeList children = form.getChildNodes();
             for (int i = 0; i < children.getLength(); i++) {
                 final VoiceXmlNode node = (VoiceXmlNode) children.item(i);

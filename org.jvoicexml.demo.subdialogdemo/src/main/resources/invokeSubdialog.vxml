@@ -3,8 +3,11 @@
       version="2.1" xml:lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
     <form id="invoke_subdialog">
-        <subdialog name="my_subdialog" src="startSubdialog.vxml"/>
+        <subdialog name="my_subdialog" src="startSubdialog.vxml">
+            <param name="handedover" expr="'value from invoker'"/>
+        </subdialog>
         <block>
+            <prompt>The subdialog returned <value expr="my_subdialog.subdialogreturn" /></prompt>
             <submit next="afterSubdialog.vxml"/>
         </block>
     </form>

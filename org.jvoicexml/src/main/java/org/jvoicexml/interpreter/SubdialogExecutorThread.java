@@ -144,6 +144,7 @@ final class SubdialogExecutorThread extends Thread {
             }
             unregisterReturnEventHandler(handler);
             model.deleteScope(Scope.DIALOG);
+            model.deleteScope(Scope.APPLICATION);
         }
     }
 
