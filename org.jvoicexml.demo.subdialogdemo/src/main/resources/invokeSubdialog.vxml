@@ -7,6 +7,7 @@
             <param name="handedover" expr="'value from invoker'"/>
         </subdialog>
         <block>
+            <prompt>The subdialog returned <value expr="my_subdialog.subdialogreturn" /></prompt>
             <submit next="afterSubdialog.vxml"/>
         </block>
     </form>

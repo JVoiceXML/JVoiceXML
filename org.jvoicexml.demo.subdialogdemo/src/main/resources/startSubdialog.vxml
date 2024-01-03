@@ -4,10 +4,11 @@
       xsi:schemaLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
     <form id="start_subdialog">
         <var name="handedover" />
+        <var name="subdialogreturn" expr="'value from the subdialog'" />
         <block>
             <prompt>Hello from the subdialog!</prompt>
             <prompt>You called the subdialog with <value expr="handedover" /></prompt>
-            <return/>
+            <return namelist="subdialogreturn"/>
         </block>
     </form>
 </vxml>
