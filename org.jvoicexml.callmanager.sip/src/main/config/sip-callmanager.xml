@@ -33,6 +33,8 @@
                     value="http://localhost:8080/org.jvoicexml.demo.servlets/HelloWorld"/>
                 <beans:entry key="input" 
                     value="http://localhost:8080/org.jvoicexml.demo.servlets/Input.vxml"/>
+                <beans:entry key="dtmfinput" 
+                    value="http://localhost:8080/org.jvoicexml.demo.servlets/DTMFInput.vxml"/>
                 <beans:entry key="record" 
                     value="http://localhost:8080/org.jvoicexml.demo.servlets/Record.vxml"/>
             </beans:map>
