@@ -456,7 +456,7 @@ public class VoiceXmlInterpreterContext {
                 } else {
                     dialog = null;
                 }
-                descriptor = interpret(document, dialog, null);
+                descriptor = interpret(document, dialog, null, false);
                 if (descriptor == null) {
                     document = null;
                 } else {
@@ -552,7 +552,7 @@ public class VoiceXmlInterpreterContext {
                 } else {
                     dialog = null;
                 }
-                descriptor = interpret(document, dialog, parameters);
+                descriptor = interpret(document, dialog, parameters, true);
                 if (descriptor == null) {
                     document = null;
                 } else {
@@ -769,13 +769,16 @@ public class VoiceXmlInterpreterContext {
      *            the dialog where to start interpretation
      * @param parameters
      *            passed parameters when executing this dialog
+     * @param isSubdialog
+     *          <code>true</code> if this is a subdialog
      * @return Descriptor of the next document to process or <code>null</code>
      *         if there is no next document.
      * @exception JVoiceXMLEvent
      *                Error or event processing the document.
      */
     private DocumentDescriptor interpret(final VoiceXmlDocument document,
-            final String startDialog, final Map<String, Object> parameters)
+            final String startDialog, final Map<String, Object> parameters,
+            final boolean isSubdialog)
                     throws JVoiceXMLEvent {
         interpreter = new VoiceXmlInterpreter(this);
         try {
@@ -797,7 +800,7 @@ public class VoiceXmlInterpreterContext {
         while (dialog != null) {
             try {
                 enterScope(Scope.DIALOG);
-                interpreter.process(dialog, parameters);
+                interpreter.process(dialog, parameters, isSubdialog);
                 dialog = interpreter.getNextDialog();
             } catch (GotoNextFormEvent e) {
                 final String id = e.getForm();

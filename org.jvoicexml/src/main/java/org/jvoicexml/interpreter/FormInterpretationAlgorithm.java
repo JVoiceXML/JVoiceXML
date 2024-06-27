@@ -84,7 +84,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.vxml.Param;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -195,6 +194,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
     /** The call properties to use with the next input or output. */
     private CallControlProperties callProperties;
     
+    /** {@code true} if the dialog is a subdialog. */
+    private boolean processingSubdialog;
+
     /**
      * Construct a new FIA object.
      *
@@ -264,11 +266,15 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
      *            the profile
      * @param parameters
      *            passed parameters when executing this dialog
+     * @param isSubdialog
+     *          <code>true</code> if this is a subdialog
      * @throws JVoiceXMLEvent
      *             Error initializing the {@link FormItem}s.
      */
     public void initialize(final Profile prof,
-            final Map<String, Object> parameters) throws JVoiceXMLEvent {
+            final Map<String, Object> parameters, final boolean isSubdialog)
+                    throws JVoiceXMLEvent {
+        processingSubdialog = isSubdialog;
         profile = prof;
         if (profile == null) {
             throw new BadFetchError("No profile given."
@@ -508,8 +514,13 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                             + "'...");
                 } catch (ConnectionDisconnectEvent | CancelEvent
                         | ExitEvent e) {
+                    if (processingSubdialog) {
+                        LOGGER.info("forwarding event to parent dialog '" 
+                                + e.getEventType() + "'");
+                        throw e;
+                    }
                     // Similar to the catch below but terminating processing
-                    LOGGER.debug("caught hangup event while processing '"
+                    LOGGER.info("caught hangup event while processing '"
                             + e.getEventType() + "'");
                     final EventBus eventbus = context.getEventBus();
                     eventbus.publish(e);
@@ -528,6 +539,12 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                         gotoFormItemName = ie.getItem();
                         LOGGER.info("going to form item '" + gotoFormItemName
                                 + "'...");
+                    } catch (JVoiceXMLEvent event) {
+                        if (processingSubdialog) {
+                            LOGGER.info("forwarding event to parent dialog '" 
+                                    + event.getEventType() + "'");
+                            throw event;
+                        }
                     } finally {
                         final EventHandler handler = context.getEventHandler();
                         handler.clean(item);
@@ -776,6 +793,9 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
             // Check if something bad happened in the collect phase
             event = handler.checkEvent();
             if (event != null) {
+                if (isInputItem) {
+                    markInputItemVisited(formItem, event);
+                }
                 throw event;
             }
         }
@@ -785,12 +805,7 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                 .getImplementationPlatform();
         final boolean hasUserInput = platform.isUserInputActive();
         if (hasUserInput) {
-            final UserInput userInput = platform.getUserInput();
-            final ActiveGrammarSet activeGrammars =
-                    context.getActiveGrammarSet();
-            final Collection<ModeType> types =
-                    activeGrammars.getModeTypes();
-            userInput.stopRecognition(types);
+            stopRecognition(platform);
         }
         final CallControl call = platform.getCallControl();
         if (call != null) {
@@ -817,15 +832,57 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
         if (reprompt) {
             LOGGER.info("reprompt: clearing all just filled elements");
             // Clear all just-filled attributes
-            final DataModel model = context.getDataModel();
-            for (InputItem input : justFilled) {
-                final String name = input.getName();
-                int rc = model.deleteVariable(name);
-                if (rc != DataModel.NO_ERROR) {
-                    LOGGER.warn("error deleting variable '" + name + "': "
-                            + model.errorCodeToString(rc));
-                }
+            clearAllJustFilledAttributes();
+        }
+    }
+
+    /**
+     * Clears all just filled attributes.
+     */
+    private void clearAllJustFilledAttributes() {
+        final DataModel model = context.getDataModel();
+        for (InputItem input : justFilled) {
+            final String name = input.getName();
+            int rc = model.deleteVariable(name);
+            if (rc != DataModel.NO_ERROR) {
+                LOGGER.warn("error deleting variable '" + name + "': "
+                        + model.errorCodeToString(rc));
             }
+        }
+    }
+
+    /**
+     * Stops the recognition of the current input items.
+     * @param platform the  implementation platform
+     * @throws NoresourceError
+     *          the resource could not be obtained
+     * @throws ConnectionDisconnectHangupEvent
+     *          the user hung up
+     */
+    private void stopRecognition(final ImplementationPlatform platform)
+            throws NoresourceError, ConnectionDisconnectHangupEvent {
+        final UserInput userInput = platform.getUserInput();
+        final ActiveGrammarSet activeGrammars =
+                context.getActiveGrammarSet();
+        final Collection<ModeType> types =
+                activeGrammars.getModeTypes();
+        userInput.stopRecognition(types);
+    }
+
+    /**
+     * Marks the input item as visited by setting the form item variable to the
+     * event that caused the visit.
+     * @param formItem the input item
+     * @param event the caught event
+     */
+    private void markInputItemVisited(final FormItem formItem,
+            final JVoiceXMLEvent event) {
+        final String name = formItem.getName();
+        final DataModel model = context.getDataModel();
+        int rc = model.updateVariable(name, event);
+        if (rc != DataModel.NO_ERROR) {
+            LOGGER.warn("error marking input item as visited '" + name + "': "
+                    + model.errorCodeToString(rc));
         }
     }
 

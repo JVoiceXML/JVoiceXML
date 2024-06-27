@@ -228,11 +228,14 @@ public final class VoiceXmlInterpreter {
      *            the dialog to be processed.
      * @param parameters
      *            passed parameters when executing this dialog
+     * @param isSubdialog
+     *          <code>true</code> if the dialog is a subdialog,
      * @exception JVoiceXMLEvent
      *                Error or event processing the dialog.
      */
     public void process(final Dialog dialog,
-            final Map<String, Object> parameters) throws JVoiceXMLEvent {
+            final Map<String, Object> parameters, final boolean isSubdialog)
+                    throws JVoiceXMLEvent {
         // There is no next dialog by default.
         nextDialog = null;
         fia = new FormInterpretationAlgorithm(context, this, dialog);
@@ -251,12 +254,15 @@ public final class VoiceXmlInterpreter {
         // Start the fia.
         try {
             try {
-                fia.initialize(profile, parameters);
+                fia.initialize(profile, parameters, isSubdialog);
                 fia.mainLoop();
             } catch (GotoNextFormEvent | GotoNextDocumentEvent
                       | SubmitEvent e) {
                 throw e;
             } catch (JVoiceXMLEvent event) {
+                if (isSubdialog) {
+                    throw event;
+                }
                 eventbus.publish(event);
             }
         } finally {

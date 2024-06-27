@@ -57,7 +57,6 @@ import org.jvoicexml.xml.vxml.Filled;
  * @see org.jvoicexml.xml.vxml.Menu
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  *
  * @since 0.4
  */

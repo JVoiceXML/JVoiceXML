@@ -245,7 +245,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -308,7 +308,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -388,7 +388,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -456,7 +456,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -519,7 +519,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -596,7 +596,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -675,7 +675,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -746,7 +746,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -832,7 +832,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {
@@ -941,7 +941,7 @@ public final class TestFormInterpretationAlgorithm {
             @Override
             public void run() {
                 try {
-                    fia.initialize(profile, null);
+                    fia.initialize(profile, null, false);
                     fia.mainLoop();
                 } catch (JVoiceXMLEvent e) {
                     if (e instanceof CancelEvent) {

@@ -427,7 +427,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
@@ -484,7 +484,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null,
                 context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
@@ -531,7 +531,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, null, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, document);
@@ -583,7 +583,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, dialog);
@@ -650,7 +650,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver(), eventbus);
         final InitialFormItem initialItem = new InitialFormItem(context,
@@ -739,7 +739,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver(), eventbus);
         final InitialFormItem initialItem = new InitialFormItem(context,
@@ -832,7 +832,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
@@ -885,7 +885,7 @@ public final class TestJVoiceXmlEventHandler {
         dialog.setNode(form);
         final FormInterpretationAlgorithm fia = new FormInterpretationAlgorithm(
                 context, interpreter, dialog);
-        fia.initialize(profile, null);
+        fia.initialize(profile, null, false);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(model,
                 context.getScopeObserver(), eventbus);
         handler.collect(context, interpreter, fia, item);
