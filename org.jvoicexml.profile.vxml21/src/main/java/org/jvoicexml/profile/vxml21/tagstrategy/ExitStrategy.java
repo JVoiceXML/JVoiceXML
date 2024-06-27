@@ -26,6 +26,9 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvoicexml.CallControlProperties;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -107,6 +110,15 @@ final class ExitStrategy extends AbstractTagStrategy {
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("exiting: Waiting for output queue to be empty.");
+        }
+        final ImplementationPlatform platform =
+                context.getImplementationPlatform();
+        final DocumentServer server = context.getDocumentServer();
+        // TODO obtain the correct call properties
+        platform.playPrompts(server, null);
+        platform.waitOutputQueueEmpty();
         if (expr != null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("setting exit return value to '" + expr + "'");

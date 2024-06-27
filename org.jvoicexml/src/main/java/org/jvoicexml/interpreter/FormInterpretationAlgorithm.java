@@ -498,6 +498,10 @@ public final class FormInterpretationAlgorithm implements FormItemVisitor {
                     // Process the input or event.
                     process(item);
                 } catch (InternalExitEvent e) {
+                    if (processingSubdialog) {
+                        LOGGER.info("exiting subdialog...");
+                        throw e;
+                    }
                     LOGGER.info("exiting...");
                     break;
                 } catch (GotoNextDocumentEvent e) {

@@ -562,10 +562,6 @@ public class VoiceXmlInterpreterContext {
                         document = loadDocument(descriptor);
                     }
                 }
-            } catch (InternalExitEvent e) {
-                LOGGER.info(
-                        "exit request. terminating processing of subdialog");
-                document = null;
             } finally {
                 exitScope(Scope.DOCUMENT);
             }
